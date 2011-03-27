@@ -1,16 +1,21 @@
 var chart = document.getElementById("chart");
 var c = chart.getContext("2d");
 
-chart.onclick = moveRect;
+chart.onclick = moveRects;
 
-function drawRect() {
-  c.fillRect(rect.x,rect.y,rect.width,rect.height);
+function drawRects() {
+  for (var i in rects) {
+    var r = rects[i];
+    c.fillRect(r.x, r.y, r.width, r.height);
+  }
 }
 
-function moveRect() {
+function moveRects() {
+  for (var i in rects) {
+    rects[i].x += 20;
+  }
   c.clearRect(0, 0, chart.width, chart.height);
-  rect.x += 20;
-  drawRect(rect);
+  drawRects();
 }
 
 function Rect(x, y, width, height) {
@@ -20,7 +25,6 @@ function Rect(x, y, width, height) {
   this.height = height;
 }
 
-var rect = new Rect(10, 25, 20, 50);
+var rects = [new Rect(10, 25, 20, 50), new Rect(40, 25, 20, 50)];
 
-drawRect(rect)
-
+drawRects();
