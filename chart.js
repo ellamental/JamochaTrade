@@ -4,16 +4,23 @@ var c = chart.getContext("2d");
 chart.onclick = moveRect;
 
 function drawRect() {
-  c.fillRect(rect[0],rect[1],rect[2],rect[3]);
+  c.fillRect(rect.x,rect.y,rect.width,rect.height);
 }
 
 function moveRect() {
   c.clearRect(0, 0, chart.width, chart.height);
-  rect[0] += 20;
+  rect.x += 20;
   drawRect(rect);
 }
 
-var rect = [10, 25, 20, 50];
+function Rect(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+}
+
+var rect = new Rect(10, 25, 20, 50);
 
 drawRect(rect)
 
