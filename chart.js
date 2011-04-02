@@ -1,3 +1,34 @@
+//___________________________________________________________________________//
+// JamochaTrade
+//  
+// JamochaTrade is a rewrite of pyTrade, a stock charting and paper trading 
+// program, in Javascript.
+//
+// JamochaTrade is free software: you can redistribute it and/or
+// modify it under the terms of the GNU Affero General Public
+// License version 3 as published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License version 3 for more details.
+//
+// You should have received a copy of the GNU Affero General Public
+// License version 3 along with this program. If not, see
+// <http://www.gnu.org/licenses/>.
+//___________________________________________________________________________//
+
+var width = 600, height = 500
+var chart = document.getElementById("chart");
+var c = chart.getContext("2d");
+c.width = width; c.height = height
+
+chart.onclick = moveRects;
+
+//___________________________________________________________________________//
+// Query Procedures
+//___________________________________________________________________________//
+
 // This is the YQL Query which still must be properly escaped @
 // http://developer.yahoo.com/yql/console/
 // Also the dataset is too large for YQL so the timeframe must be trimmed.
@@ -21,10 +52,9 @@ function parseData(result) {
 $.getJSON(getUrl("ibm"), parseData)
 
 
-var chart = document.getElementById("chart");
-var c = chart.getContext("2d");
-
-chart.onclick = moveRects;
+//___________________________________________________________________________//
+// Chart Drawing Procedures
+//___________________________________________________________________________//
 
 function drawRects() {
   for (var i in rects) {
