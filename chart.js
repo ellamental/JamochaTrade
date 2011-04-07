@@ -31,13 +31,14 @@ chart.width = width; chart.height = height
 //___________________________________________________________________________//
 
 function getUrl(symbol) {
-  return "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%3D27%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
+  return "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%4D04%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
 }
 
 $.getJSON(getUrl("ibm"), init);
 
 function init(result) {
   var data = result.query.results.row;
+  console.log(data[1].col0);
   drawRects(data, 1);
 }
 
@@ -47,8 +48,24 @@ function init(result) {
 //___________________________________________________________________________//
 
 function drawRects(d, s) {
-  var e = s + 30;
+  var e = s + 15;
+  var low = d[s].col3;
+  var high = d[s].col2;
+  
   for (var i = s; i < e; i++) {
-    c.fillRect(i*30, d[i].col1, 20, d[i].col1 - d[i].col4);
+    if (d[i].col3 < low) { low = d[i].col3 }
+    if (d[i].col2 > high) { high = d[i].col2 }
+  }
+
+  var mul = height / (high - low);
+
+  for (var i = e; i > s; i--) {
+    if (d[i].col1 < d[i].col4) { c.fillStyle = "#00f"; }
+    else { c.fillStyle = "#f00"; }
+    c.fillRect(width - (i*30), 
+               height - (mul * (d[i].col1-low)),
+               20,
+               (mul * (d[i].col1 - d[i].col4)));
   }
 }
+
