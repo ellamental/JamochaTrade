@@ -52,11 +52,6 @@ function newChart(symbol) {
               volume: result_data[i].col5};
     }
 
-    
-    
-    drawChart();
-    console.log(data.slice(today,today+10));
-
     function drawChart() {
       var end = today + chart_length;
       var low = data[today].low;
@@ -74,9 +69,9 @@ function newChart(symbol) {
 
       // draw wicks
       for (var i = end; i > today; i--) {
-        if (data[i].open < data[i].close) { c.fillStyle = "#00f"; }
-        else { c.fillStyle = "#f00"; }
-        c.fillRect((width + ((width / (chart_length * 2)) / 2) - 1) - ((i-today)*width_mul), 
+        c.fillStyle = "#000";
+        //c.fillRect((width + ((width / (chart_length * 2)) / 2) - 1) - ((i-today)*width_mul), 
+        c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
                   (height-7) - (height_mul * (data[i].low-low)),
                   2,
                   (height_mul * (data[i].low - data[i].high)));
@@ -94,7 +89,9 @@ function newChart(symbol) {
       }
     }
     
-    
+    drawChart();
+    console.log(data.slice(today,today+10));
+
   });
 };
 
