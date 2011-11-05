@@ -71,25 +71,28 @@ function getData(data, start, length) {
   return a;
 }
 
-function drawRects(d, s) {
-  var e = s + 15;
-  var low = d[s].col3;
-  var high = d[s].col2;
+function drawRects(d, start) {
+  var end = start + 15;
+  var low = d[start].col3;
+  var high = d[start].col2;
   
-  for (var i = s; i < e; i++) {
+  // get lowest low and highest high
+  for (var i = start; i < end; i++) {
     if (d[i].col3 < low) { low = d[i].col3 }
     if (d[i].col2 > high) { high = d[i].col2 }
   }
 
-  var mul = height / (high - low);
+  // get multipliers
+  var height_mul = height / (high - low);
+  var width_mul = width / (end - start);
 
-  for (var i = e; i > s; i--) {
+  for (var i = end; i > start; i--) {
     if (d[i].col1 < d[i].col4) { c.fillStyle = "#00f"; }
     else { c.fillStyle = "#f00"; }
-    c.fillRect(width - (i*30), 
-               height - (mul * (d[i].col1-low)),
+    c.fillRect((width+50) - (i*width_mul), 
+               (height+20) - (height_mul * (d[i].col1-low)),
                20,
-               (mul * (d[i].col1 - d[i].col4)));
+               (height_mul * (d[i].col1 - d[i].col4)));
   }
 }
 
