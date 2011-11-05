@@ -55,7 +55,7 @@ function newChart(symbol) {
     
     
     drawChart();
-    console.log(data.slice(0,10));
+    console.log(data.slice(today,today+10));
 
     function drawChart() {
       var end = today + chart_length;
@@ -70,13 +70,13 @@ function newChart(symbol) {
 
       // get multipliers
       var height_mul = (height-30) / (high - low);
-      var width_mul = (width-20) / (end - today);
+      var width_mul = (width-20) / chart_length;
 
       // draw wicks
       for (var i = end; i > today; i--) {
         if (data[i].open < data[i].close) { c.fillStyle = "#00f"; }
         else { c.fillStyle = "#f00"; }
-        c.fillRect((width + ((width / (chart_length * 2)) / 2) - 1) - (i*width_mul), 
+        c.fillRect((width + ((width / (chart_length * 2)) / 2) - 1) - ((i-today)*width_mul), 
                   (height-7) - (height_mul * (data[i].low-low)),
                   2,
                   (height_mul * (data[i].low - data[i].high)));
@@ -87,7 +87,7 @@ function newChart(symbol) {
       for (var i = end; i > today; i--) {
         if (data[i].open < data[i].close) { c.fillStyle = "#00f"; }
         else { c.fillStyle = "#f00"; }
-        c.fillRect(width - (i*width_mul), 
+        c.fillRect(width - ((i-today)*width_mul), 
                   (height-7) - (height_mul * (data[i].open-low)),
                   width / (chart_length*2), //20,
                   (height_mul * (data[i].open - data[i].close)));
