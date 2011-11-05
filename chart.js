@@ -38,14 +38,38 @@ $.getJSON(getUrl("ibm"), init);
 
 function init(result) {
   var data = result.query.results.row;
-  console.log(data[1].col0);
+  //console.log(data[1].col0);
   drawRects(data, 1);
+  console.log(getData(data, 1, 10));
 }
 
 
 //___________________________________________________________________________//
 // Chart Drawing Procedures
 //___________________________________________________________________________//
+
+function getData(data, start, length) {
+  var d = data.slice(start, length);
+  var a = new Array(d.length);
+  var lo = d[0].col3; hi = d[0].col2;
+  
+  for (i in d) {
+    if (d[i].col3 < lo) { lo = d[i].col3 }
+    if (d[i].col2 > hi) { hi = d[i].col2 }
+  }
+  
+  multiple = height / (hi - lo);
+  
+  for (i in d) {
+    a[i] = {open:  [d[i].col1, (d[i].col1-lo)*multiple],
+            high:  [d[i].col2, (d[i].col2-lo)*multiple],
+            low:   [d[i].col3, (d[i].col3-lo)*multiple],
+            close: [d[i].col4, (d[i].col4-lo)*multiple],
+            date:   d[i].col0,
+            volume: d[i].col5};
+  }
+  return a;
+}
 
 function drawRects(d, s) {
   var e = s + 15;
