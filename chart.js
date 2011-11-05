@@ -28,9 +28,10 @@ function newChart(symbol) {
   var c = chart.getContext("2d");
   chart.width = width; chart.height = height
   
-  var today = 0;
+  var today = 30;
   var chart_length = 15;
 
+  
   
   function getUrl(symbol) {
     return "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%4D04%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
@@ -51,8 +52,20 @@ function newChart(symbol) {
               date:   result_data[i].col0,
               volume: result_data[i].col5};
     }
+    
+    $("#next_day").click(function () {
+      if (today > 0) {
+        today--;
+        drawChart();
+      }
+    });
+    
+    $("#new_symbol").click(function() {
+      newChart("orcl");
+    });
 
     function drawChart() {
+      c.clearRect(0, 0, width, height);
       var end = today + chart_length;
       var low = data[today].low;
       var high = data[today].high;
