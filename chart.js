@@ -18,81 +18,73 @@
 // <http://www.gnu.org/licenses/>.
 //___________________________________________________________________________//
 
-var width = 600, height = 500
-var chart = document.getElementById("chart");
-var c = chart.getContext("2d");
-chart.width = width; chart.height = height
-
-//chart.onclick = moveRects;
+// Maybe put everything inside the $getJSON(url, function (result) { //all code here }
+// with the getUrl(symbol) function being the only one outside this scope?
 
 
-//___________________________________________________________________________//
-// Query and Init Procedures
-//___________________________________________________________________________//
-
-function getUrl(symbol) {
-  return "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%4D04%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
-}
-
-$.getJSON(getUrl("ibm"), init);
-
-function init(result) {
-  var data = result.query.results.row;
-  //console.log(data[1].col0);
-  drawRects(data, 1);
-  console.log(getData(data, 1, 10));
-}
-
-
-//___________________________________________________________________________//
-// Chart Drawing Procedures
-//___________________________________________________________________________//
-
-function getData(data, start, length) {
-  var d = data.slice(start, length);
-  var a = new Array(d.length);
-  var lo = d[0].col3; hi = d[0].col2;
+function newChart(symbol) {
+  var width = 600, height = 500
+  var chart = document.getElementById("chart");
+  var c = chart.getContext("2d");
+  chart.width = width; chart.height = height
   
-  for (i in d) {
-    if (d[i].col3 < lo) { lo = d[i].col3 }
-    if (d[i].col2 > hi) { hi = d[i].col2 }
+  var today = 0;
+  var chart_length = 15;
+
+  
+  function getUrl(symbol) {
+    return "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%4D04%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
   }
   
-  multiple = height / (hi - lo);
-  
-  for (i in d) {
-    a[i] = {open:  [d[i].col1, (d[i].col1-lo)*multiple],
-            high:  [d[i].col2, (d[i].col2-lo)*multiple],
-            low:   [d[i].col3, (d[i].col3-lo)*multiple],
-            close: [d[i].col4, (d[i].col4-lo)*multiple],
-            date:   d[i].col0,
-            volume: d[i].col5};
-  }
-  return a;
-}
+  $.getJSON(getUrl("ibm"), function (result) {
+    //col0=Date, col1=Open, col2=High, col3=Low, col4=Close, col5=Volume, col6=Adj Close
+    // result_data[0] = headers, result_data[1:] = data, most recent first
+    var result_data = result.query.results.row.slice(1);
+    
+    // Format result_data to change col1->open, col2->high, ...
+    var data = new Array(result_data.length - 1)
+    for (var i=0; i < data.length; i++) {
+      data[i] = {open:  result_data[i].col1,
+              high:  result_data[i].col2,
+              low:   result_data[i].col3,
+              close: result_data[i].col4,
+              date:   result_data[i].col0,
+              volume: result_data[i].col5};
+    }
 
-function drawRects(d, start) {
-  var end = start + 15;
-  var low = d[start].col3;
-  var high = d[start].col2;
-  
-  // get lowest low and highest high
-  for (var i = start; i < end; i++) {
-    if (d[i].col3 < low) { low = d[i].col3 }
-    if (d[i].col2 > high) { high = d[i].col2 }
-  }
+    
+    
+    drawRects();
+    console.log(data.slice(0,10));
 
-  // get multipliers
-  var height_mul = height / (high - low);
-  var width_mul = width / (end - start);
+    function drawRects() {
+      var end = today + chart_length;
+      var low = data[today].low;
+      var high = data[today].high;
+      
+      // get lowest low and highest high
+      for (var i = today; i < end; i++) {
+        if (data[i].low < low) { low = data[i].low }
+        if (data[i].high > high) { high = data[i].high }
+      }
 
-  for (var i = end; i > start; i--) {
-    if (d[i].col1 < d[i].col4) { c.fillStyle = "#00f"; }
-    else { c.fillStyle = "#f00"; }
-    c.fillRect((width+50) - (i*width_mul), 
-               (height+20) - (height_mul * (d[i].col1-low)),
-               20,
-               (height_mul * (d[i].col1 - d[i].col4)));
-  }
-}
+      // get multipliers
+      var height_mul = height / (high - low);
+      var width_mul = width / (end - today);
+
+      for (var i = end; i > today; i--) {
+        if (data[i].open < data[i].close) { c.fillStyle = "#00f"; }
+        else { c.fillStyle = "#f00"; }
+        c.fillRect((width+10) - (i*width_mul), 
+                  (height+20) - (height_mul * (data[i].open-low)),
+                  20,
+                  (height_mul * (data[i].open - data[i].close)));
+      }
+    }
+    
+    
+  });
+};
+
+newChart("ibm");
 
