@@ -76,9 +76,9 @@ function newChart(symbol) {
       for (var i = end; i > today; i--) {
         if (data[i].open < data[i].close) { c.fillStyle = "#00f"; }
         else { c.fillStyle = "#f00"; }
-        c.fillRect((width+9) - (i*width_mul), 
+        c.fillRect((width + ((width / (chart_length * 2)) / 2) - 1) - (i*width_mul), 
                   (height-7) - (height_mul * (data[i].low-low)),
-                  3,
+                  2,
                   (height_mul * (data[i].low - data[i].high)));
       }
 
@@ -89,7 +89,7 @@ function newChart(symbol) {
         else { c.fillStyle = "#f00"; }
         c.fillRect(width - (i*width_mul), 
                   (height-7) - (height_mul * (data[i].open-low)),
-                  20,
+                  width / (chart_length*2), //20,
                   (height_mul * (data[i].open - data[i].close)));
       }
     }
