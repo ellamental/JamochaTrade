@@ -54,10 +54,10 @@ function newChart(symbol) {
 
     
     
-    drawRects();
+    drawChart();
     console.log(data.slice(0,10));
 
-    function drawRects() {
+    function drawChart() {
       var end = today + chart_length;
       var low = data[today].low;
       var high = data[today].high;
@@ -69,14 +69,26 @@ function newChart(symbol) {
       }
 
       // get multipliers
-      var height_mul = height / (high - low);
-      var width_mul = width / (end - today);
+      var height_mul = (height-30) / (high - low);
+      var width_mul = (width-20) / (end - today);
 
+      // draw wicks
       for (var i = end; i > today; i--) {
         if (data[i].open < data[i].close) { c.fillStyle = "#00f"; }
         else { c.fillStyle = "#f00"; }
-        c.fillRect((width+10) - (i*width_mul), 
-                  (height+20) - (height_mul * (data[i].open-low)),
+        c.fillRect((width+9) - (i*width_mul), 
+                  (height-7) - (height_mul * (data[i].low-low)),
+                  3,
+                  (height_mul * (data[i].low - data[i].high)));
+      }
+
+      
+      // draw bodies
+      for (var i = end; i > today; i--) {
+        if (data[i].open < data[i].close) { c.fillStyle = "#00f"; }
+        else { c.fillStyle = "#f00"; }
+        c.fillRect(width - (i*width_mul), 
+                  (height-7) - (height_mul * (data[i].open-low)),
                   20,
                   (height_mul * (data[i].open - data[i].close)));
       }
