@@ -18,9 +18,6 @@
 // <http://www.gnu.org/licenses/>.
 //___________________________________________________________________________//
 
-// Maybe put everything inside the $getJSON(url, function (result) { //all code here }
-// with the getUrl(symbol) function being the only one outside this scope?
-
 
 function newChart(symbol) {
   var width = 600, height = 500
@@ -92,7 +89,6 @@ function newChart(symbol) {
     // draw wicks
     for (var i = end; i > today; i--) {
       c.fillStyle = "#000";
-      //c.fillRect((width + ((width / (chart_length * 2)) / 2) - 1) - ((i-today)*width_mul), 
       c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
                 (height-7) - (height_mul * (data[i].low-low)),
                 2,
