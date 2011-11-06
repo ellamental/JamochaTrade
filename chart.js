@@ -33,10 +33,15 @@ function newChart(symbol) {
   
   var chart_style = "candle";
   var chart_styles = {"candle" : drawCandle,
-                      "bar" : drawBar,
-                      "ohlc" : drawOHLC,
-                      "hlc" : drawHLC,
-                      "line" : drawLine}
+                      "bar" :    drawBar,
+                      "ohlc" :   drawOHLC,
+                      "hlc" :    drawHLC,
+                      "line" :   drawLine}
+  
+  
+  //__________________________________________________________________________
+  // Event binding
+  //__________________________________________________________________________
   
   $("#next_day").click(function () {
     if (today > 0) {
@@ -65,6 +70,10 @@ function newChart(symbol) {
   });
 
   
+  //__________________________________________________________________________
+  // Data Retrieval
+  //__________________________________________________________________________
+  
   function getData(symbol) {
     var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%4D04%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
 
@@ -76,17 +85,22 @@ function newChart(symbol) {
       // Format result_data to change col1->open, col2->high, ...
       data = new Array(result_data.length - 1)
       for (var i=0; i < data.length; i++) {
-        data[i] = {open:  result_data[i].col1,
-                high:  result_data[i].col2,
-                low:   result_data[i].col3,
-                close: result_data[i].col4,
-                date:   result_data[i].col0,
-                volume: result_data[i].col5};
+        data[i] = {open:   result_data[i].col1,
+                   high:   result_data[i].col2,
+                   low:    result_data[i].col3,
+                   close:  result_data[i].col4,
+                   date:   result_data[i].col0,
+                   volume: result_data[i].col5};
       }
       drawChart();
       console.log(data.slice(today,today+10));
     });
   }
+
+  
+  //__________________________________________________________________________
+  // Chart drawing (Candlestick, Bar, OHLC, HLC, Line)
+  //__________________________________________________________________________
 
   function drawChart() {
     chart_styles[chart_style]();
