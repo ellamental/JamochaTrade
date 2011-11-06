@@ -219,7 +219,7 @@ function newChart(symbol) {
   }
 
   function drawLine() {
-    c.clearRect(0, 0, width, height);
+    chart.width = chart.width;  // c.clearRect(0, 0, width, height); doesn't work here
     var end = today + chart_length;
     var low = data[today].low;
     var high = data[today].high;
