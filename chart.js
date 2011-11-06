@@ -31,12 +31,17 @@ function newChart(symbol) {
   var data = false;
   getData(symbol);
   
+  var chart_style = "bar";
+  var chart_styles = {"candle" : drawCandle,
+                      "bar" : drawBar}
+  
   $("#next_day").click(function () {
     if (today > 0) {
       today--;
       drawChart();
     }
   });
+  
   function getChart() {
     var name = $("#symbol_entry").val()
     getData(name);
@@ -46,6 +51,10 @@ function newChart(symbol) {
   $("#new_symbol").click(getChart);
   $("#symbol_entry").bind("keypress", function (e) {if (e.which === 13) {getChart();}});
   
+  $("#chart_style").change(function () {
+    chart_style = $("#chart_style").val();
+    drawChart();
+  });
 
   function getData(symbol) {
     var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%4D04%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
@@ -71,6 +80,10 @@ function newChart(symbol) {
   }
 
   function drawChart() {
+    chart_styles[chart_style]();
+  }
+
+  function drawCandle() {
     c.clearRect(0, 0, width, height);
     var end = today + chart_length;
     var low = data[today].low;
@@ -105,7 +118,33 @@ function newChart(symbol) {
                 (height_mul * (data[i].open - data[i].close)));
     }
   }
-  
+
+  function drawBar() {
+    c.clearRect(0, 0, width, height);
+    var end = today + chart_length;
+    var low = data[today].low;
+    var high = data[today].high;
+    
+    // get lowest low and highest high
+    for (var i = today; i < end; i++) {
+      if (data[i].low < low) { low = data[i].low }
+      if (data[i].high > high) { high = data[i].high }
+    }
+
+    // get multipliers
+    var height_mul = (height-30) / (high - low);
+    var width_mul = (width-20) / chart_length;
+
+    for (var i = end; i > today; i--) {
+      if (data[i].open < data[i].close) { c.fillStyle = "#444"; }
+      else { c.fillStyle = "#000"; }
+      c.fillRect(width - ((i-today)*width_mul), 
+                (height-7) - (height_mul * (data[i].close-low)),
+                width / (chart_length*2), //20,
+                height);//(height_mul * (data[i].open - data[i].close)));
+    }
+  }
+
 };
 
 
