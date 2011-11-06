@@ -41,10 +41,13 @@ function newChart(symbol) {
     }
   });
   $("#new_symbol").click(function() {
-    getData("orcl");
+    var name = $("#symbol_entry").val()
+    getData(name);
+    $("#symbol_name").text(name);
+    $("#symbol_entry").val("");
   });
 
-  
+
   function getData(symbol) {
     var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D2%26e%4D04%26f%3D2011%26g%3Dd%26a%3D0%26b%3D1%26c%3D2000%26ignore%3D.csv'&format=json&callback=?";
 
