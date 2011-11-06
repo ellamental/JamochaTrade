@@ -40,12 +40,16 @@ function newChart(symbol) {
       drawChart();
     }
   });
-  $("#new_symbol").click(function() {
+  function getChart() {
     var name = $("#symbol_entry").val()
     getData(name);
-    $("#symbol_name").text(name);
+    $("#symbol_name").text(name.toUpperCase());
     $("#symbol_entry").val("");
-  });
+  }
+ 
+  $("#new_symbol").click(getChart);
+  $("#symbol_entry").bind("keypress", function (e) {if (e.which === 13) {getChart();}});
+  
 
 
   function getData(symbol) {
