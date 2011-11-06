@@ -26,7 +26,7 @@ function newChart(symbol) {
   chart.width = width; chart.height = height
   
   var today = 30;
-  var chart_length = 90;
+  var chart_length = 15;
 
   var data = false;
   getData(symbol);
@@ -34,7 +34,8 @@ function newChart(symbol) {
   var chart_style = "candle";
   var chart_styles = {"candle" : drawCandle,
                       "bar" : drawBar,
-                      "ohlc" : drawOHLC}
+                      "ohlc" : drawOHLC,
+                      "hlc" : drawHLC}
   
   $("#next_day").click(function () {
     if (today > 0) {
@@ -180,6 +181,35 @@ function newChart(symbol) {
     }
   }
 
+  function drawHLC() {
+    c.clearRect(0, 0, width, height);
+    var end = today + chart_length;
+    var low = data[today].low;
+    var high = data[today].high;
+    
+    // get lowest low and highest high
+    for (var i = today; i < end; i++) {
+      if (data[i].low < low) { low = data[i].low }
+      if (data[i].high > high) { high = data[i].high }
+    }
+
+    // get multipliers
+    var height_mul = (height-30) / (high - low);
+    var width_mul = (width-20) / chart_length;
+
+    // draw wicks
+    for (var i = end; i > today; i--) {
+      c.fillStyle = "#000";
+      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
+                (height-7) - (height_mul * (data[i].low-low)),
+                2,
+                (height_mul * (data[i].low - data[i].high)));
+      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1,
+                (height-7) - (height_mul * (data[i].close-low)),
+                width_mul / 2,
+                2);
+    }
+  }
 
 };
 
