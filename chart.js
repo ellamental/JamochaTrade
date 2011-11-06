@@ -77,10 +77,24 @@ function newChart(symbol) {
 
   $("#buy").click(function () {
     price = data[today].close;
-    shares = Math.floor(account / price);
+    num_shares = $("#shares_to_buy").val();
+    if (num_shares === "") {
+      shares = Math.floor(account / price);
+    }
+    else {
+      shares = parseInt(num_shares);
+      if (shares * price > account) {
+        shares = Math.floor(account / price)
+      }
+    }
     cost = shares * price;
     account = account - cost;
-    portfolio[symbol] = shares;
+    if (symbol in portfolio) {
+      portfolio[symbol] += shares;
+    }
+    else {
+      portfolio[symbol] = shares;
+    }
     $("#account").text("$" + account.toFixed(2));
     $("#portfolio").text(JSON.stringify(portfolio));
   });
@@ -88,8 +102,18 @@ function newChart(symbol) {
   $("#sell").click(function () {
     if (symbol in portfolio) {
       price = data[today].close;
-      profit = price * portfolio[symbol];
-      portfolio[symbol] = 0;
+      num_shares = $("#shares_to_sell").val();
+      if (num_shares === "") {
+        shares = portfolio[symbol];
+      }
+      else if (parseInt(num_shares) > portfolio[symbol]) {
+        shares = portfolio[symbol];
+      }
+      else {
+        shares = parseInt(num_shares);
+      }
+      profit = price * shares;
+      portfolio[symbol] = portfolio[symbol] - shares;
       account += profit;
       $("#account").text("$" + account.toFixed(2));
       $("#portfolio").text(JSON.stringify(portfolio));
