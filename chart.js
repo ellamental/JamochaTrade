@@ -56,10 +56,10 @@ function newChart(symbol) {
   });
   
   function getChart() {
-    var name = $("#symbol_entry").val()
+    var name = $("#symbol_entry").val().toUpperCase();
     symbol = name;
     getData(name);
-    $("#symbol_name").text(name.toUpperCase());
+    $("#symbol_name").text(name);
     $("#symbol_entry").val("");
   }
   $("#new_symbol").click(getChart);
