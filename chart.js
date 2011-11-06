@@ -35,7 +35,8 @@ function newChart(symbol) {
   var chart_styles = {"candle" : drawCandle,
                       "bar" : drawBar,
                       "ohlc" : drawOHLC,
-                      "hlc" : drawHLC}
+                      "hlc" : drawHLC,
+                      "line" : drawLine}
   
   $("#next_day").click(function () {
     if (today > 0) {
@@ -210,6 +211,33 @@ function newChart(symbol) {
                 2);
     }
   }
+
+  function drawLine() {
+    c.clearRect(0, 0, width, height);
+    var end = today + chart_length;
+    var low = data[today].low;
+    var high = data[today].high;
+    
+    // get lowest low and highest high
+    for (var i = today; i < end; i++) {
+      if (data[i].low < low) { low = data[i].low }
+      if (data[i].high > high) { high = data[i].high }
+    }
+
+    // get multipliers
+    var height_mul = (height-30) / (high - low);
+    var width_mul = (width-20) / chart_length;
+
+    // draw line
+    c.moveTo(width - ((end-today)*width_mul) + (width_mul / 4) - 1, 
+             (height-7) - (height_mul * (data[end].close-low)))
+    for (var i = end; i > today; i--) {
+      c.lineTo(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
+              (height-7) - (height_mul * (data[i].close-low)));
+    }
+    c.stroke();
+  }
+
 
 };
 
