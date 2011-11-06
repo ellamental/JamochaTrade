@@ -26,14 +26,15 @@ function newChart(symbol) {
   chart.width = width; chart.height = height
   
   var today = 30;
-  var chart_length = 15;
+  var chart_length = 90;
 
   var data = false;
   getData(symbol);
   
-  var chart_style = "bar";
+  var chart_style = "candle";
   var chart_styles = {"candle" : drawCandle,
-                      "bar" : drawBar}
+                      "bar" : drawBar,
+                      "ohlc" : drawOHLC}
   
   $("#next_day").click(function () {
     if (today > 0) {
@@ -144,6 +145,41 @@ function newChart(symbol) {
                 height);//(height_mul * (data[i].open - data[i].close)));
     }
   }
+  
+  function drawOHLC() {
+    c.clearRect(0, 0, width, height);
+    var end = today + chart_length;
+    var low = data[today].low;
+    var high = data[today].high;
+    
+    // get lowest low and highest high
+    for (var i = today; i < end; i++) {
+      if (data[i].low < low) { low = data[i].low }
+      if (data[i].high > high) { high = data[i].high }
+    }
+
+    // get multipliers
+    var height_mul = (height-30) / (high - low);
+    var width_mul = (width-20) / chart_length;
+
+    // draw wicks
+    for (var i = end; i > today; i--) {
+      c.fillStyle = "#000";
+      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
+                (height-7) - (height_mul * (data[i].low-low)),
+                2,
+                (height_mul * (data[i].low - data[i].high)));
+      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1,
+                (height-7) - (height_mul * (data[i].close-low)),
+                width_mul / 2,
+                2);
+      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1,
+                (height-7) - (height_mul * (data[i].open-low)),
+                -(width_mul / 2),
+                2);
+    }
+  }
+
 
 };
 
