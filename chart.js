@@ -23,7 +23,9 @@ function newChart(symbol) {
   var width = 600, height = 500
   var chart = document.getElementById("chart");
   var c = chart.getContext("2d");
-  chart.width = width; chart.height = height
+  chart.width = width; chart.height = height;
+
+  var symbol = symbol;
   
   var today = 30;
   var chart_length = 15;
@@ -37,6 +39,9 @@ function newChart(symbol) {
                       "ohlc" :   drawOHLC,
                       "hlc" :    drawHLC,
                       "line" :   drawLine}
+  
+  var account = 100000;
+  var portfolio = {};
   
   
   //__________________________________________________________________________
@@ -52,6 +57,7 @@ function newChart(symbol) {
   
   function getChart() {
     var name = $("#symbol_entry").val()
+    symbol = name;
     getData(name);
     $("#symbol_name").text(name.toUpperCase());
     $("#symbol_entry").val("");
@@ -69,6 +75,26 @@ function newChart(symbol) {
     drawChart();
   });
 
+  $("#buy").click(function () {
+    price = data[today].close;
+    shares = Math.floor(account / price);
+    cost = shares * price;
+    account = account - cost;
+    portfolio[symbol] = shares;
+    $("#account").text("$" + account.toFixed(2));
+    $("#portfolio").text(JSON.stringify(portfolio));
+  });
+  
+  $("#sell").click(function () {
+    if (symbol in portfolio) {
+      price = data[today].close;
+      profit = price * portfolio[symbol];
+      portfolio[symbol] = 0;
+      account += profit;
+      $("#account").text("$" + account.toFixed(2));
+      $("#portfolio").text(JSON.stringify(portfolio));
+    }
+  });
   
   //__________________________________________________________________________
   // Data Retrieval
