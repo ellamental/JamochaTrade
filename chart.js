@@ -27,7 +27,7 @@ function newChart(symbol) {
 
   var symbol = symbol;
   
-  var today = 30;
+  var today = 300;
   var chart_length = 15;
 
   var data = false;
