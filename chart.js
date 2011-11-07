@@ -54,6 +54,18 @@ function newChart(symbol) {
       drawChart();
     }
   });
+  $("#next_week").click(function () {
+    if (today > 5) {
+      today = today - 5;
+      drawChart();
+    }
+  });
+  $("#next_month").click(function () {
+    if (today > 20) {
+      today = today - 20;
+      drawChart();
+    }
+  });
   
   function getChart() {
     var name = $("#symbol_entry").val().toUpperCase();
