@@ -157,8 +157,7 @@ function newChart(symbol) {
     chart_styles[chart_style]();
   }
 
-  function drawCandle() {
-    c.clearRect(0, 0, width, height);
+  function getAdjustments() {
     var end = today + chart_length;
     var low = data[today].low;
     var high = data[today].high;
@@ -172,6 +171,19 @@ function newChart(symbol) {
     // get multipliers
     var height_mul = (height-30) / (high - low);
     var width_mul = (width-20) / chart_length;
+
+    return {"end": end,
+            "low": low,
+            "high": high,
+            "height_mul": height_mul,
+            "width_mul": width_mul}
+  }
+
+  function drawCandle() {
+    c.clearRect(0, 0, width, height);
+    var a = getAdjustments();
+    var end = a.end, low = a.low, high = data[today].high;
+    var height_mul = a.height_mul, width_mul = a.width_mul;
 
     // draw wicks
     for (var i = end; i > today; i--) {
@@ -195,19 +207,9 @@ function newChart(symbol) {
 
   function drawBar() {
     c.clearRect(0, 0, width, height);
-    var end = today + chart_length;
-    var low = data[today].low;
-    var high = data[today].high;
-    
-    // get lowest low and highest high
-    for (var i = today; i < end; i++) {
-      if (data[i].low < low) { low = data[i].low }
-      if (data[i].high > high) { high = data[i].high }
-    }
-
-    // get multipliers
-    var height_mul = (height-30) / (high - low);
-    var width_mul = (width-20) / chart_length;
+    var a = getAdjustments();
+    var end = a.end, low = a.low, high = data[today].high;
+    var height_mul = a.height_mul, width_mul = a.width_mul;
 
     for (var i = end; i > today; i--) {
       if (data[i].open < data[i].close) { c.fillStyle = "#444"; }
@@ -221,19 +223,9 @@ function newChart(symbol) {
   
   function drawOHLC() {
     c.clearRect(0, 0, width, height);
-    var end = today + chart_length;
-    var low = data[today].low;
-    var high = data[today].high;
-    
-    // get lowest low and highest high
-    for (var i = today; i < end; i++) {
-      if (data[i].low < low) { low = data[i].low }
-      if (data[i].high > high) { high = data[i].high }
-    }
-
-    // get multipliers
-    var height_mul = (height-30) / (high - low);
-    var width_mul = (width-20) / chart_length;
+    var a = getAdjustments();
+    var end = a.end, low = a.low, high = data[today].high;
+    var height_mul = a.height_mul, width_mul = a.width_mul;
 
     // draw wicks
     for (var i = end; i > today; i--) {
@@ -255,19 +247,9 @@ function newChart(symbol) {
 
   function drawHLC() {
     c.clearRect(0, 0, width, height);
-    var end = today + chart_length;
-    var low = data[today].low;
-    var high = data[today].high;
-    
-    // get lowest low and highest high
-    for (var i = today; i < end; i++) {
-      if (data[i].low < low) { low = data[i].low }
-      if (data[i].high > high) { high = data[i].high }
-    }
-
-    // get multipliers
-    var height_mul = (height-30) / (high - low);
-    var width_mul = (width-20) / chart_length;
+    var a = getAdjustments();
+    var end = a.end, low = a.low, high = data[today].high;
+    var height_mul = a.height_mul, width_mul = a.width_mul;
 
     // draw wicks
     for (var i = end; i > today; i--) {
@@ -285,19 +267,9 @@ function newChart(symbol) {
 
   function drawLine() {
     chart.width = chart.width;  // c.clearRect(0, 0, width, height); doesn't work here
-    var end = today + chart_length;
-    var low = data[today].low;
-    var high = data[today].high;
-    
-    // get lowest low and highest high
-    for (var i = today; i < end; i++) {
-      if (data[i].low < low) { low = data[i].low }
-      if (data[i].high > high) { high = data[i].high }
-    }
-
-    // get multipliers
-    var height_mul = (height-30) / (high - low);
-    var width_mul = (width-20) / chart_length;
+    var a = getAdjustments();
+    var end = a.end, low = a.low, high = data[today].high;
+    var height_mul = a.height_mul, width_mul = a.width_mul;
 
     // draw line
     c.moveTo(width - ((end-today)*width_mul) + (width_mul / 4) - 1, 
