@@ -144,7 +144,7 @@ function newChart(symbol) {
                    volume: result_data[i].col5};
       }
       drawChart();
-      console.log(data.slice(today,today+10));
+      //console.log(data.slice(today,today+10));
     });
   }
 
@@ -178,13 +178,25 @@ function newChart(symbol) {
             "height_mul": height_mul,
             "width_mul": width_mul}
   }
+  
+  function drawHorizontalLines() {
+    var mul = height / 6;
+    c.fillStyle = "#000";
+    for (var i=1; i<6; i++) {
+      c.fillRect(0,
+                 i*mul,
+                 width,
+                 1);
+    }
+  }
 
   function drawCandle() {
     c.clearRect(0, 0, width, height);
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
-
+    drawHorizontalLines();
+    
     // draw wicks
     for (var i = end; i > today; i--) {
       c.fillStyle = "#000";
@@ -210,6 +222,7 @@ function newChart(symbol) {
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
+    drawHorizontalLines();
 
     for (var i = end; i > today; i--) {
       if (data[i].open < data[i].close) { c.fillStyle = "#444"; }
@@ -226,6 +239,7 @@ function newChart(symbol) {
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
+    drawHorizontalLines();
 
     // draw wicks
     for (var i = end; i > today; i--) {
@@ -250,6 +264,7 @@ function newChart(symbol) {
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
+    drawHorizontalLines();
 
     // draw wicks
     for (var i = end; i > today; i--) {
@@ -270,6 +285,7 @@ function newChart(symbol) {
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
+    drawHorizontalLines();
 
     // draw line
     c.moveTo(width - ((end-today)*width_mul) + (width_mul / 4) - 1, 
