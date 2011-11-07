@@ -2,13 +2,13 @@ body {text-align: center;}
 canvas {border: 1px solid #000;}
 
 #wrapper {
-  width: 920;
+  width: 970;
   text-align: center;
 }
 
 #toolbar {
   float: left;
-  width: 300px;
+  width: 350px;
 }
 
 #main {
