@@ -1,0 +1,18 @@
+body {text-align: center;}
+canvas {border: 1px solid #000;}
+
+#wrapper {
+  width: 920;
+  text-align: center;
+}
+
+#toolbar {
+  float: left;
+  width: 300px;
+}
+
+#main {
+  float: left;
+  text-align: center;
+  padding-left: 10px;
+}
