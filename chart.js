@@ -111,7 +111,7 @@ function newChart(symbol) {
     else {
       portfolio[symbol] = shares;
       var div_id = "pi_"+symbol;
-      $("#security_list").prepend('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><button id="sell_'+symbol+'">Sell</button></div>');
+      $("#security_list").prepend('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><input id="sell_shares_'+symbol+'" size="6"></input><button id="sell_'+symbol+'">Sell</button></div>');
       $("#sell_" + symbol).button();
       var s = symbol;
       $("#sell_"+symbol).click(function () {
@@ -126,7 +126,7 @@ function newChart(symbol) {
   function sell(sym) {
     if (sym in portfolio) {
       price = appData[sym][today].close;
-      num_shares = $("#shares_to_sell").val();
+      num_shares = $("#sell_shares_"+sym).val();
       if (num_shares === "") {
         shares = portfolio[sym];
       }
