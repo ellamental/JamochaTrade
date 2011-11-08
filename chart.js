@@ -121,9 +121,15 @@ function newChart(symbol) {
     else {
       portfolio[symbol] = shares;
       var div_id = "pi_"+symbol;
-      $("#security_list").prepend('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><input id="sell_shares_'+symbol+'" size="6"></input><button id="sell_'+symbol+'">Sell</button></div>');
+      $("#security_list").prepend('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><input id="sell_shares_'+symbol+'" size="6"></input><button id="sell_'+symbol+'">Sell</button><button id="view_'+symbol+'">View</button></div>');
       $("#sell_" + symbol).button();
       var s = symbol;
+      $("#view_" + symbol).button();
+      $("#view_" + symbol).click(function () {
+        symbol = s;
+        $("#symbol_name").text(s.toUpperCase());
+        getData(s);
+      });
       $("#sell_"+symbol).click(function () {
         sell(s);
       });
