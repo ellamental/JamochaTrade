@@ -6,11 +6,15 @@
   <!--jquery + jqyeryui -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+  <!-- themeroller -->
+  <link type="text/css" rel="stylesheet" href="http://jqueryui.com/themes/base/ui.all.css" />
+  <script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 
   <title>JamochaTrade - A Javascript stock charting program.</title>
 
   <script>
   $(function() {
+    $("#switcher").themeswitcher();
     $("#chart_controls").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("#order_entry").accordion({autoHeight: false, navigation: true, collapsible:  true});
     $("#portfolio_view").accordion({autoHeight: false, navigation: true, collapsible: true});
@@ -90,6 +94,8 @@
   </div> <!-- end main -->
 
 </div> <!-- end wrapper -->
+
+<div id="switcher"></div>
 
 </body>
 </html>
