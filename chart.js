@@ -111,7 +111,7 @@ function newChart(symbol) {
     else {
       portfolio[symbol] = shares;
       var div_id = "pi_"+symbol;
-      $("#security_list").prepend('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><button id="sell_'+symbol+'">Sell</button></div>');
+      $("#security_list").prepend('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><button id="sell_'+symbol+'">Sell</button></div>');
       $("#sell_" + symbol).button();
       var s = symbol;
       $("#sell_"+symbol).click(function () {
