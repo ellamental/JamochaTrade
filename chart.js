@@ -243,19 +243,19 @@ function newChart(symbol) {
     drawHorizontalLines();
     
     // draw wicks
-    for (var i = end; i > today; i--) {
+    for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
-      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
                 (height-7) - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
     }
 
     // draw bodies
-    for (var i = end; i > today; i--) {
+    for (var i = end; i >= today; i--) {
       if (data[i].open < data[i].close) { c.fillStyle = upColor; }
       else { c.fillStyle = downColor; }
-      c.fillRect(width - ((i-today)*width_mul), 
+      c.fillRect(width - ((i-today+1)*width_mul), 
                 (height-7) - (height_mul * (data[i].open-low)),
                 width / (chart_length*2), //20,
                 (height_mul * (data[i].open - data[i].close)));
@@ -269,10 +269,10 @@ function newChart(symbol) {
     var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
 
-    for (var i = end; i > today; i--) {
+    for (var i = end; i >= today; i--) {
       if (data[i].open < data[i].close) { c.fillStyle = upColor; }
       else { c.fillStyle = downColor; }
-      c.fillRect(width - ((i-today)*width_mul), 
+      c.fillRect(width - ((i-today+1)*width_mul), 
                 (height-7) - (height_mul * (data[i].close-low)),
                 width / (chart_length*2), //20,
                 height);//(height_mul * (data[i].open - data[i].close)));
@@ -287,17 +287,17 @@ function newChart(symbol) {
     drawHorizontalLines();
 
     // draw wicks
-    for (var i = end; i > today; i--) {
+    for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
-      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
                 (height-7) - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
-      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1,
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
                 (height-7) - (height_mul * (data[i].close-low)),
                 width_mul / 2,
                 2);
-      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1,
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
                 (height-7) - (height_mul * (data[i].open-low)),
                 -(width_mul / 2),
                 2);
@@ -312,13 +312,13 @@ function newChart(symbol) {
     drawHorizontalLines();
 
     // draw wicks
-    for (var i = end; i > today; i--) {
+    for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
-      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
                 (height-7) - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
-      c.fillRect(width - ((i-today)*width_mul) + (width_mul / 4) - 1,
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
                 (height-7) - (height_mul * (data[i].close-low)),
                 width_mul / 2,
                 2);
@@ -335,8 +335,8 @@ function newChart(symbol) {
     // draw line
     c.moveTo(width - ((end-today)*width_mul) + (width_mul / 4) - 1, 
              (height-7) - (height_mul * (data[end].close-low)))
-    for (var i = end; i > today; i--) {
-      c.lineTo(width - ((i-today)*width_mul) + (width_mul / 4) - 1, 
+    for (var i = end; i >= today; i--) {
+      c.lineTo(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
               (height-7) - (height_mul * (data[i].close-low)));
     }
     c.stroke();
