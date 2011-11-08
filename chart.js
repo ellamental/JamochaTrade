@@ -49,24 +49,22 @@ function newChart(symbol) {
   // Event binding
   //__________________________________________________________________________
   
-  $("#next_day").click(function () {
-    if (today > 0) {
-      today--;
-      drawChart();
+  function nextDay(days, delay) {
+    function nextD() {
+      if (days > 0) {
+        t=setTimeout(nextD, delay); 
+        days--;
+        if (today > 0) {
+          today--; 
+          drawChart();
+        }
+      }
     }
-  });
-  $("#next_week").click(function () {
-    if (today > 5) {
-      today = today - 5;
-      drawChart();
-    }
-  });
-  $("#next_month").click(function () {
-    if (today > 20) {
-      today = today - 20;
-      drawChart();
-    }
-  });
+    nextD();
+  }
+  $("#next_day").click(function () { nextDay(1, 0) });
+  $("#next_week").click(function () { nextDay(5, 100); });
+  $("#next_month").click(function () { nextDay(20, 25); });
   
   function getChart() {
     var name = $("#symbol_entry").val().toUpperCase();
