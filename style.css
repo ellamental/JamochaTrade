@@ -16,3 +16,7 @@ canvas {border: 1px solid #000;}
   text-align: center;
   padding-left: 10px;
 }
+
+.portfolio_item {
+  background: #666;
+}

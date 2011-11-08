@@ -30,6 +30,7 @@ function newChart(symbol) {
   var today = 300;
   var chart_length = 15;
 
+  var appData = {};
   var data = false;
   getData(symbol);
   
@@ -102,62 +103,83 @@ function newChart(symbol) {
     cost = shares * price;
     account = account - cost;
     if (symbol in portfolio) {
+      if (portfolio[symbol] === 0) { $("#pi_" + symbol).show(); }
       portfolio[symbol] += shares;
+      var div_id = "#pi_"+symbol+" > .shares";
+      $(div_id).text(portfolio[symbol])
     }
     else {
       portfolio[symbol] = shares;
+      var div_id = "pi_"+symbol;
+      $("#portfolio_list").append('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><button id="sell_'+symbol+'">Sell</button></div>');
+      var s = symbol;
+      $("#sell_"+symbol).click(function () {
+        sell(s);
+      });
     }
     $("#account").text("$" + account.toFixed(2));
-    $("#portfolio").text(JSON.stringify(portfolio));
   });
   
-  $("#sell").click(function () {
-    if (symbol in portfolio) {
-      price = data[today].close;
+  $("#sell").click(function () { sell(symbol); });
+
+  function sell(sym) {
+    if (sym in portfolio) {
+      price = appData[sym][today].close;
       num_shares = $("#shares_to_sell").val();
       if (num_shares === "") {
-        shares = portfolio[symbol];
+        shares = portfolio[sym];
       }
-      else if (parseInt(num_shares) > portfolio[symbol]) {
-        shares = portfolio[symbol];
+      else if (parseInt(num_shares) > portfolio[sym]) {
+        shares = portfolio[sym];
       }
       else {
         shares = parseInt(num_shares);
       }
       profit = price * shares;
-      portfolio[symbol] = portfolio[symbol] - shares;
+      portfolio[sym] = portfolio[sym] - shares;
       account += profit;
+      if (portfolio[sym] === 0) { $("#pi_"+sym).hide(); }
+      var div_id = "#pi_"+sym+" > .shares";
+      $(div_id).text(portfolio[sym]);
       $("#account").text("$" + account.toFixed(2));
-      $("#portfolio").text(JSON.stringify(portfolio));
     }
-  });
+  }
+
   
   //__________________________________________________________________________
   // Data Retrieval
   //__________________________________________________________________________
   
   function getData(symbol) {
-    date = new Date();
-    var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D"+(date.getMonth()+1)+"%26e%3D"+date.getDate()+"%26f%3D"+date.getFullYear()+"%26g%3Dd%26a%3D0%26b%3D2%26c%3D1962%26ignore%3D.csv'&format=json&callback=?";
-    
-    $.getJSON(url, function (result) {
-      //col0=Date, col1=Open, col2=High, col3=Low, col4=Close, col5=Volume, col6=Adj Close
-      // result_data[0] = headers, result_data[1:] = data, most recent first
-      var result_data = result.query.results.row.slice(1);
-      
-      // Format result_data to change col1->open, col2->high, ...
-      data = new Array(result_data.length - 1)
-      for (var i=0; i < data.length; i++) {
-        data[i] = {open:   result_data[i].col1,
-                   high:   result_data[i].col2,
-                   low:    result_data[i].col3,
-                   close:  result_data[i].col4,
-                   date:   result_data[i].col0,
-                   volume: result_data[i].col5};
-      }
+    if (symbol in appData) {
+      data = appData[symbol];
       drawChart();
-      //console.log(data.slice(today,today+10));
-    });
+    }
+    else {
+      console.log("Downloading...");
+      date = new Date();
+      var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D"+(date.getMonth()+1)+"%26e%3D"+date.getDate()+"%26f%3D"+date.getFullYear()+"%26g%3Dd%26a%3D0%26b%3D2%26c%3D1962%26ignore%3D.csv'&format=json&callback=?";
+      
+      $.getJSON(url, function (result) {
+        //col0=Date, col1=Open, col2=High, col3=Low, col4=Close, col5=Volume, col6=Adj Close
+        // result_data[0] = headers, result_data[1:] = data, most recent first
+        var result_data = result.query.results.row.slice(1);
+        
+        // Format result_data to change col1->open, col2->high, ...
+        data = new Array(result_data.length - 1)
+        for (var i=0; i < data.length; i++) {
+          data[i] = {open:   result_data[i].col1,
+                    high:   result_data[i].col2,
+                    low:    result_data[i].col3,
+                    close:  result_data[i].col4,
+                    date:   result_data[i].col0,
+                    volume: result_data[i].col5};
+        }
+        appData[symbol] = data;
+        drawChart();
+        //console.log(data.slice(today,today+10));
+      });
+    }
   }
 
   
@@ -314,6 +336,6 @@ function newChart(symbol) {
 
 
 $(document).ready(function() {
-  newChart("ibm");
+  newChart("IBM");
 });
 
