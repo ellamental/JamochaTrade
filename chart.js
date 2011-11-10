@@ -345,7 +345,7 @@ function newChart(symbol) {
     drawHorizontalLines();
 
     // draw line
-    c.moveTo(width - ((end-today)*width_mul) + (width_mul / 4) - 1, 
+    c.moveTo(width - ((end-today+1)*width_mul) + (width_mul / 4) - 1, 
              (height-7) - (height_mul * (data[end].close-low)))
     for (var i = end; i >= today; i--) {
       c.lineTo(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
