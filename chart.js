@@ -82,6 +82,12 @@ function newChart(symbol) {
   $("#chart_style").change(function () {
     chart_style = $("#chart_style").val();
     drawChart();
+    if (chart_style === "candle" || chart_style === "bar") {
+      $("#color_pickers").show(500);
+    }
+    else {
+      $("#color_pickers").hide(500);
+    }
   });
   
   $("#up_color").change(function () {
