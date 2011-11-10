@@ -307,11 +307,11 @@ function newChart(symbol) {
                 (height_mul * (data[i].low - data[i].high)));
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
                 (height-7) - (height_mul * (data[i].close-low)),
-                width_mul / 2,
+                width_mul / 4,
                 2);
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
                 (height-7) - (height_mul * (data[i].open-low)),
-                -(width_mul / 2),
+                -(width_mul / 4),
                 2);
     }
   }
@@ -332,7 +332,7 @@ function newChart(symbol) {
                 (height_mul * (data[i].low - data[i].high)));
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
                 (height-7) - (height_mul * (data[i].close-low)),
-                width_mul / 2,
+                width_mul / 4,
                 2);
     }
   }
