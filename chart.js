@@ -153,8 +153,7 @@ function newChart(symbol) {
     $("#account").text("$" + account.toFixed(2));
   }
   
-  $("#sell").click(function () { sell(symbol); });
-  $("#limit").click(function () { 
+  $("#limit").click(function () {
     pending_orders.push(["buy", symbol, $("#limit_price").val(), $("#shares_to_buy").val()]);
   });
 
