@@ -115,8 +115,15 @@ function newChart(symbol) {
     buy($("#shares_to_buy").val(), data[today].close);
   });
   
+  $("#limit").click(function () {
+    pending_orders.push({ "type": "buy",
+                          "symbol": symbol,
+                          "price": $("#limit_price").val(),
+                          "shares": $("#shares_to_buy").val() });
+  });
+
   function buy(num_shares, price) {
-    price = parseInt(price);
+    price = parseFloat(price);
     if (num_shares === "") {
       shares = Math.floor(account / price);
     }
@@ -131,36 +138,34 @@ function newChart(symbol) {
     if (symbol in portfolio) {
       if (portfolio[symbol] === 0) { $("#pi_" + symbol).show(); }
       portfolio[symbol] += shares;
-      var div_id = "#pi_"+symbol+" > .shares";
-      $(div_id).text(portfolio[symbol])
+      var shares_id = "#pi_"+symbol+" > .shares";
+      $(shares_id).text(portfolio[symbol])
     }
     else {
       portfolio[symbol] = shares;
-      var div_id = "pi_"+symbol;
-      $("#security_list").prepend('<div id="'+div_id+'" name="'+symbol+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+symbol+'<br />Shares: <span class="shares">'+shares+'</span><br /><input id="sell_shares_'+symbol+'" size="6"></input><button id="sell_'+symbol+'">Sell</button><button id="view_'+symbol+'">View</button></div>');
-      $("#sell_" + symbol).button();
-      var s = symbol;
-      $("#view_" + symbol).button();
-      $("#view_" + symbol).click(function () {
-        symbol = s;
-        $("#symbol_name").text(s.toUpperCase());
-        getData(s);
-      });
-      $("#sell_"+symbol).click(function () {
-        sell(s);
-      });
+      addPortfolioItem(symbol);
     }
     $("#account").text("$" + account.toFixed(2));
   }
   
-  $("#limit").click(function () {
-    pending_orders.push(["buy", symbol, $("#limit_price").val(), $("#shares_to_buy").val()]);
-  });
-
-  function sell(sym) {
+  function addPortfolioItem(sym) {
+      var div_id = "pi_"+sym;
+      $("#security_list").prepend('<div id="'+div_id+'" name="'+sym+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+sym+'<br />Shares: <span class="shares">'+shares+'</span><br /><input id="sell_shares_'+sym+'" size="6"></input><button id="sell_'+sym+'">Sell</button><button id="view_'+sym+'">View</button></div>');
+      $("#sell_" + sym).button();
+      $("#view_" + sym).button();
+      $("#view_" + sym).click(function () {
+        symbol = sym;
+        $("#symbol_name").text(sym.toUpperCase());
+        getData(sym);
+      });
+      $("#sell_"+sym).click(function () {
+        sell(sym, $("#sell_shares_"+sym).val());
+      });
+    }
+  
+  function sell(sym, num_shares) {
     if (sym in portfolio) {
       price = appData[sym][today].close;
-      num_shares = $("#sell_shares_"+sym).val();
       if (num_shares === "") {
         shares = portfolio[sym];
       }
@@ -182,13 +187,10 @@ function newChart(symbol) {
 
   function process_orders() {
     for (var i=0; i<pending_orders.length; i++) {
-      var bs = pending_orders[i][0];
-      var sym = pending_orders[i][1];
-      var p = pending_orders[i][2];
-      var shares = pending_orders[i][3];
-      if (bs === "buy") {
-        if (appData[sym][today].high > p) {
-          buy(shares, p);
+      var o = pending_orders[i];
+      if (o.type === "buy") {
+        if (appData[o.symbol][today].high > o.price) {
+          buy(o.shares, o.price);
           pending_orders.splice(i, 1);
         }
       }
