@@ -212,6 +212,12 @@ function newChart(symbol) {
 
   function drawChart() {
     chart_styles[chart_style]();
+    var t = data[today];
+    $("#today_date").text(t.date);
+    $("#today_open").text(t.open);
+    $("#today_high").text(t.high);
+    $("#today_low").text(t.low);
+    $("#today_close").text(t.close);
   }
 
   function getAdjustments() {
