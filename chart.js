@@ -20,7 +20,7 @@
 
 
 function newChart(symbol) {
-  var width = 600, height = 500
+  var width = 620, height = 500
   var chart = document.getElementById("chart");
   var c = chart.getContext("2d");
   chart.width = width; chart.height = height;
@@ -296,10 +296,6 @@ function newChart(symbol) {
   function drawPriceLabels(a) {
     var mul = height / 6;
     var diff = (a.high-a.low) / 6;
-    console.log(a.low);
-    console.log(a.high);
-    console.log(a.high-a.low);
-    console.log(diff);
     c.fillStyle = "#000";
     c.font = 'italic 15px sans-serif';
     c.textAlign = "right";
