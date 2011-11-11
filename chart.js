@@ -47,6 +47,7 @@ function newChart(symbol) {
   var account = 100000;
   var portfolio = {};
   
+  var pending_orders = [];
   
   //__________________________________________________________________________
   // Event binding
@@ -60,6 +61,8 @@ function newChart(symbol) {
         if (today > 0) {
           today--; 
           drawChart();
+          process_orders();
+          //console.log(pending_orders);
         }
       }
     }
@@ -104,9 +107,16 @@ function newChart(symbol) {
     drawChart();
   });
 
+  //__________________________________________________________________________
+  // Order Processing
+  //__________________________________________________________________________
+
   $("#buy").click(function () {
-    price = data[today].close;
-    num_shares = $("#shares_to_buy").val();
+    buy($("#shares_to_buy").val(), data[today].close);
+  });
+  
+  function buy(num_shares, price) {
+    price = parseInt(price);
     if (num_shares === "") {
       shares = Math.floor(account / price);
     }
@@ -141,9 +151,12 @@ function newChart(symbol) {
       });
     }
     $("#account").text("$" + account.toFixed(2));
-  });
+  }
   
   $("#sell").click(function () { sell(symbol); });
+  $("#limit").click(function () { 
+    pending_orders.push(["buy", symbol, $("#limit_price").val(), $("#shares_to_buy").val()]);
+  });
 
   function sell(sym) {
     if (sym in portfolio) {
@@ -168,6 +181,20 @@ function newChart(symbol) {
     }
   }
 
+  function process_orders() {
+    for (var i=0; i<pending_orders.length; i++) {
+      var bs = pending_orders[i][0];
+      var sym = pending_orders[i][1];
+      var p = pending_orders[i][2];
+      var shares = pending_orders[i][3];
+      if (bs === "buy") {
+        if (appData[sym][today].high > p) {
+          buy(shares, p);
+          pending_orders.splice(i, 1);
+        }
+      }
+    }
+  }
   
   //__________________________________________________________________________
   // Data Retrieval
