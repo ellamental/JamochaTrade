@@ -186,14 +186,18 @@ function newChart(symbol) {
   }
 
   function process_orders() {
+    var remove_list = [];
     for (var i=0; i<pending_orders.length; i++) {
       var o = pending_orders[i];
       if (o.type === "buy") {
         if (appData[o.symbol][today].high > o.price) {
           buy(o.shares, o.price);
-          pending_orders.splice(i, 1);
+          remove_list.push(i);
         }
       }
+    }
+    for (var i=remove_list.length-1; i >= 0; i--) {
+      pending_orders.splice(i, 1);
     }
   }
   
