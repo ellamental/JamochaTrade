@@ -232,11 +232,11 @@ function newChart(symbol) {
         data = new Array(result_data.length - 1)
         for (var i=0; i < data.length; i++) {
           data[i] = {open:   parseFloat(result_data[i].col1),
-                    high:   parseFloat(result_data[i].col2),
-                    low:    parseFloat(result_data[i].col3),
-                    close:  parseFloat(result_data[i].col4),
-                    date:   result_data[i].col0,
-                    volume: result_data[i].col5};
+                     high:   parseFloat(result_data[i].col2),
+                     low:    parseFloat(result_data[i].col3),
+                     close:  parseFloat(result_data[i].col4),
+                     date:   result_data[i].col0,
+                     volume: result_data[i].col5};
         }
         appData[symbol] = data;
         drawChart();
@@ -316,9 +316,9 @@ function newChart(symbol) {
     for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                height - (height_mul * (data[i].low-low)),
-                2,
-                (height_mul * (data[i].low - data[i].high)));
+                 height - (height_mul * (data[i].low-low)),
+                 2,
+                 (height_mul * (data[i].low - data[i].high)));
     }
 
     // draw bodies
@@ -326,9 +326,9 @@ function newChart(symbol) {
       if (data[i].open < data[i].close) { c.fillStyle = upColor; }
       else { c.fillStyle = downColor; }
       c.fillRect(width - ((i-today+1)*width_mul), 
-                height - (height_mul * (data[i].open-low)),
-                width / (chart_length*2), //20,
-                (height_mul * (data[i].open - data[i].close)));
+                 height - (height_mul * (data[i].open-low)),
+                 width / (chart_length*2), //20,
+                 (height_mul * (data[i].open - data[i].close)));
     }
     drawPriceLabels(a);
   }
@@ -344,9 +344,9 @@ function newChart(symbol) {
       if (data[i].open < data[i].close) { c.fillStyle = upColor; }
       else { c.fillStyle = downColor; }
       c.fillRect(width - ((i-today+1)*width_mul), 
-                height - (height_mul * (data[i].close-low)),
-                width / (chart_length*2), //20,
-                height);//(height_mul * (data[i].open - data[i].close)));
+                 height - (height_mul * (data[i].close-low)),
+                 width / (chart_length*2), //20,
+                 height);//(height_mul * (data[i].open - data[i].close)));
     }
     drawPriceLabels(a);
   }
@@ -362,17 +362,17 @@ function newChart(symbol) {
     for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                height - (height_mul * (data[i].low-low)),
-                2,
-                (height_mul * (data[i].low - data[i].high)));
+                 height - (height_mul * (data[i].low-low)),
+                 2,
+                 (height_mul * (data[i].low - data[i].high)));
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4),
-                height - (height_mul * (data[i].close-low)),
-                width_mul / 4,
-                2);
+                 height - (height_mul * (data[i].close-low)),
+                 width_mul / 4,
+                 2);
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
-                height - (height_mul * (data[i].open-low)),
-                -(width_mul / 4),
-                2);
+                 height - (height_mul * (data[i].open-low)),
+                 -(width_mul / 4),
+                 2);
     }
     drawPriceLabels(a);
   }
@@ -388,13 +388,13 @@ function newChart(symbol) {
     for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                height - (height_mul * (data[i].low-low)),
-                2,
-                (height_mul * (data[i].low - data[i].high)));
+                 height - (height_mul * (data[i].low-low)),
+                 2,
+                 (height_mul * (data[i].low - data[i].high)));
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4),
-                height - (height_mul * (data[i].close-low)),
-                width_mul / 4,
-                2);
+                 height - (height_mul * (data[i].close-low)),
+                 width_mul / 4,
+                 2);
     }
     drawPriceLabels(a);
   }
@@ -411,7 +411,7 @@ function newChart(symbol) {
              height - (height_mul * (data[end].close-low)))
     for (var i = end; i >= today; i--) {
       c.lineTo(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-              height - (height_mul * (data[i].close-low)));
+               height - (height_mul * (data[i].close-low)));
     }
     c.stroke();
     drawPriceLabels(a);
