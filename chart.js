@@ -118,15 +118,28 @@ function newChart(symbol) {
   // Order Processing
   //__________________________________________________________________________
 
-  $("#buy").click(function () {
-    buy($("#shares_to_buy").val(), data[today].close);
+  $("#limit_price_div").hide();
+  $("#buy_order_type").change(function () {
+    var val = $("#buy_order_type").val();
+    if (val === "market") {
+      $("#limit_price_div").hide();
+    }
+    else if (val === "limit") {
+      $("#limit_price_div").show();
+    }
   });
   
-  $("#limit").click(function () {
-    pending_orders.push({ "type": "buy",
-                          "symbol": symbol,
-                          "price": $("#limit_price").val(),
-                          "shares": $("#shares_to_buy").val() });
+  $("#buy").click(function () {
+    order_type = $("#buy_order_type").val();
+    if (order_type === "market") {
+      buy($("#shares_to_buy").val(), data[today].close);
+    }
+    else if (order_type === "limit") {
+      pending_orders.push({ "type": "buy",
+                            "symbol": symbol,
+                            "price": $("#limit_price").val(),
+                            "shares": $("#shares_to_buy").val() });
+    }
   });
 
   function buy(num_shares, price) {

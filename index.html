@@ -88,8 +88,14 @@
     <div id="order_entry">
       <h3><a href="#">Order Entry</a></h3>
       <div>
-        Shares: <input id="shares_to_buy" size="6"></input> <button id="buy">Buy</button><br/>
-        Limit: <input id="limit_price" size="6"></input> <button id="limit">Limit</button>
+        Order Type: <select id="buy_order_type" class="ui-state-default">
+                      <option value="market">Market</option>
+                      <option value="limit">Limit</option>
+                    </select><br />
+        Shares: <input id="shares_to_buy" size="6"></input> <button id="buy">Buy</button>
+        <div id="limit_price_div">
+          Limit Price: <input id="limit_price" size="6"></input>
+        </div> <!-- end limit_price_div -->
       </div> <!-- end Order Entry -->
     </div> <!-- end order_entry -->
     
