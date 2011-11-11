@@ -231,10 +231,10 @@ function newChart(symbol) {
         // Format result_data to change col1->open, col2->high, ...
         data = new Array(result_data.length - 1)
         for (var i=0; i < data.length; i++) {
-          data[i] = {open:   result_data[i].col1,
-                    high:   result_data[i].col2,
-                    low:    result_data[i].col3,
-                    close:  result_data[i].col4,
+          data[i] = {open:   parseFloat(result_data[i].col1),
+                    high:   parseFloat(result_data[i].col2),
+                    low:    parseFloat(result_data[i].col3),
+                    close:  parseFloat(result_data[i].col4),
                     date:   result_data[i].col0,
                     volume: result_data[i].col5};
         }
@@ -272,7 +272,7 @@ function newChart(symbol) {
     }
 
     // get multipliers
-    var height_mul = (height-30) / (high - low);
+    var height_mul = (height) / (high - low);
     var width_mul = (width-20) / chart_length;
 
     return {"end": end,
@@ -285,18 +285,34 @@ function newChart(symbol) {
   function drawHorizontalLines() {
     var mul = height / 6;
     c.fillStyle = "#000";
-    for (var i=1; i<6; i++) {
+    for (var i=0; i<6; i++) {
       c.fillRect(0,
-                 i*mul,
+                 height-(i*mul),
                  width,
                  1);
+    }
+  }
+
+  function drawPriceLabels(a) {
+    var mul = height / 6;
+    var diff = (a.high-a.low) / 6;
+    console.log(a.low);
+    console.log(a.high);
+    console.log(a.high-a.low);
+    console.log(diff);
+    c.fillStyle = "#000";
+    c.font = 'italic 15px sans-serif';
+    c.textAlign = "right";
+    for (var i=0; i<6; i++) {
+      var p = (a.low+(diff*i)).toFixed(2);
+      c.fillText(p, width-5, height-(i*mul)-2);
     }
   }
 
   function drawCandle() {
     c.clearRect(0, 0, width, height);
     var a = getAdjustments();
-    var end = a.end, low = a.low, high = data[today].high;
+    var end = a.end, low = a.low, high = a.high;// = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
     
@@ -304,7 +320,7 @@ function newChart(symbol) {
     for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                (height-7) - (height_mul * (data[i].low-low)),
+                height - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
     }
@@ -314,10 +330,11 @@ function newChart(symbol) {
       if (data[i].open < data[i].close) { c.fillStyle = upColor; }
       else { c.fillStyle = downColor; }
       c.fillRect(width - ((i-today+1)*width_mul), 
-                (height-7) - (height_mul * (data[i].open-low)),
+                height - (height_mul * (data[i].open-low)),
                 width / (chart_length*2), //20,
                 (height_mul * (data[i].open - data[i].close)));
     }
+    drawPriceLabels(a);
   }
 
   function drawBar() {
@@ -331,10 +348,11 @@ function newChart(symbol) {
       if (data[i].open < data[i].close) { c.fillStyle = upColor; }
       else { c.fillStyle = downColor; }
       c.fillRect(width - ((i-today+1)*width_mul), 
-                (height-7) - (height_mul * (data[i].close-low)),
+                height - (height_mul * (data[i].close-low)),
                 width / (chart_length*2), //20,
                 height);//(height_mul * (data[i].open - data[i].close)));
     }
+    drawPriceLabels(a);
   }
   
   function drawOHLC() {
@@ -348,18 +366,19 @@ function newChart(symbol) {
     for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                (height-7) - (height_mul * (data[i].low-low)),
+                height - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
-                (height-7) - (height_mul * (data[i].close-low)),
+                height - (height_mul * (data[i].close-low)),
                 width_mul / 4,
                 2);
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
-                (height-7) - (height_mul * (data[i].open-low)),
+                height - (height_mul * (data[i].open-low)),
                 -(width_mul / 4),
                 2);
     }
+    drawPriceLabels(a);
   }
 
   function drawHLC() {
@@ -373,14 +392,15 @@ function newChart(symbol) {
     for (var i = end; i >= today; i--) {
       c.fillStyle = "#000";
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                (height-7) - (height_mul * (data[i].low-low)),
+                height - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
-                (height-7) - (height_mul * (data[i].close-low)),
+                height - (height_mul * (data[i].close-low)),
                 width_mul / 4,
                 2);
     }
+    drawPriceLabels(a);
   }
 
   function drawLine() {
@@ -392,12 +412,13 @@ function newChart(symbol) {
 
     // draw line
     c.moveTo(width - ((end-today+1)*width_mul) + (width_mul / 4) - 1, 
-             (height-7) - (height_mul * (data[end].close-low)))
+             height - (height_mul * (data[end].close-low)))
     for (var i = end; i >= today; i--) {
       c.lineTo(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-              (height-7) - (height_mul * (data[i].close-low)));
+              height - (height_mul * (data[i].close-low)));
     }
     c.stroke();
+    drawPriceLabels(a);
   }
 
 
