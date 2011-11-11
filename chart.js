@@ -69,7 +69,7 @@ function newChart(symbol) {
               port_value += appData[sym][today].close * portfolio[sym];
             }
           }
-          $("#portfolio_value").text("$"+port_value);
+          $("#portfolio_value").text("$"+port_value.toFixed(2));
         }
       }
     }
