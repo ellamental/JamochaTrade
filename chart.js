@@ -63,6 +63,13 @@ function newChart(symbol) {
           drawChart();
           process_orders();
           //console.log(pending_orders);
+          port_value = account;
+          for (var sym in portfolio) {
+            if (portfolio[sym] != 0) {
+              port_value += appData[sym][today].close * portfolio[sym];
+            }
+          }
+          $("#portfolio_value").text("$"+port_value);
         }
       }
     }
