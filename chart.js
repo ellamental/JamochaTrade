@@ -365,7 +365,7 @@ function newChart(symbol) {
                 height - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
-      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4),
                 height - (height_mul * (data[i].close-low)),
                 width_mul / 4,
                 2);
@@ -391,7 +391,7 @@ function newChart(symbol) {
                 height - (height_mul * (data[i].low-low)),
                 2,
                 (height_mul * (data[i].low - data[i].high)));
-      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
+      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4),
                 height - (height_mul * (data[i].close-low)),
                 width_mul / 4,
                 2);
