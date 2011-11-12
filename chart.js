@@ -146,6 +146,7 @@ function newChart(symbol) {
                             "symbol": symbol,
                             "price": $("#limit_price").val(),
                             "shares": $("#shares_to_buy").val() });
+      alert("Limit order entered");
     }
   });
 
