@@ -24,6 +24,13 @@ function newChart(symbol) {
   var chart = document.getElementById("chart");
   var c = chart.getContext("2d");
   chart.width = width; chart.height = height;
+  
+  // Set select boxes to default
+  $("#time_period").val("15");
+  $("#chart_style").val("candle");
+  $("#up_color").val("#00FF00");
+  $("#down_color").val("#FF0000");
+  $("#buy_order_type").val("market");
 
   var symbol = symbol;
   
