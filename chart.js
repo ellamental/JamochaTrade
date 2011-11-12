@@ -142,12 +142,20 @@ function newChart(symbol) {
       buy($("#shares_to_buy").val(), data[today].close);
     }
     else if (order_type === "limit") {
-      pending_orders.push({ "type": "buy",
+      pending_orders.push({ "type": "buy_limit",
                             "symbol": symbol,
                             "price": $("#limit_price").val(),
                             "shares": $("#shares_to_buy").val() });
       alert("Limit order entered");
     }
+    else if (order_type === "stop") {
+      pending_orders.push({ "type": "buy_stop",
+                            "symbol": symbol,
+                            "price": $("#limit_price").val(),
+                            "shares": $("#shares_to_buy").val() });
+      alert("Stop order entered");
+    }
+
   });
 
   function buy(num_shares, price) {
@@ -217,12 +225,20 @@ function newChart(symbol) {
     var remove_list = [];
     for (var i=0; i<pending_orders.length; i++) {
       var o = pending_orders[i];
-      if (o.type === "buy") {
+      if (o.type === "buy_limit") {
         if (appData[o.symbol][today].low < o.price) {
           p = Math.min(appData[o.symbol][today].open, o.price);
           buy(o.shares, p);
           remove_list.push(i);
           alert("Limit order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
+        }
+      }
+      else if (o.type === "buy_stop") {
+        if (appData[o.symbol][today].high > o.price) {
+          p = Math.max(appData[o.symbol][today].open, o.price);
+          buy(o.shares, p);
+          remove_list.push(i);
+          alert("Stop order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
         }
       }
     }
