@@ -218,10 +218,11 @@ function newChart(symbol) {
     for (var i=0; i<pending_orders.length; i++) {
       var o = pending_orders[i];
       if (o.type === "buy") {
-        if (appData[o.symbol][today].high > o.price) {
-          p = Math.max(appData[o.symbol][today].open, o.price);
+        if (appData[o.symbol][today].low < o.price) {
+          p = Math.min(appData[o.symbol][today].open, o.price);
           buy(o.shares, p);
           remove_list.push(i);
+          alert("Limit order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
         }
       }
     }
