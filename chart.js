@@ -186,7 +186,7 @@ function newChart(symbol) {
   
   function addPortfolioItem(sym) {
       var div_id = "pi_"+sym;
-      $("#security_list").prepend('<div id="'+div_id+'" name="'+sym+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+sym+'<br />Shares: <span class="shares">'+shares+'</span><br /><input id="sell_shares_'+sym+'" size="6"></input><button id="sell_'+sym+'">Sell</button><button id="view_'+sym+'">View</button></div>');
+      $("#security_list").prepend('<div id="'+div_id+'" name="'+sym+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+sym+'<br />Shares: <span class="shares">'+shares+'</span><br />Order Type: <select id="order_type_'+sym+'" class="ui-state-default"><option value="market">Market</option><option value="limit">Limit</option><option value="stop">Stop</option></select><br />Shares: <input id="sell_shares_'+sym+'" size="6"></input><div id="limit_div_'+sym+'">Limit Price: <input id="limit_price_'+sym+'" size="6"></div><div><button id="sell_'+sym+'">Sell</button><button id="view_'+sym+'">View</button></div></div>');
       $("#sell_" + sym).button();
       $("#view_" + sym).button();
       $("#view_" + sym).click(function () {
@@ -194,14 +194,42 @@ function newChart(symbol) {
         $("#symbol_name").text(sym.toUpperCase());
         getData(sym);
       });
+      $("#limit_div_"+sym).hide();
+      $("#order_type_"+sym).val("market");
+      $("#order_type_"+sym).click(function () {
+        var o = $("#order_type_"+sym).val();
+        if (o === "market") {
+          $("#limit_div_"+sym).hide();
+        }
+        else if (o === "limit" || o === "stop") {
+          $("#limit_div_"+sym).show();
+        }
+      });
       $("#sell_"+sym).click(function () {
-        sell(sym, $("#sell_shares_"+sym).val());
+        order_type = $("#order_type_"+sym).val();
+        if (order_type === "market") {
+          sell(sym, $("#sell_shares_"+sym).val(), appData[sym][today].close);
+        }
+        else if (order_type === "limit") {
+          pending_orders.push({ "type": "sell_limit",
+                                "symbol": sym,
+                                "price": $("#limit_price_"+sym).val(),
+                                "shares": $("#sell_shares_"+sym).val() });
+          alert("Limit order entered");
+        }
+        else if (order_type === "stop") {
+          pending_orders.push({ "type": "sell_stop",
+                                "symbol": symbol,
+                                "price": $("#limit_price_"+sym).val(),
+                                "shares": $("#sell_shares_"+sym).val() });
+          alert("Stop order entered");
+        }
+
       });
     }
   
-  function sell(sym, num_shares) {
+  function sell(sym, num_shares, price) {
     if (sym in portfolio) {
-      price = appData[sym][today].close;
       if (num_shares === "") {
         shares = portfolio[sym];
       }
@@ -239,6 +267,22 @@ function newChart(symbol) {
           buy(o.shares, p);
           remove_list.push(i);
           alert("Stop order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
+        }
+      }
+      else if (o.type === "sell_limit") {
+        if (appData[o.symbol][today].high > o.price) {
+          p = Math.max(appData[o.symbol][today].open, o.price);
+          sell(o.symbol, o.shares, p);
+          remove_list.push(i);
+          alert("Limit sell order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
+        }
+      }
+      else if (o.type === "sell_stop") {
+        if (appData[o.symbol][today].low < o.price) {
+          p = Math.min(appData[o.symbol][today].open, o.price);
+          sell(o.symbol, o.shares, p);
+          remove_list.push(i);
+          alert("Stop sell order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
         }
       }
     }
