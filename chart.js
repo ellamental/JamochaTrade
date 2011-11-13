@@ -152,11 +152,7 @@ function newChart(symbol) {
                 "id": pending_order_counter };
       pending_orders.push(o);
       pending_order_counter++;
-      $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Limit Buy<br />Symbol: '+symbol+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'<br /><button id="cancel_'+o.id+'">Cancel</button></div>');
-      $("#cancel_"+o.id).button();
-      $("#cancel_"+o.id).click(function () {
-        remove_pending_order(o.id);
-      });
+      display_pending_order(o);
       if (pending_orders.length === 1) {
         $("#pending_orders_pane").show();
       }
@@ -169,18 +165,25 @@ function newChart(symbol) {
                 "id": pending_order_counter };
       pending_orders.push(o);
       pending_order_counter++;
-      $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Stop Buy<br />Symbol: '+symbol+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'<br /><button id="cancel_'+o.id+'">Cancel</button></div>');
-      $("#cancel_"+o.id).button();
-      $("#cancel_"+o.id).click(function () {
-        remove_pending_order(o.id);
-      });
+      display_pending_order(o);
       if (pending_orders.length === 1) {
         $("#pending_orders_pane").show();
       }
     }
-
   });
-
+  
+  function display_pending_order(o) {
+    var display = { "buy_stop": "Buy Stop",
+                    "buy_limit": "Buy Limit",
+                    "sell_stop": "Sell Stop",
+                    "sell_limit": "Sell Limit" }
+    $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">'+display[o.type]+'<br />Symbol: '+o.symbol+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'<br /><button id="cancel_'+o.id+'">Cancel</button></div>');
+    $("#cancel_"+o.id).button();
+    $("#cancel_"+o.id).click(function () {
+      remove_pending_order(o.id);
+    });
+  }
+  
   function buy(num_shares, price) {
     price = parseFloat(price);
     if (num_shares === "") {
@@ -241,11 +244,7 @@ function newChart(symbol) {
                   "id": pending_order_counter };
         pending_orders.push(o);
         pending_order_counter++;
-        $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Limit Sell<br />Symbol: '+sym+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'<br /><button id="cancel_'+o.id+'">Cancel</button></div>');
-        $("#cancel_"+o.id).button();
-        $("#cancel_"+o.id).click(function () {
-          remove_pending_order(o.id);
-        });
+        display_pending_order(o);
         if (pending_orders.length === 1) {
           $("#pending_orders_pane").show();
         }
@@ -258,11 +257,7 @@ function newChart(symbol) {
                   "id": pending_order_counter };
         pending_orders.push(o);
         pending_order_counter++;
-        $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Limit Sell<br />Symbol: '+sym+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'<br /><button id="cancel_'+o.id+'">Cancel</button></div>');
-        $("#cancel_"+o.id).button();
-        $("#cancel_"+o.id).click(function () {
-          remove_pending_order(o.id);
-        });
+        display_pending_order(o);
         if (pending_orders.length === 1) {
           $("#pending_orders_pane").show();
         }
