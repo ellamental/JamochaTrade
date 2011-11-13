@@ -1,10 +1,10 @@
-//___________________________________________________________________________//
-// JamochaTrade
-//___________________________________________________________________________//
+JamochaTrade is a stock charting and paper trading game/trainer.  It allows the 
+user to test trading strategies on real historical data.
 
-JamochaTrade is a rewrite of pyTrade in Javascript.  It is being developed 
-incrementally as a series of tutorials/blog posts called Jumping Into 
-Javascript.  More information will be available here shortly.
+Features:
+- 5 chart styles (Candlestick, bar, OHLC, HLC and line charts)
+- Market, Limit and Stop orders
+- Portfolio view
 
-For now, here's the link to the first installment of Jumping Into Javascript:
-http://pointlessprogramming.wordpress.com/2011/03/26/jumping-into-javascript/
+The early stages of development are documented on my blog:
+(Jumping into Javascript)[http://nickzarr.com/blog4/2011/03/jumping-into-javascript/]
