@@ -7,4 +7,4 @@ Features:
 - Portfolio view
 
 The early stages of development are documented on my blog:
-(Jumping into Javascript)[http://nickzarr.com/blog4/2011/03/jumping-into-javascript/]
+[Jumping into Javascript](http://nickzarr.com/blog4/2011/03/jumping-into-javascript/)
