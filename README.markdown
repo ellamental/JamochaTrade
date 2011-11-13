@@ -2,6 +2,7 @@ JamochaTrade is a stock charting and paper trading game/trainer.  It allows the
 user to test trading strategies on real historical data.
 
 Features:
+
 - 5 chart styles (Candlestick, bar, OHLC, HLC and line charts)
 - Market, Limit and Stop orders
 - Portfolio view
