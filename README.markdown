@@ -6,6 +6,7 @@ Features:
 - 5 chart styles (Candlestick, bar, OHLC, HLC and line charts)
 - Market, Limit and Stop orders
 - Portfolio view
+- Most features auto-hide to reduce clutter
 
 The early stages of development are documented on my blog:
 [Jumping into Javascript](http://nickzarr.com/blog4/2011/03/jumping-into-javascript/)
