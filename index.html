@@ -18,6 +18,7 @@
     $("#chart_controls").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("#order_entry").accordion({autoHeight: false, navigation: true, collapsible:  true});
     $("#portfolio_view").accordion({autoHeight: false, navigation: true, collapsible: true});
+    $("#pending_orders_pane").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("button").button();
   });
   </script>
@@ -109,6 +110,12 @@
         </div>
       </div> <!-- end Portfolio -->
     </div> <!-- end portfolio_view -->
+
+    <div id="pending_orders_pane">
+      <h3><a href="#">Pending Orders</a></h3>
+      <div id="pending_orders">
+      </div>
+    </div> <!-- end pending_orders -->
 
   </div> <!-- end toolbar -->
 
