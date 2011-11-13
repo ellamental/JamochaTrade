@@ -200,60 +200,59 @@ function newChart(symbol) {
   }
   
   function addPortfolioItem(sym) {
-      var div_id = "pi_"+sym;
-      $("#security_list").prepend('<div id="'+div_id+'" name="'+sym+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+sym+'<br />Shares: <span class="shares">'+shares+'</span><br />Order Type: <select id="order_type_'+sym+'" class="ui-state-default"><option value="market">Market</option><option value="limit">Limit</option><option value="stop">Stop</option></select><br />Shares: <input id="sell_shares_'+sym+'" size="6"></input><div id="limit_div_'+sym+'">Limit Price: <input id="limit_price_'+sym+'" size="6"></div><div><button id="sell_'+sym+'">Sell</button><button id="view_'+sym+'">View</button></div></div>');
-      $("#sell_" + sym).button();
-      $("#view_" + sym).button();
-      $("#view_" + sym).click(function () {
-        symbol = sym;
-        $("#symbol_name").text(sym.toUpperCase());
-        getData(sym);
-      });
-      $("#limit_div_"+sym).hide();
-      $("#order_type_"+sym).val("market");
-      $("#order_type_"+sym).click(function () {
-        var o = $("#order_type_"+sym).val();
-        if (o === "market") {
-          $("#limit_div_"+sym).hide();
+    var div_id = "pi_"+sym;
+    $("#security_list").prepend('<div id="'+div_id+'" name="'+sym+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+sym+'<br />Shares: <span class="shares">'+shares+'</span><br />Order Type: <select id="order_type_'+sym+'" class="ui-state-default"><option value="market">Market</option><option value="limit">Limit</option><option value="stop">Stop</option></select><br />Shares: <input id="sell_shares_'+sym+'" size="6"></input><div id="limit_div_'+sym+'">Limit Price: <input id="limit_price_'+sym+'" size="6"></div><div><button id="sell_'+sym+'">Sell</button><button id="view_'+sym+'">View</button></div></div>');
+    $("#sell_" + sym).button();
+    $("#view_" + sym).button();
+    $("#view_" + sym).click(function () {
+      symbol = sym;
+      $("#symbol_name").text(sym.toUpperCase());
+      getData(sym);
+    });
+    $("#limit_div_"+sym).hide();
+    $("#order_type_"+sym).val("market");
+    $("#order_type_"+sym).click(function () {
+      var o = $("#order_type_"+sym).val();
+      if (o === "market") {
+        $("#limit_div_"+sym).hide();
+      }
+      else if (o === "limit" || o === "stop") {
+        $("#limit_div_"+sym).show();
+      }
+    });
+    $("#sell_"+sym).click(function () {
+      order_type = $("#order_type_"+sym).val();
+      if (order_type === "market") {
+        sell(sym, $("#sell_shares_"+sym).val(), appData[sym][today].close);
+      }
+      else if (order_type === "limit") {
+        var o = { "type": "sell_limit",
+                  "symbol": sym,
+                  "price": $("#limit_price_"+sym).val(),
+                  "shares": $("#sell_shares_"+sym).val(),
+                  "id": pending_order_counter };
+        pending_orders.push(o);
+        pending_order_counter++;
+        $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Limit Sell<br />Symbol: '+sym+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'</div>');
+        if (pending_orders.length === 1) {
+          $("#pending_orders_pane").show();
         }
-        else if (o === "limit" || o === "stop") {
-          $("#limit_div_"+sym).show();
+      }
+      else if (order_type === "stop") {
+        var o = { "type": "sell_stop",
+                  "symbol": sym,
+                  "price": $("#limit_price_"+sym).val(),
+                  "shares": $("#sell_shares_"+sym).val(),
+                  "id": pending_order_counter };
+        pending_orders.push(o);
+        pending_order_counter++;
+        $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Limit Sell<br />Symbol: '+sym+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'</div>');
+        if (pending_orders.length === 1) {
+          $("#pending_orders_pane").show();
         }
-      });
-      $("#sell_"+sym).click(function () {
-        order_type = $("#order_type_"+sym).val();
-        if (order_type === "market") {
-          sell(sym, $("#sell_shares_"+sym).val(), appData[sym][today].close);
-        }
-        else if (order_type === "limit") {
-          var o = { "type": "sell_limit",
-                    "symbol": sym,
-                    "price": $("#limit_price_"+sym).val(),
-                    "shares": $("#sell_shares_"+sym).val(),
-                    "id": pending_order_counter };
-          pending_orders.push(o);
-          pending_order_counter++;
-          $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Limit Sell<br />Symbol: '+sym+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'</div>');
-          if (pending_orders.length === 1) {
-            $("#pending_orders_pane").show();
-          }
-        }
-        else if (order_type === "stop") {
-          var o = { "type": "sell_stop",
-                    "symbol": sym,
-                    "price": $("#limit_price_"+sym).val(),
-                    "shares": $("#sell_shares_"+sym).val(),
-                    "id": pending_order_counter };
-          pending_orders.push(o);
-          pending_order_counter++;
-          $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">Limit Sell<br />Symbol: '+sym+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'</div>');
-          if (pending_orders.length === 1) {
-            $("#pending_orders_pane").show();
-          }
-        }
-
-      });
-    }
+      }
+    });
+  }
   
   function sell(sym, num_shares, price) {
     if (sym in portfolio) {
