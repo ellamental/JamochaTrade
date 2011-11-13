@@ -134,7 +134,7 @@ function newChart(symbol) {
     if (val === "market") {
       $("#limit_price_div").hide();
     }
-    else if (val === "limit") {
+    else if (val === "limit" || val === "stop") {
       $("#limit_price_div").show();
     }
   });
@@ -145,32 +145,26 @@ function newChart(symbol) {
       buy($("#shares_to_buy").val(), data[today].close);
     }
     else if (order_type === "limit") {
-      var o = { "type": "buy_limit",
-                "symbol": symbol,
-                "price": $("#limit_price").val(),
-                "shares": $("#shares_to_buy").val(),
-                "id": pending_order_counter };
-      pending_orders.push(o);
-      pending_order_counter++;
-      display_pending_order(o);
-      if (pending_orders.length === 1) {
-        $("#pending_orders_pane").show();
-      }
+      add_pending_order("buy_limit", symbol, $("#limit_price").val(), $("#shares_to_buy").val());
     }
     else if (order_type === "stop") {
-      var o = { "type": "buy_stop",
-                "symbol": symbol,
-                "price": $("#limit_price").val(),
-                "shares": $("#shares_to_buy").val(),
-                "id": pending_order_counter };
-      pending_orders.push(o);
-      pending_order_counter++;
-      display_pending_order(o);
-      if (pending_orders.length === 1) {
-        $("#pending_orders_pane").show();
-      }
+      add_pending_order("buy_stop", symbol, $("#limit_price").val(), $("#shares_to_buy").val());
     }
   });
+
+  function add_pending_order(type, sym, price, shares) {
+    var o = { "type": type,
+              "symbol": sym,
+              "price": price,
+              "shares": shares,
+              "id": pending_order_counter };
+    pending_orders.push(o);
+    pending_order_counter++;
+    display_pending_order(o);
+    if (pending_orders.length === 1) {
+      $("#pending_orders_pane").show();
+    }
+  }
   
   function display_pending_order(o) {
     var display = { "buy_stop": "Buy Stop",
@@ -237,30 +231,10 @@ function newChart(symbol) {
         sell(sym, $("#sell_shares_"+sym).val(), appData[sym][today].close);
       }
       else if (order_type === "limit") {
-        var o = { "type": "sell_limit",
-                  "symbol": sym,
-                  "price": $("#limit_price_"+sym).val(),
-                  "shares": $("#sell_shares_"+sym).val(),
-                  "id": pending_order_counter };
-        pending_orders.push(o);
-        pending_order_counter++;
-        display_pending_order(o);
-        if (pending_orders.length === 1) {
-          $("#pending_orders_pane").show();
-        }
+        add_pending_order("sell_limit", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
       }
       else if (order_type === "stop") {
-        var o = { "type": "sell_stop",
-                  "symbol": sym,
-                  "price": $("#limit_price_"+sym).val(),
-                  "shares": $("#sell_shares_"+sym).val(),
-                  "id": pending_order_counter };
-        pending_orders.push(o);
-        pending_order_counter++;
-        display_pending_order(o);
-        if (pending_orders.length === 1) {
-          $("#pending_orders_pane").show();
-        }
+        add_pending_order("sell_stop", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
       }
     });
   }
