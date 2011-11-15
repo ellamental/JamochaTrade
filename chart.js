@@ -327,6 +327,20 @@ function newChart(symbol) {
   
   $("#indicator_settings").hide();
   
+  var active_indicators = [];
+  
+  function draw_active_indicators() {
+    for (var i=0; i<active_indicators.length; i++) {
+      ind = active_indicators[i];
+      ind.func.apply(this, ind.args);
+    }
+  }
+  
+  function add_active_indicator(func, args) {
+    active_indicators.push({ "func": func, "args": args });
+    func.apply(this, args);
+  }
+  
   function make_color_select(id) {
     return '<select id="'+id+'" class="ui-state-default"><option value="#000000">Black</option><option value="#0000FF">Blue</option><option value="#FF0000">Red</option><option value="#00FF00">Green</option><option value="#FF9933">Orange</option><option value="#FFFF00">Yellow</option></select>'
   }
@@ -334,7 +348,10 @@ function newChart(symbol) {
   var indicator_settings = {
     "sma": {"html": '<div>Days: <input id="sma_days" size="4"></input><br />Color: '+make_color_select('sma_color')+'</div>',
             "click_func": function () {
-                            draw_sma(parseInt($("#sma_days").val()), $("#sma_color").val());
+                            var days = parseInt($("#sma_days").val()),
+                                color = $("#sma_color").val();
+                            add_active_indicator(draw_sma, [days, color]);
+                            //draw_sma(parseInt($("#sma_days").val()), $("#sma_color").val());
                           }
            },
   };
@@ -342,7 +359,6 @@ function newChart(symbol) {
   $("#add_indicator").click(function () {
     var is_elem = $("#indicator_settings");
     var indicator = $("#indicator_select").val();
-    console.log(indicator_settings[indicator].html);
     is_elem.append(indicator_settings[indicator].html);
     is_elem.append('<button id="is_apply">Apply</button>');
     $("#is_apply").button();
@@ -366,7 +382,6 @@ function newChart(symbol) {
       }
       sma_data.push(sum/days);
     }
-    console.log(sma_data);
     drawaLine(sma_data, o, color);
   }
   
@@ -435,6 +450,7 @@ function newChart(symbol) {
 
   function drawChart() {
     chart_styles[chart_style]();
+    draw_active_indicators();
     var t = data[today];
     $("#today_date").text(t.date);
     $("#today_open").text(t.open);
