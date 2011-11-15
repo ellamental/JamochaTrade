@@ -322,6 +322,47 @@ function newChart(symbol) {
   }
   
   //__________________________________________________________________________
+  // Indicators
+  //__________________________________________________________________________
+  
+  $("#draw_sma").click(function () {
+    draw_sma(parseInt($("#sma_days").val()));
+  });
+  
+  function draw_sma(days) {
+    var o = getAdjustments();
+    var sma_data = [];
+    var end = chart_length + today;
+    for (var i=today; i < end; i++) {
+      var slice = data.slice(i, i+days), 
+          sum = 0;
+      for (var j=0; j < days; j++) {
+        sum += slice[j].close;
+      }
+      sma_data.push(sum/days);
+    }
+    console.log(sma_data);
+    drawaLine(sma_data, o);
+  }
+  
+  function drawaLine(data_list, o) {
+    //chart.width = chart.width;  // c.clearRect(0, 0, width, height); doesn't work here
+    //var a = getAdjustments();
+    var end = o.end, low = o.low, high = o.high,
+        height_mul = o.height_mul, width_mul = o.width_mul;
+
+    // draw line
+    c.moveTo(width - ((end+1)*width_mul) + (width_mul / 4) - 1, 
+             height - (height_mul * (data_list[data_list.length-1]-low)))
+    for (var i = data_list.length; i >= 0; i--) {
+      c.lineTo(width - ((i+1)*width_mul) + (width_mul / 4) - 1, 
+               height - (height_mul * (data_list[i]-low)));
+    }
+    c.stroke();
+  }
+
+  
+  //__________________________________________________________________________
   // Data Retrieval
   //__________________________________________________________________________
   
@@ -528,6 +569,7 @@ function newChart(symbol) {
     c.stroke();
     drawPriceLabels(a);
   }
+
 
 
 };

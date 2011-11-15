@@ -16,6 +16,7 @@
   $(function() {
     $("#switcher").themeswitcher();
     $("#chart_controls").accordion({autoHeight: false, navigation: true, collapsible: true});
+    $("#indicators").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("#order_entry").accordion({autoHeight: false, navigation: true, collapsible:  true});
     $("#portfolio_view").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("#pending_orders_pane").accordion({autoHeight: false, navigation: true, collapsible: true});
@@ -86,6 +87,13 @@
       </div> <!-- end Chart -->
     </div> <!-- end chart_controls -->
     
+    <div id="indicators">
+      <h3>Indicators</h3>
+      <div>
+        SMA <input id="sma_days" size="4"></input> days <button id="draw_sma">Draw</button>
+      </div>
+    </div> <!-- end indicators -->
+
     <div id="order_entry">
       <h3><a href="#">Order Entry</a></h3>
       <div>
