@@ -348,6 +348,7 @@ function newChart(symbol) {
   function drawaLine(data_list, o) {
     //chart.width = chart.width;  // c.clearRect(0, 0, width, height); doesn't work here
     //var a = getAdjustments();
+    c.beginPath();
     var end = o.end, low = o.low, high = o.high,
         height_mul = o.height_mul, width_mul = o.width_mul;
 
@@ -402,6 +403,11 @@ function newChart(symbol) {
   //__________________________________________________________________________
   // Chart drawing (Candlestick, Bar, OHLC, HLC, Line)
   //__________________________________________________________________________
+
+  function clear_canvas() {
+    c.clearRect(0, 0, width, height);
+    //chart.width++; chart.width--; // must change size for webkit compatibility
+  }
 
   function drawChart() {
     chart_styles[chart_style]();
@@ -459,7 +465,7 @@ function newChart(symbol) {
   }
 
   function drawCandle() {
-    c.clearRect(0, 0, width, height);
+    clear_canvas();
     var a = getAdjustments();
     var end = a.end, low = a.low, high = a.high;// = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
@@ -487,7 +493,7 @@ function newChart(symbol) {
   }
 
   function drawBar() {
-    c.clearRect(0, 0, width, height);
+    clear_canvas();
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
@@ -505,7 +511,7 @@ function newChart(symbol) {
   }
   
   function drawOHLC() {
-    c.clearRect(0, 0, width, height);
+    clear_canvas();
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
@@ -531,7 +537,7 @@ function newChart(symbol) {
   }
 
   function drawHLC() {
-    c.clearRect(0, 0, width, height);
+    clear_canvas();
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
@@ -553,13 +559,14 @@ function newChart(symbol) {
   }
 
   function drawLine() {
-    chart.width = chart.width;  // c.clearRect(0, 0, width, height); doesn't work here
+    clear_canvas();
     var a = getAdjustments();
     var end = a.end, low = a.low, high = data[today].high;
     var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
 
     // draw line
+    c.beginPath();
     c.moveTo(width - ((end-today+1)*width_mul) + (width_mul / 4) - 1, 
              height - (height_mul * (data[end].close-low)))
     for (var i = end; i >= today; i--) {
