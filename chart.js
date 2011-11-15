@@ -328,6 +328,7 @@ function newChart(symbol) {
   $("#indicator_settings").hide();
   
   var active_indicators = [];
+  var indicator_counter = 0;
   
   function draw_active_indicators() {
     for (var i=0; i<active_indicators.length; i++) {
@@ -336,9 +337,33 @@ function newChart(symbol) {
     }
   }
   
-  function add_active_indicator(func, args) {
-    active_indicators.push({ "func": func, "args": args });
+  function add_active_indicator(name, func, args) {
+    active_indicators.push({ "func": func, "args": args, "id": indicator_counter });
     func.apply(this, args);
+    add_indicator_to_pane(name, indicator_counter);
+    indicator_counter++;
+  }
+  
+  function add_indicator_to_pane(name, id) {
+    var html = '<div id="ai_'+id+'" class="ui-state-default ui-corner-all">'+name+' <button id="ai_close_'+id+'"></button></div>';
+    $("#active_indicators").append(html);
+    $("#ai_close_"+id).button({text:false, icons:{primary:'ui-icon-closethick'}});
+    $("#ai_close_"+id).click(function () {
+      remove_indicator(id);
+    });
+    if (active_indicators.length < 2) {
+      $("#active_indicators").show();
+    }
+  }
+  
+  function remove_indicator(id) {
+    $("#ai_"+id).remove();
+    for (var i=0; i<active_indicators.length; i++) {
+      if (active_indicators[i].id === id) {
+        active_indicators.splice(i, 1);
+        drawChart();
+      }
+    }
   }
   
   function make_color_select(id) {
@@ -350,7 +375,8 @@ function newChart(symbol) {
             "click_func": function () {
                             var days = parseInt($("#sma_days").val()),
                                 color = $("#sma_color").val();
-                            add_active_indicator(draw_sma, [days, color]);
+                                name = "SMA ("+days+")"
+                            add_active_indicator(name, draw_sma, [days, color]);
                             //draw_sma(parseInt($("#sma_days").val()), $("#sma_color").val());
                           }
            },
