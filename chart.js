@@ -384,16 +384,18 @@ function newChart(symbol) {
   
   $("#add_indicator").click(function () {
     var is_elem = $("#indicator_settings");
-    var indicator = $("#indicator_select").val();
-    is_elem.append(indicator_settings[indicator].html);
-    is_elem.append('<button id="is_apply">Apply</button>');
-    $("#is_apply").button();
-    $("#indicator_settings").show();
-    $("#is_apply").click(function () {
-        indicator_settings[indicator].click_func();
-        is_elem.empty();
-        is_elem.hide();
-    });
+    if (is_elem.children().size() === 0 ) {
+      var indicator = $("#indicator_select").val();
+      is_elem.append(indicator_settings[indicator].html);
+      is_elem.append('<button id="is_apply">Apply</button>');
+      $("#is_apply").button();
+      $("#indicator_settings").show();
+      $("#is_apply").click(function () {
+          indicator_settings[indicator].click_func();
+          is_elem.empty();
+          is_elem.hide();
+      });
+    }
   });
   
   function draw_sma(days, color) {
