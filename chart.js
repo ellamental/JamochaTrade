@@ -325,11 +325,36 @@ function newChart(symbol) {
   // Indicators
   //__________________________________________________________________________
   
-  $("#draw_sma").click(function () {
-    draw_sma(parseInt($("#sma_days").val()));
+  $("#indicator_settings").hide();
+  
+  function make_color_select(id) {
+    return '<select id="'+id+'" class="ui-state-default"><option value="#000000">Black</option><option value="#0000FF">Blue</option><option value="#FF0000">Red</option><option value="#00FF00">Green</option><option value="#FF9933">Orange</option><option value="#FFFF00">Yellow</option></select>'
+  }
+
+  var indicator_settings = {
+    "sma": {"html": '<div>Days: <input id="sma_days" size="4"></input><br />Color: '+make_color_select('sma_color')+'</div>',
+            "click_func": function () {
+                            draw_sma(parseInt($("#sma_days").val()), $("#sma_color").val());
+                          }
+           },
+  };
+  
+  $("#add_indicator").click(function () {
+    var is_elem = $("#indicator_settings");
+    var indicator = $("#indicator_select").val();
+    console.log(indicator_settings[indicator].html);
+    is_elem.append(indicator_settings[indicator].html);
+    is_elem.append('<button id="is_apply">Apply</button>');
+    $("#is_apply").button();
+    $("#indicator_settings").show();
+    $("#is_apply").click(function () {
+        indicator_settings[indicator].click_func();
+        is_elem.empty();
+        is_elem.hide();
+    });
   });
   
-  function draw_sma(days) {
+  function draw_sma(days, color) {
     var o = getAdjustments();
     var sma_data = [];
     var end = chart_length + today;
@@ -342,13 +367,12 @@ function newChart(symbol) {
       sma_data.push(sum/days);
     }
     console.log(sma_data);
-    drawaLine(sma_data, o);
+    drawaLine(sma_data, o, color);
   }
   
-  function drawaLine(data_list, o) {
-    //chart.width = chart.width;  // c.clearRect(0, 0, width, height); doesn't work here
-    //var a = getAdjustments();
+  function drawaLine(data_list, o, color) {
     c.beginPath();
+    c.strokeStyle = color;
     var end = o.end, low = o.low, high = o.high,
         height_mul = o.height_mul, width_mul = o.width_mul;
 
