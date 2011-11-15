@@ -633,6 +633,7 @@ function newChart(symbol) {
 
     // draw line
     c.beginPath();
+    c.strokeStyle = "#000";
     c.moveTo(width - ((end-today+1)*width_mul) + (width_mul / 4) - 1, 
              height - (height_mul * (data[end].close-low)))
     for (var i = end; i >= today; i--) {
