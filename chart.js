@@ -387,13 +387,18 @@ function newChart(symbol) {
     if (is_elem.children().size() === 0 ) {
       var indicator = $("#indicator_select").val();
       is_elem.append(indicator_settings[indicator].html);
-      is_elem.append('<button id="is_apply">Apply</button>');
+      is_elem.append('<button id="is_cancel">Cancel</button><button id="is_apply">Apply</button>');
       $("#is_apply").button();
+      $("#is_cancel").button();
       $("#indicator_settings").show();
       $("#is_apply").click(function () {
-          indicator_settings[indicator].click_func();
-          is_elem.empty();
-          is_elem.hide();
+        indicator_settings[indicator].click_func();
+        is_elem.empty();
+        is_elem.hide();
+      });
+      $("#is_cancel").click(function () {
+        is_elem.empty();
+        is_elem.hide();
       });
     }
   });
