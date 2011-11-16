@@ -436,30 +436,46 @@ function newChart(symbol) {
 
   
   //__________________________________________________________________________
-  // Trendlines
+  // Trendline Drawing
   //__________________________________________________________________________
   
-  var begin_line_x,
-      begin_line_y;
+  var offset = $("#chart").offset();
+  var canvas, sketch_context,
+      begin_x, begin_y;
   
   $("#chart").mousedown(function (e) {
-    console.log(chart.offsetLeft+" "+chart.offsetTop);
-    begin_line_x = e.pageX - chart.offsetLeft;
-    begin_line_y = e.pageY - chart.offsetTop;
-  });
+    var container = chart.parentNode;
+    canvas = document.createElement('canvas');
+    canvas.id = 'sketch';
+    canvas.width = chart.width;
+    canvas.height = chart.height;
+    container.appendChild(canvas);
+    begin_x = e.pageX - offset.left;
+    begin_y = e.pageY - offset.top;
+    sketch_context = canvas.getContext("2d");
   
-  $("#chart").mouseup(function (e) {
-    drawTrendline(begin_line_x, begin_line_y, e.pageX-chart.offsetLeft, e.pageY-chart.offsetTop);
-  });
+    $("#sketch").mousemove(function (e) {
+      var x = e.pageX - offset.left,
+          y = e.pageY - offset.top;
+      sketch_context.clearRect(0, 0, canvas.width, canvas.height);
+      sketch_context.beginPath();
+      sketch_context.moveTo(begin_x, begin_y);
+      sketch_context.lineTo(x, y);
+      sketch_context.stroke();
+    });
   
-  function drawTrendline(x, y, end_x, end_y) {
-    c.beginPath();
-    c.strokeStyle = "#000";
-    c.moveTo(x, y);
-    c.lineTo(end_x, end_y);
-    c.stroke();
-  }
-    
+    $("#sketch").mouseup(function (e) {
+      var x = e.pageX - offset.left,
+          y = e.pageY - offset.top;
+      c.beginPath();
+      c.moveTo(begin_x, begin_y);
+      c.lineTo(x, y);
+      c.stroke();
+      $("#sketch").remove();
+    });
+  });
+
+  
   //__________________________________________________________________________
   // Data Retrieval
   //__________________________________________________________________________

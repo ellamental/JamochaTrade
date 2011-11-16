@@ -1,6 +1,15 @@
 body {text-align: center;}
 canvas {border: 1px solid #000;}
 
+#container {
+  position: relative;
+}
+
+#sketch {
+  position: absolute; top: 1px; left: 1px;
+  /*z-index: 2;*/
+}
+
 #wrapper {
   width: 1000;
   text-align: center;
