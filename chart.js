@@ -71,7 +71,7 @@ function newChart(symbol) {
         if (today > 0) {
           today--; 
           drawChart();
-          process_orders();
+          processOrders();
           //console.log(pending_orders);
           port_value = account;
           for (var sym in portfolio) {
@@ -145,14 +145,14 @@ function newChart(symbol) {
       buy($("#shares_to_buy").val(), data[today].close);
     }
     else if (order_type === "limit") {
-      add_pending_order("buy_limit", symbol, $("#limit_price").val(), $("#shares_to_buy").val());
+      addPendingOrder("buy_limit", symbol, $("#limit_price").val(), $("#shares_to_buy").val());
     }
     else if (order_type === "stop") {
-      add_pending_order("buy_stop", symbol, $("#limit_price").val(), $("#shares_to_buy").val());
+      addPendingOrder("buy_stop", symbol, $("#limit_price").val(), $("#shares_to_buy").val());
     }
   });
 
-  function add_pending_order(type, sym, price, shares) {
+  function addPendingOrder(type, sym, price, shares) {
     var o = { "type": type,
               "symbol": sym,
               "price": price,
@@ -160,13 +160,13 @@ function newChart(symbol) {
               "id": pending_order_counter };
     pending_orders.push(o);
     pending_order_counter++;
-    display_pending_order(o);
+    displayPendingOrder(o);
     if (pending_orders.length === 1) {
       $("#pending_orders_pane").show();
     }
   }
   
-  function display_pending_order(o) {
+  function displayPendingOrder(o) {
     var display = { "buy_stop": "Buy Stop",
                     "buy_limit": "Buy Limit",
                     "sell_stop": "Sell Stop",
@@ -174,7 +174,7 @@ function newChart(symbol) {
     $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">'+display[o.type]+'<br />Symbol: '+o.symbol+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'<br /><button id="cancel_'+o.id+'">Cancel</button></div>');
     $("#cancel_"+o.id).button();
     $("#cancel_"+o.id).click(function () {
-      remove_pending_order(o.id);
+      removePendingOrder(o.id);
     });
   }
   
@@ -231,10 +231,10 @@ function newChart(symbol) {
         sell(sym, $("#sell_shares_"+sym).val(), appData[sym][today].close);
       }
       else if (order_type === "limit") {
-        add_pending_order("sell_limit", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
+        addPendingOrder("sell_limit", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
       }
       else if (order_type === "stop") {
-        add_pending_order("sell_stop", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
+        addPendingOrder("sell_stop", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
       }
     });
   }
@@ -260,7 +260,7 @@ function newChart(symbol) {
     }
   }
 
-  function process_orders() {
+  function processOrders() {
     var remove_list = [];
     for (var i=0; i<pending_orders.length; i++) {
       var o = pending_orders[i];
@@ -309,7 +309,7 @@ function newChart(symbol) {
     }
   }
   
-  function remove_pending_order(order_id) {
+  function removePendingOrder(order_id) {
     for (var i=0; i < pending_orders.length; i++) {
       if (pending_orders[i].id === order_id) {
         pending_orders.splice(i, 1);
@@ -330,33 +330,33 @@ function newChart(symbol) {
   var active_indicators = [];
   var indicator_counter = 0;
   
-  function draw_active_indicators() {
+  function drawActiveIndicators() {
     for (var i=0; i<active_indicators.length; i++) {
       ind = active_indicators[i];
       ind.func.apply(this, ind.args);
     }
   }
   
-  function add_active_indicator(name, func, args) {
+  function addActiveIndicator(name, func, args) {
     active_indicators.push({ "func": func, "args": args, "id": indicator_counter });
     func.apply(this, args);
-    add_indicator_to_pane(name, indicator_counter);
+    addIndicatorToPane(name, indicator_counter);
     indicator_counter++;
   }
   
-  function add_indicator_to_pane(name, id) {
+  function addIndicatorToPane(name, id) {
     var html = '<div id="ai_'+id+'" class="ui-state-default ui-corner-all">'+name+' <button id="ai_close_'+id+'"></button></div>';
     $("#active_indicators").append(html);
     $("#ai_close_"+id).button({text:false, icons:{primary:'ui-icon-closethick'}});
     $("#ai_close_"+id).click(function () {
-      remove_indicator(id);
+      removeIndicator(id);
     });
     if (active_indicators.length < 2) {
       $("#active_indicators").show();
     }
   }
   
-  function remove_indicator(id) {
+  function removeIndicator(id) {
     $("#ai_"+id).remove();
     for (var i=0; i<active_indicators.length; i++) {
       if (active_indicators[i].id === id) {
@@ -366,18 +366,17 @@ function newChart(symbol) {
     }
   }
   
-  function make_color_select(id) {
+  function makeColorSelect(id) {
     return '<select id="'+id+'" class="ui-state-default"><option value="#000000">Black</option><option value="#0000FF">Blue</option><option value="#FF0000">Red</option><option value="#00FF00">Green</option><option value="#FF9933">Orange</option><option value="#FFFF00">Yellow</option></select>'
   }
 
   var indicator_settings = {
-    "sma": {"html": '<div>Days: <input id="sma_days" size="4"></input><br />Color: '+make_color_select('sma_color')+'</div>',
+    "sma": {"html": '<div>Days: <input id="sma_days" size="4"></input><br />Color: '+makeColorSelect('sma_color')+'</div>',
             "click_func": function () {
                             var days = parseInt($("#sma_days").val()),
                                 color = $("#sma_color").val();
                                 name = "SMA ("+days+")"
-                            add_active_indicator(name, draw_sma, [days, color]);
-                            //draw_sma(parseInt($("#sma_days").val()), $("#sma_color").val());
+                            addActiveIndicator(name, drawSMA, [days, color]);
                           }
            },
   };
@@ -403,7 +402,7 @@ function newChart(symbol) {
     }
   });
   
-  function draw_sma(days, color) {
+  function drawSMA(days, color) {
     var o = getAdjustments();
     var sma_data = [];
     var end = chart_length + today;
@@ -524,7 +523,7 @@ function newChart(symbol) {
 
   function drawChart() {
     chart_styles[chart_style]();
-    draw_active_indicators();
+    drawActiveIndicators();
     var t = data[today];
     $("#today_date").text(t.date);
     $("#today_open").text(t.open);
