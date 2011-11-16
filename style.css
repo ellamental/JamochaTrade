@@ -7,7 +7,6 @@ canvas {border: 1px solid #000;}
 
 #sketch {
   position: absolute; top: 1px; left: 1px;
-  /*z-index: 2;*/
 }
 
 #wrapper {

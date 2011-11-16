@@ -72,7 +72,6 @@ function newChart(symbol) {
           today--; 
           drawChart();
           processOrders();
-          //console.log(pending_orders);
           port_value = account;
           for (var sym in portfolio) {
             if (portfolio[sym] != 0) {
@@ -518,7 +517,6 @@ function newChart(symbol) {
 
   function clear_canvas() {
     c.clearRect(0, 0, width, height);
-    //chart.width++; chart.width--; // must change size for webkit compatibility
   }
 
   function drawChart() {
