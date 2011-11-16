@@ -436,6 +436,31 @@ function newChart(symbol) {
 
   
   //__________________________________________________________________________
+  // Trendlines
+  //__________________________________________________________________________
+  
+  var begin_line_x,
+      begin_line_y;
+  
+  $("#chart").mousedown(function (e) {
+    console.log(chart.offsetLeft+" "+chart.offsetTop);
+    begin_line_x = e.pageX - chart.offsetLeft;
+    begin_line_y = e.pageY - chart.offsetTop;
+  });
+  
+  $("#chart").mouseup(function (e) {
+    drawTrendline(begin_line_x, begin_line_y, e.pageX-chart.offsetLeft, e.pageY-chart.offsetTop);
+  });
+  
+  function drawTrendline(x, y, end_x, end_y) {
+    c.beginPath();
+    c.strokeStyle = "#000";
+    c.moveTo(x, y);
+    c.lineTo(end_x, end_y);
+    c.stroke();
+  }
+    
+  //__________________________________________________________________________
   // Data Retrieval
   //__________________________________________________________________________
   
