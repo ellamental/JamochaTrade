@@ -14,6 +14,11 @@ canvas {border: 1px solid #000;}
   text-align: center;
 }
 
+#switcher {
+  float: left;
+  margin-left: 20px;
+}
+
 #toolbar {
   float: left;
   width: 350px;

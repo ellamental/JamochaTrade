@@ -59,6 +59,18 @@ function newChart(symbol) {
   
   $("#pending_orders_pane").hide();
   
+  $("#comment_submit").click(function () {
+    var datastring = "message="+$("#comment_box").val();
+    $.ajax({  
+      type: "POST",
+      url: "sendmail.php",
+      data: datastring,
+      success: function() {
+        $("#comment_box").val("");
+      }
+    });
+  });
+  
   //__________________________________________________________________________
   // Event binding
   //__________________________________________________________________________
