@@ -86,8 +86,8 @@ function newChart(symbol) {
           processOrders();
           port_value = account;
           for (var sym in portfolio) {
-            if (portfolio[sym] != 0) {
-              port_value += appData[sym][today].close * portfolio[sym];
+            if (portfolio[sym][0].shares != 0) {
+              port_value += appData[sym][today].close * portfolio[sym][0].shares;
             }
           }
           $("#portfolio_value").text("$"+port_value.toFixed(2));
@@ -203,13 +203,25 @@ function newChart(symbol) {
     cost = shares * price;
     account = account - cost;
     if (symbol in portfolio) {
-      if (portfolio[symbol] === 0) { $("#pi_" + symbol).show(); }
-      portfolio[symbol] += shares;
       var shares_id = "#pi_"+symbol+" > .shares";
-      $(shares_id).text(portfolio[symbol])
+      if (portfolio[symbol][0].shares === 0) {
+        $("#pi_" + symbol).show();
+        portfolio[symbol].unshift({ "shares": shares, 
+                                    "price": price,
+                                    "trades": [ ["buy", shares, price] ] });
+        $(shares_id).text(shares)
+      }
+      else {
+        portfolio[symbol][0].shares += shares;
+        portfolio[symbol][0].trades.push(["buy", shares, price]);
+        $(shares_id).text(portfolio[symbol][0].shares)
+      }
+      console.log(portfolio[symbol]);
     }
     else {
-      portfolio[symbol] = shares;
+      portfolio[symbol] = [{ "shares": shares, 
+                             "price": price, 
+                             "trades": [ ["buy", shares, price] ] }];
       addPortfolioItem(symbol);
     }
     $("#account").text("$" + account.toFixed(2));
@@ -253,20 +265,22 @@ function newChart(symbol) {
   function sell(sym, num_shares, price) {
     if (sym in portfolio) {
       if (num_shares === "") {
-        shares = portfolio[sym];
+        shares = portfolio[sym][0].shares;
       }
-      else if (parseInt(num_shares) > portfolio[sym]) {
-        shares = portfolio[sym];
+      else if (parseInt(num_shares) > portfolio[sym][0].shares) {
+        shares = portfolio[sym][0].shares;
       }
       else {
         shares = parseInt(num_shares);
       }
       profit = price * shares;
-      portfolio[sym] = portfolio[sym] - shares;
+      portfolio[sym][0].shares = portfolio[sym][0].shares - shares;
+      portfolio[sym][0].trades.push(["sell", shares, price]);
+      console.log(portfolio[sym][0])
       account += profit;
-      if (portfolio[sym] === 0) { $("#pi_"+sym).hide(); }
+      if (portfolio[sym][0].shares === 0) { $("#pi_"+sym).hide(); }
       var div_id = "#pi_"+sym+" > .shares";
-      $(div_id).text(portfolio[sym]);
+      $(div_id).text(portfolio[sym][0].shares);
       $("#account").text("$" + account.toFixed(2));
     }
   }
