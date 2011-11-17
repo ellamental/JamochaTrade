@@ -26,7 +26,7 @@ function newChart(symbol) {
   chart.width = width; chart.height = height;
   
   // Set select boxes to default
-  $("#time_period").val("15");
+  $("#time_period").val("30");
   $("#chart_style").val("candle");
   $("#up_color").val("#00FF00");
   $("#down_color").val("#FF0000");
@@ -35,7 +35,7 @@ function newChart(symbol) {
   var symbol = symbol;
   
   var today = 300;
-  var chart_length = 15;
+  var chart_length = parseInt($("#time_period").val());
 
   var stock_data = {};
   var data = false;
