@@ -212,7 +212,10 @@ function newChart(symbol) {
         $(shares_id).text(shares)
       }
       else {
+        var old_val = portfolio[symbol][0].shares * portfolio[symbol][0].price,
+            avg_price = (old_val + cost) / (portfolio[symbol][0].shares + shares);
         portfolio[symbol][0].shares += shares;
+        portfolio[symbol][0].price = avg_price;
         portfolio[symbol][0].trades.push(["buy", shares, price]);
         $(shares_id).text(portfolio[symbol][0].shares)
       }
