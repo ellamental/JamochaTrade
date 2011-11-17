@@ -37,7 +37,7 @@ function newChart(symbol) {
   var today = 300;
   var chart_length = 15;
 
-  var appData = {};
+  var stock_data = {};
   var data = false;
   getData(symbol);
   
@@ -48,8 +48,8 @@ function newChart(symbol) {
                       "hlc" :    drawHLC,
                       "line" :   drawLine}
   
-  var upColor = "#00FF00";
-  var downColor = "#FF0000";
+  var up_color = $("#up_color").val();
+  var down_color = $("#down_color").val();
   
   var account = 100000;
   var portfolio = {};
@@ -87,7 +87,7 @@ function newChart(symbol) {
           port_value = account;
           for (var sym in portfolio) {
             if (portfolio[sym][0].shares != 0) {
-              port_value += appData[sym][today].close * portfolio[sym][0].shares;
+              port_value += stock_data[sym][today].close * portfolio[sym][0].shares;
             }
           }
           $("#portfolio_value").text("$"+port_value.toFixed(2));
@@ -122,11 +122,11 @@ function newChart(symbol) {
   });
   
   $("#up_color").change(function () {
-    upColor = $("#up_color").val();
+    up_color = $("#up_color").val();
     drawChart();
   });
   $("#down_color").change(function () {
-    downColor = $("#down_color").val();
+    down_color = $("#down_color").val();
     drawChart();
   });
 
@@ -290,7 +290,7 @@ function newChart(symbol) {
     item.find("#pi_sell").click(function () {
       var order_type = order_type_select.val();
       if (order_type === "market") {
-        sell(sym, item.find("#pi_sell_shares").val(), appData[sym][today].close);
+        sell(sym, item.find("#pi_sell_shares").val(), stock_data[sym][today].close);
       }
       else if (order_type === "limit") {
         addPendingOrder("sell_limit", sym, item.find("#pi_limit_price").val(), item.find("#pi_sell_shares").val());
@@ -336,8 +336,8 @@ function newChart(symbol) {
     for (var i=0; i<pending_orders.length; i++) {
       var o = pending_orders[i];
       if (o.type === "buy_limit") {
-        if (appData[o.symbol][today].low < o.price) {
-          p = Math.min(appData[o.symbol][today].open, o.price);
+        if (stock_data[o.symbol][today].low < o.price) {
+          p = Math.min(stock_data[o.symbol][today].open, o.price);
           buy(o.shares, p);
           remove_list.push(i);
           alert("Limit order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
@@ -345,8 +345,8 @@ function newChart(symbol) {
         }
       }
       else if (o.type === "buy_stop") {
-        if (appData[o.symbol][today].high > o.price) {
-          p = Math.max(appData[o.symbol][today].open, o.price);
+        if (stock_data[o.symbol][today].high > o.price) {
+          p = Math.max(stock_data[o.symbol][today].open, o.price);
           buy(o.shares, p);
           remove_list.push(i);
           alert("Stop order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
@@ -354,8 +354,8 @@ function newChart(symbol) {
         }
       }
       else if (o.type === "sell_limit") {
-        if (appData[o.symbol][today].high > o.price) {
-          p = Math.max(appData[o.symbol][today].open, o.price);
+        if (stock_data[o.symbol][today].high > o.price) {
+          p = Math.max(stock_data[o.symbol][today].open, o.price);
           sell(o.symbol, o.shares, p);
           remove_list.push(i);
           alert("Limit sell order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
@@ -363,8 +363,8 @@ function newChart(symbol) {
         }
       }
       else if (o.type === "sell_stop") {
-        if (appData[o.symbol][today].low < o.price) {
-          p = Math.min(appData[o.symbol][today].open, o.price);
+        if (stock_data[o.symbol][today].low < o.price) {
+          p = Math.min(stock_data[o.symbol][today].open, o.price);
           sell(o.symbol, o.shares, p);
           remove_list.push(i);
           alert("Stop sell order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
@@ -544,8 +544,8 @@ function newChart(symbol) {
   //__________________________________________________________________________
   
   function getData(symbol) {
-    if (symbol in appData) {
-      data = appData[symbol];
+    if (symbol in stock_data) {
+      data = stock_data[symbol];
       drawChart();
     }
     else {
@@ -568,7 +568,7 @@ function newChart(symbol) {
                      date:   result_data[i].col0,
                      volume: result_data[i].col5};
         }
-        appData[symbol] = data;
+        stock_data[symbol] = data;
         drawChart();
         //console.log(data.slice(today,today+10));
       });
@@ -658,8 +658,8 @@ function newChart(symbol) {
 
     // draw bodies
     for (var i = end; i >= today; i--) {
-      if (data[i].open < data[i].close) { c.fillStyle = upColor; }
-      else { c.fillStyle = downColor; }
+      if (data[i].open < data[i].close) { c.fillStyle = up_color; }
+      else { c.fillStyle = down_color; }
       c.fillRect(width - ((i-today+1)*width_mul), 
                  height - (height_mul * (data[i].open-low)),
                  width / (chart_length*2), //20,
@@ -676,8 +676,8 @@ function newChart(symbol) {
     drawHorizontalLines();
 
     for (var i = end; i >= today; i--) {
-      if (data[i].open < data[i].close) { c.fillStyle = upColor; }
-      else { c.fillStyle = downColor; }
+      if (data[i].open < data[i].close) { c.fillStyle = up_color; }
+      else { c.fillStyle = down_color; }
       c.fillRect(width - ((i-today+1)*width_mul), 
                  height - (height_mul * (data[i].close-low)),
                  width / (chart_length*2), //20,
