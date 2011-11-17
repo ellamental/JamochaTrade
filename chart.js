@@ -181,15 +181,33 @@ function newChart(symbol) {
     var display = { "buy_stop": "Buy Stop",
                     "buy_limit": "Buy Limit",
                     "sell_stop": "Sell Stop",
-                    "sell_limit": "Sell Limit" }
-    $("#pending_orders").append('<div id="pending_order_'+o.id+'" class="ui-corner-all ui-widget-content">'+display[o.type]+'<br />Symbol: '+o.symbol+'<br />Shares: '+o.shares+'<br />Price: '+o.price+'<br /><button id="cancel_'+o.id+'">Cancel</button></div>');
-    $("#cancel_"+o.id).button();
-    $("#cancel_"+o.id).click(function () {
+                    "sell_limit": "Sell Limit" },
+        po = $("#po_template").clone(true);
+    po.attr("id", "po_"+o.id);
+    po.find("#po_type").text(display[o.type]);
+    po.find("#po_symbol").text(o.symbol);
+    po.find("#po_shares").text(o.shares);
+    po.find("#po_price").text(o.price);
+    po.find("#po_cancel").click(function () {
       removePendingOrder(o.id);
     });
+    $("#pending_orders").append(po);
+  }
+  
+  function removePendingOrder(order_id) {
+    for (var i=0; i < pending_orders.length; i++) {
+      if (pending_orders[i].id === order_id) {
+        pending_orders.splice(i, 1);
+        $("#po_"+order_id).remove();
+        if (pending_orders.length < 1) {
+          $("#pending_orders_pane").hide();
+        }
+      }
+    }
   }
   
   function buy(num_shares, price) {
+    // Parse input
     price = parseFloat(price);
     if (num_shares === "") {
       shares = Math.floor(account / price);
@@ -200,10 +218,16 @@ function newChart(symbol) {
         shares = Math.floor(account / price)
       }
     }
+    
+    // update account
     cost = shares * price;
     account = account - cost;
+    $("#account").text("$" + account.toFixed(2));
+    
     if (symbol in portfolio) {
       pitem = $("#pi_"+symbol);
+      
+      // if no current position, create a new position and add to beginning of portfolio[symbol]
       if (portfolio[symbol][0].shares === 0) {
         pitem.show();
         portfolio[symbol].unshift({ "shares": shares, 
@@ -211,6 +235,8 @@ function newChart(symbol) {
                                     "trades": [ ["buy", shares, price] ] });
         pitem.find("#pi_shares").text(shares)
       }
+      
+      // if there is a current position: average and update the purchase price, shares and trades
       else {
         var old_val = portfolio[symbol][0].shares * portfolio[symbol][0].price,
             avg_price = (old_val + cost) / (portfolio[symbol][0].shares + shares);
@@ -221,13 +247,14 @@ function newChart(symbol) {
       }
       console.log(portfolio[symbol]);
     }
+    
+    // if no position in this security has ever existed: create a new position
     else {
       portfolio[symbol] = [{ "shares": shares, 
                              "price": price, 
                              "trades": [ ["buy", shares, price] ] }];
       addPortfolioItem(symbol);
     }
-    $("#account").text("$" + account.toFixed(2));
   }
   
   function addPortfolioItem(sym) {
@@ -314,7 +341,7 @@ function newChart(symbol) {
           buy(o.shares, p);
           remove_list.push(i);
           alert("Limit order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
-          $("#pending_order_"+o.id).remove();
+          $("#po_"+o.id).remove();
         }
       }
       else if (o.type === "buy_stop") {
@@ -323,7 +350,7 @@ function newChart(symbol) {
           buy(o.shares, p);
           remove_list.push(i);
           alert("Stop order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
-          $("#pending_order_"+o.id).remove();
+          $("#po_"+o.id).remove();
         }
       }
       else if (o.type === "sell_limit") {
@@ -332,7 +359,7 @@ function newChart(symbol) {
           sell(o.symbol, o.shares, p);
           remove_list.push(i);
           alert("Limit sell order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
-          $("#pending_order_"+o.id).remove();
+          $("#po_"+o.id).remove();
         }
       }
       else if (o.type === "sell_stop") {
@@ -341,7 +368,7 @@ function newChart(symbol) {
           sell(o.symbol, o.shares, p);
           remove_list.push(i);
           alert("Stop sell order filled: "+o.symbol+" "+o.shares+" @ "+p+"/share");
-          $("#pending_order_"+o.id).remove();
+          $("#po_"+o.id).remove();
         }
       }
     }
@@ -357,18 +384,7 @@ function newChart(symbol) {
     }
   }
   
-  function removePendingOrder(order_id) {
-    for (var i=0; i < pending_orders.length; i++) {
-      if (pending_orders[i].id === order_id) {
-        pending_orders.splice(i, 1);
-        $("#pending_order_"+order_id).remove();
-        if (pending_orders.length < 1) {
-          $("#pending_orders_pane").hide();
-        }
-      }
-    }
-  }
-  
+
   //__________________________________________________________________________
   // Indicators
   //__________________________________________________________________________

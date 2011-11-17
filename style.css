@@ -33,3 +33,7 @@ canvas {border: 1px solid #000;}
 #pi_template {
   display: none;
 }
+
+#po_template {
+  display: none;
+}
