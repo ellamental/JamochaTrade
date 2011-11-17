@@ -203,13 +203,13 @@ function newChart(symbol) {
     cost = shares * price;
     account = account - cost;
     if (symbol in portfolio) {
-      var shares_id = "#pi_"+symbol+" > .shares";
+      pitem = $("#pi_"+symbol);
       if (portfolio[symbol][0].shares === 0) {
-        $("#pi_" + symbol).show();
+        pitem.show();
         portfolio[symbol].unshift({ "shares": shares, 
                                     "price": price,
                                     "trades": [ ["buy", shares, price] ] });
-        $(shares_id).text(shares)
+        pitem.find("#pi_shares").text(shares)
       }
       else {
         var old_val = portfolio[symbol][0].shares * portfolio[symbol][0].price,
@@ -217,7 +217,7 @@ function newChart(symbol) {
         portfolio[symbol][0].shares += shares;
         portfolio[symbol][0].price = avg_price;
         portfolio[symbol][0].trades.push(["buy", shares, price]);
-        $(shares_id).text(portfolio[symbol][0].shares)
+        pitem.find("#pi_shares").text(portfolio[symbol][0].shares)
       }
       console.log(portfolio[symbol]);
     }
@@ -231,42 +231,54 @@ function newChart(symbol) {
   }
   
   function addPortfolioItem(sym) {
-    var div_id = "pi_"+sym;
-    $("#security_list").prepend('<div id="'+div_id+'" name="'+sym+'" class="portfolio_item ui-corner-all ui-widget-content">Symbol: '+sym+'<br />Shares: <span class="shares">'+shares+'</span><br />Order Type: <select id="order_type_'+sym+'" class="ui-state-default"><option value="market">Market</option><option value="limit">Limit</option><option value="stop">Stop</option></select><br />Shares: <input id="sell_shares_'+sym+'" size="6"></input><div id="limit_div_'+sym+'">Limit Price: <input id="limit_price_'+sym+'" size="6"></div><div><button id="sell_'+sym+'">Sell</button><button id="view_'+sym+'">View</button></div></div>');
-    $("#sell_" + sym).button();
-    $("#view_" + sym).button();
-    $("#view_" + sym).click(function () {
+    var item = $("#pi_template").clone(true);
+    item.attr("id", "pi_"+sym);
+
+    // Set default values, hide elements and make buttons
+    var order_type_select = item.find("#pi_order_type");
+    order_type_select.val("market");
+    item.find("#pi_limit_div").hide();
+    
+    // Set initial values
+    item.find("#pi_symbol").text(sym);
+    item.find("#pi_shares").text(shares);
+    
+    // Bind events
+    item.find("#pi_view").click(function () {
       symbol = sym;
       $("#symbol_name").text(sym.toUpperCase());
       getData(sym);
     });
-    $("#limit_div_"+sym).hide();
-    $("#order_type_"+sym).val("market");
-    $("#order_type_"+sym).click(function () {
-      var o = $("#order_type_"+sym).val();
+    
+    order_type_select.click(function () {
+      var o = order_type_select.val();
       if (o === "market") {
-        $("#limit_div_"+sym).hide();
+        item.find("#pi_limit_div").hide();
       }
       else if (o === "limit" || o === "stop") {
-        $("#limit_div_"+sym).show();
+        item.find("#pi_limit_div").show();
       }
     });
-    $("#sell_"+sym).click(function () {
-      order_type = $("#order_type_"+sym).val();
+    
+    item.find("#pi_sell").click(function () {
+      var order_type = order_type_select.val();
       if (order_type === "market") {
-        sell(sym, $("#sell_shares_"+sym).val(), appData[sym][today].close);
+        sell(sym, item.find("#pi_sell_shares").val(), appData[sym][today].close);
       }
       else if (order_type === "limit") {
-        addPendingOrder("sell_limit", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
+        addPendingOrder("sell_limit", sym, item.find("#pi_limit_price").val(), item.find("#pi_sell_shares").val());
       }
       else if (order_type === "stop") {
-        addPendingOrder("sell_stop", sym, $("#limit_price_"+sym).val(), $("#sell_shares_"+sym).val());
+        addPendingOrder("sell_stop", sym, item.find("#pi_limit_price").val(), item.find("#pi_sell_shares").val());
       }
     });
+    
+    $("#security_list").prepend(item);
   }
   
   function sell(sym, num_shares, price) {
     if (sym in portfolio) {
+      // Parse input
       if (num_shares === "") {
         shares = portfolio[sym][0].shares;
       }
@@ -276,14 +288,18 @@ function newChart(symbol) {
       else {
         shares = parseInt(num_shares);
       }
+      
+      // Set portfolio and account values
       profit = price * shares;
       portfolio[sym][0].shares = portfolio[sym][0].shares - shares;
       portfolio[sym][0].trades.push(["sell", shares, price]);
       console.log(portfolio[sym][0])
       account += profit;
-      if (portfolio[sym][0].shares === 0) { $("#pi_"+sym).hide(); }
-      var div_id = "#pi_"+sym+" > .shares";
-      $(div_id).text(portfolio[sym][0].shares);
+      
+      // Update portfolio item
+      var pitem = $("#pi_"+sym);
+      if (portfolio[sym][0].shares === 0) { pitem.hide(); }
+      var div_id = pitem.find("#pi_shares").text(portfolio[sym][0].shares);
       $("#account").text("$" + account.toFixed(2));
     }
   }
@@ -329,9 +345,13 @@ function newChart(symbol) {
         }
       }
     }
+    
+    // Remove filled orders
     for (var i=remove_list.length-1; i >= 0; i--) {
       pending_orders.splice(i, 1);
     }
+    
+    // If all orders have been filled: hide pending orders pane
     if (pending_orders.length < 1) {
       $("#pending_orders_pane").hide();
     }
