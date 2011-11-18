@@ -195,7 +195,7 @@ function newChart(symbol) {
   }
   
   function removePendingOrder(order_id) {
-    for (var i=0; i < pending_orders.length; i++) {
+    for (var i=0, j=pending_orders.length; i < j; i++) {
       if (pending_orders[i].id === order_id) {
         pending_orders.splice(i, 1);
         $("#po_"+order_id).remove();
@@ -333,7 +333,7 @@ function newChart(symbol) {
 
   function processOrders() {
     var remove_list = [];
-    for (var i=0; i<pending_orders.length; i++) {
+    for (var i=0, j=pending_orders.length; i < j; i++) {
       var o = pending_orders[i];
       if (o.type === "buy_limit") {
         if (stock_data[o.symbol][today].low < o.price) {
@@ -395,7 +395,7 @@ function newChart(symbol) {
   var indicator_counter = 0;
   
   function drawActiveIndicators() {
-    for (var i=0; i<active_indicators.length; i++) {
+    for (var i=0, j=active_indicators.length; i < j; i++) {
       ind = active_indicators[i];
       ind.func.apply(this, ind.args);
     }
@@ -422,7 +422,7 @@ function newChart(symbol) {
   
   function removeIndicator(id) {
     $("#ai_"+id).remove();
-    for (var i=0; i<active_indicators.length; i++) {
+    for (var i=0, j=active_indicators.length; i < j; i++) {
       if (active_indicators[i].id === id) {
         active_indicators.splice(i, 1);
         drawChart();
@@ -560,7 +560,7 @@ function newChart(symbol) {
         
         // Format result_data to change col1->open, col2->high, ...
         data = new Array(result_data.length - 1)
-        for (var i=0; i < data.length; i++) {
+        for (var i=0, j=data.length; i < j; i++) {
           data[i] = {open:   parseFloat(result_data[i].col1),
                      high:   parseFloat(result_data[i].col2),
                      low:    parseFloat(result_data[i].col3),
