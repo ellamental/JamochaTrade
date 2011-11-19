@@ -139,13 +139,19 @@ function newChart(symbol) {
   // Chart Controls
   //__________________________________________________________________________
   
-  $("#chart_settings").mouseenter(function() {
-      clearTimeout($(this).data('timeoutId'));
-      $("#chart_settings_pane").show('slow');
-  }).mouseleave(function(){
-      var timeoutId = setTimeout(function(){ $("#chart_settings_pane").hide('slow'); }, 1000);
-      $(this).data('timeoutId', timeoutId);
+  $("#chart_settings").hover(
+    function () { $(this).addClass("ui-state-hover") },
+    function () { $(this).removeClass("ui-state-hover") }
+  ).click(function (e) {
+    $("#chart_settings_pane").toggle();
   });
+//   $("#chart_settings").mouseenter(function() {
+//       clearTimeout($(this).data('timeoutId'));
+//       $("#chart_settings_pane").show('slow');
+//   }).mouseleave(function(){
+//       var timeoutId = setTimeout(function(){ $("#chart_settings_pane").hide('slow'); }, 1000);
+//       $(this).data('timeoutId', timeoutId);
+//   });
   
   function changeSymbol(sym) {
     //sym = sym.toUpperCase();
@@ -173,19 +179,18 @@ function newChart(symbol) {
     select_box.val('title');
   }
     
-  $("#markets").mouseenter(function() {
-      clearTimeout($(this).data('timeoutId'));
-      $("#market_lists").show('slow');
-  }).mouseleave(function(){
-      var timeoutId = setTimeout(function(){ $("#market_lists").hide('slow'); }, 1000);
-      $(this).data('timeoutId', timeoutId);
+  $("#markets").hover(
+    function () { $(this).addClass("ui-state-hover") },
+    function () { $(this).removeClass("ui-state-hover") }
+  ).click(function (e) {
+    $("#market_lists").toggle();
   });
   $("#dow_30").change(function () {
     selectSymbol($("#dow_30"));
-  });
+  }).click(function (e) { e.stopPropagation() });
   $("#nasdaq_100").change(function () {
     selectSymbol($("#nasdaq_100"));
-  });
+  }).click(function (e) { e.stopPropagation() });
   
   
   $("#chart_style").change(function () {
@@ -197,21 +202,21 @@ function newChart(symbol) {
     else {
       $("#color_pickers").hide(500);
     }
-  });
+  }).click(function (e) { e.stopPropagation() });
   
   $("#up_color").change(function () {
     up_color = $("#up_color").val();
     drawChart();
-  });
+  }).click(function (e) { e.stopPropagation() });
   $("#down_color").change(function () {
     down_color = $("#down_color").val();
     drawChart();
-  });
+  }).click(function (e) { e.stopPropagation() });
 
   $("#time_period").change(function () {
     chart_length = parseInt($("#time_period").val(), 10);
     drawChart();
-  });
+  }).click(function (e) { e.stopPropagation() });
 
   var recently_viewed_cache = ["IBM"];
   function addRecentlyViewed(sym) {
