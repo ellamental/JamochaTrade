@@ -86,6 +86,7 @@ function newChart(symbol) {
   });
   
   
+  
   //__________________________________________________________________________
   // Miscellaneous Functions
   //__________________________________________________________________________
@@ -109,6 +110,7 @@ function newChart(symbol) {
     }
     return '$'+s.join(',')+'.'+cents;
   }
+  
   
   
   //__________________________________________________________________________
@@ -141,6 +143,7 @@ function newChart(symbol) {
   $("#next_month").click(function () { nextDay(20, 25); });
   
   
+  
   //__________________________________________________________________________
   // Chart Controls
   //__________________________________________________________________________
@@ -150,13 +153,6 @@ function newChart(symbol) {
     function () { $("#chart_widgets").hide('fast'); }
   );
   
-  $("#chart_settings").hover(
-    function () { $(this).addClass("ui-state-hover") },
-    function () { $(this).removeClass("ui-state-hover") }
-  ).click(function (e) {
-    $("#chart_settings_pane").toggle();
-  });
-  
   function changeSymbol(sym) {
     sym = sym.toUpperCase();
     symbol = sym;
@@ -164,6 +160,9 @@ function newChart(symbol) {
     addRecentlyViewed(sym);
     getData(sym);
   }
+  
+  
+  // Symbol Entry widget
   
   function getChart() {
     changeSymbol($("#symbol_entry").val());
@@ -176,20 +175,16 @@ function newChart(symbol) {
     changeSymbol(select_box.val());
     select_box.val('title');
   }
-    
-  $("#markets").hover(
+  
+  
+  // Chart Settings widget
+  
+  $("#chart_settings").hover(
     function () { $(this).addClass("ui-state-hover") },
     function () { $(this).removeClass("ui-state-hover") }
   ).click(function (e) {
-    $("#market_lists").toggle();
+    $("#chart_settings_pane").toggle();
   });
-  $("#dow_30").change(function () {
-    selectSymbol($("#dow_30"));
-  }).click(function (e) { e.stopPropagation() });
-  $("#nasdaq_100").change(function () {
-    selectSymbol($("#nasdaq_100"));
-  }).click(function (e) { e.stopPropagation() });
-  
   
   $("#chart_style").change(function () {
     chart_style = $("#chart_style").val();
@@ -216,6 +211,27 @@ function newChart(symbol) {
     drawChart();
   }).click(function (e) { e.stopPropagation() });
 
+  
+  // Markets widget
+  
+  $("#markets").hover(
+    function () { $(this).addClass("ui-state-hover") },
+    function () { $(this).removeClass("ui-state-hover") }
+  ).click(function (e) {
+    $("#market_lists").toggle();
+  });
+
+  $("#dow_30").change(function () {
+    selectSymbol($("#dow_30"));
+  }).click(function (e) { e.stopPropagation() });
+  
+  $("#nasdaq_100").change(function () {
+    selectSymbol($("#nasdaq_100"));
+  }).click(function (e) { e.stopPropagation() });
+  
+  
+  // Recently Viewed Widget
+  
   function addRecentlyViewed(sym) {
     var recent = $("#recently_viewed_list");
     if (recently_viewed_cache.indexOf(sym) < 0) {
@@ -229,17 +245,18 @@ function newChart(symbol) {
     recent.val(sym);
   }
   
-  $("#recently_viewed_list").change(function (e) {
-    var s = $(this).val();
-    changeSymbol(s);
-  }).click(function (e) { e.stopPropagation() });
-  
   $("#recently_viewed").hover(
     function () { $(this).addClass("ui-state-hover") },
     function () { $(this).removeClass("ui-state-hover") }
   ).click(function (e) {
     $("#recently_viewed_list").toggle();
   });
+  
+  $("#recently_viewed_list").change(function (e) {
+    var s = $(this).val();
+    changeSymbol(s);
+  }).click(function (e) { e.stopPropagation() });
+  
   
   
   //__________________________________________________________________________
@@ -492,6 +509,7 @@ function newChart(symbol) {
     }
   }
   
+  
 
   //__________________________________________________________________________
   // Indicators
@@ -604,6 +622,7 @@ function newChart(symbol) {
     c.stroke();
   }
 
+
   
   //__________________________________________________________________________
   // Trendline Drawing
@@ -646,6 +665,7 @@ function newChart(symbol) {
   });
 
   
+  
   //__________________________________________________________________________
   // Data Retrieval
   //__________________________________________________________________________
@@ -681,6 +701,7 @@ function newChart(symbol) {
       });
     }
   }
+
 
   
   //__________________________________________________________________________
@@ -878,8 +899,6 @@ function newChart(symbol) {
     c.stroke();
     drawPriceLabels(a);
   }
-
-
 
 }
 
