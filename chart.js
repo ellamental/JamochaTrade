@@ -20,10 +20,7 @@
 
 
 function newChart(symbol) {
-  var width = 620, height = 500
-  var chart = document.getElementById("chart");
-  var c = chart.getContext("2d");
-  chart.width = width; chart.height = height;
+  "use strict";
   
   // Set select boxes to default
   $("#time_period").val("30");
@@ -32,33 +29,39 @@ function newChart(symbol) {
   $("#down_color").val("#FF0000");
   $("#buy_order_type").val("market");
 
-  var symbol = symbol;
-  
-  var today = 300;
-  var chart_length = parseInt($("#time_period").val());
+  // Hide things that should be hidden by default
+  $("#pending_orders_pane").hide();
 
-  var stock_data = {};
-  var data = false;
-  getData(symbol);
+  var width = 620,
+      height = 500,
+      chart = document.getElementById("chart"),
+      c = chart.getContext("2d"),
+      
+      today = 300,
+      chart_length = parseInt($("#time_period").val(), 10),
+      
+      stock_data = {},
+      data = false,
   
-  var chart_style = "candle";
-  var chart_styles = {"candle" : drawCandle,
+      chart_style = "candle",
+      chart_styles = {"candle" : drawCandle,
                       "bar" :    drawBar,
                       "ohlc" :   drawOHLC,
                       "hlc" :    drawHLC,
-                      "line" :   drawLine}
+                      "line" :   drawLine},
   
-  var up_color = $("#up_color").val();
-  var down_color = $("#down_color").val();
+      up_color = $("#up_color").val(),
+      down_color = $("#down_color").val(),
   
-  var account = 100000;
-  var portfolio = {};
+      account = 100000,
+      portfolio = {},
   
-  var pending_orders = [];
-  var pending_order_counter = 0;
-  
-  $("#pending_orders_pane").hide();
-  
+      pending_orders = [],
+      pending_order_counter = 0;
+
+  chart.width = width; chart.height = height;
+  getData(symbol);
+
   $("#comment_submit").click(function () {
     var datastring = "message="+$("#comment_box").val();
     $.ajax({  
@@ -78,15 +81,15 @@ function newChart(symbol) {
   function nextDay(days, delay) {
     function nextD() {
       if (days > 0) {
-        t=setTimeout(nextD, delay); 
+        var t = setTimeout(nextD, delay); 
         days--;
         if (today > 0) {
           today--; 
           drawChart();
           processOrders();
-          port_value = account;
+          var port_value = account;
           for (var sym in portfolio) {
-            if (portfolio[sym][0].shares != 0) {
+            if (portfolio[sym][0].shares !== 0) {
               port_value += stock_data[sym][today].close * portfolio[sym][0].shares;
             }
           }
@@ -96,7 +99,7 @@ function newChart(symbol) {
     }
     nextD();
   }
-  $("#next_day").click(function () { nextDay(1, 0) });
+  $("#next_day").click(function () { nextDay(1, 0); });
   $("#next_week").click(function () { nextDay(5, 100); });
   $("#next_month").click(function () { nextDay(20, 25); });
   
@@ -131,7 +134,7 @@ function newChart(symbol) {
   });
 
   $("#time_period").change(function () {
-    chart_length = parseInt($("#time_period").val());
+    chart_length = parseInt($("#time_period").val(), 10);
     drawChart();
   });
 
@@ -151,7 +154,7 @@ function newChart(symbol) {
   });
   
   $("#buy").click(function () {
-    order_type = $("#buy_order_type").val();
+    var order_type = $("#buy_order_type").val();
     if (order_type === "market") {
       buy($("#shares_to_buy").val(), data[today].close);
     }
@@ -209,23 +212,24 @@ function newChart(symbol) {
   function buy(num_shares, price) {
     // Parse input
     price = parseFloat(price);
+    var shares;
     if (num_shares === "") {
       shares = Math.floor(account / price);
     }
     else {
-      shares = parseInt(num_shares);
+      shares = parseInt(num_shares, 10);
       if (shares * price > account) {
-        shares = Math.floor(account / price)
+        shares = Math.floor(account / price);
       }
     }
     
     // update account
-    cost = shares * price;
+    var cost = shares * price;
     account = account - cost;
     $("#account").text("$" + account.toFixed(2));
     
     if (symbol in portfolio) {
-      pitem = $("#pi_"+symbol);
+      var pitem = $("#pi_"+symbol);
       
       // if no current position, create a new position and add to beginning of portfolio[symbol]
       if (portfolio[symbol][0].shares === 0) {
@@ -233,7 +237,7 @@ function newChart(symbol) {
         portfolio[symbol].unshift({ "shares": shares, 
                                     "price": price,
                                     "trades": [ ["buy", shares, price] ] });
-        pitem.find("#pi_shares").text(shares)
+        pitem.find("#pi_shares").text(shares);
       }
       
       // if there is a current position: average and update the purchase price, shares and trades
@@ -243,7 +247,7 @@ function newChart(symbol) {
         portfolio[symbol][0].shares += shares;
         portfolio[symbol][0].price = avg_price;
         portfolio[symbol][0].trades.push(["buy", shares, price]);
-        pitem.find("#pi_shares").text(portfolio[symbol][0].shares)
+        pitem.find("#pi_shares").text(portfolio[symbol][0].shares);
       }
       console.log(portfolio[symbol]);
     }
@@ -253,11 +257,11 @@ function newChart(symbol) {
       portfolio[symbol] = [{ "shares": shares, 
                              "price": price, 
                              "trades": [ ["buy", shares, price] ] }];
-      addPortfolioItem(symbol);
+      addPortfolioItem(symbol, shares);
     }
   }
   
-  function addPortfolioItem(sym) {
+  function addPortfolioItem(sym, shares) {
     var item = $("#pi_template").clone(true);
     item.attr("id", "pi_"+sym);
 
@@ -306,21 +310,22 @@ function newChart(symbol) {
   function sell(sym, num_shares, price) {
     if (sym in portfolio) {
       // Parse input
+      var shares;
       if (num_shares === "") {
         shares = portfolio[sym][0].shares;
       }
-      else if (parseInt(num_shares) > portfolio[sym][0].shares) {
+      else if (parseInt(num_shares, 10) > portfolio[sym][0].shares) {
         shares = portfolio[sym][0].shares;
       }
       else {
-        shares = parseInt(num_shares);
+        shares = parseInt(num_shares, 10);
       }
       
       // Set portfolio and account values
-      profit = price * shares;
+      var profit = price * shares;
       portfolio[sym][0].shares = portfolio[sym][0].shares - shares;
       portfolio[sym][0].trades.push(["sell", shares, price]);
-      console.log(portfolio[sym][0])
+      console.log(portfolio[sym][0]);
       account += profit;
       
       // Update portfolio item
@@ -334,7 +339,8 @@ function newChart(symbol) {
   function processOrders() {
     var remove_list = [];
     for (var i=0, j=pending_orders.length; i < j; i++) {
-      var o = pending_orders[i];
+      var o = pending_orders[i],
+          p;
       if (o.type === "buy_limit") {
         if (stock_data[o.symbol][today].low < o.price) {
           p = Math.min(stock_data[o.symbol][today].open, o.price);
@@ -396,7 +402,7 @@ function newChart(symbol) {
   
   function drawActiveIndicators() {
     for (var i=0, j=active_indicators.length; i < j; i++) {
-      ind = active_indicators[i];
+      var ind = active_indicators[i];
       ind.func.apply(this, ind.args);
     }
   }
@@ -431,18 +437,18 @@ function newChart(symbol) {
   }
   
   function makeColorSelect(id) {
-    return '<select id="'+id+'" class="ui-state-default"><option value="#000000">Black</option><option value="#0000FF">Blue</option><option value="#FF0000">Red</option><option value="#00FF00">Green</option><option value="#FF9933">Orange</option><option value="#FFFF00">Yellow</option></select>'
+    return '<select id="'+id+'" class="ui-state-default"><option value="#000000">Black</option><option value="#0000FF">Blue</option><option value="#FF0000">Red</option><option value="#00FF00">Green</option><option value="#FF9933">Orange</option><option value="#FFFF00">Yellow</option></select>';
   }
 
   var indicator_settings = {
     "sma": {"html": '<div>Days: <input id="sma_days" size="4"></input><br />Color: '+makeColorSelect('sma_color')+'</div>',
             "click_func": function () {
-                            var days = parseInt($("#sma_days").val()),
+                            var days = parseInt($("#sma_days").val(), 10),
                                 color = $("#sma_color").val();
-                                name = "SMA ("+days+")"
+                                name = "SMA ("+days+")";
                             addActiveIndicator(name, drawSMA, [days, color]);
                           }
-           },
+           }
   };
   
   $("#add_indicator").click(function () {
@@ -489,7 +495,7 @@ function newChart(symbol) {
 
     // draw line
     c.moveTo(width - ((end+1)*width_mul) + (width_mul / 4) - 1, 
-             height - (height_mul * (data_list[data_list.length-1]-low)))
+             height - (height_mul * (data_list[data_list.length-1]-low)));
     for (var i = data_list.length; i >= 0; i--) {
       c.lineTo(width - ((i+1)*width_mul) + (width_mul / 4) - 1, 
                height - (height_mul * (data_list[i]-low)));
@@ -550,7 +556,7 @@ function newChart(symbol) {
     }
     else {
       console.log("Downloading...");
-      date = new Date();
+      var date = new Date();
       var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D"+(date.getMonth()+1)+"%26e%3D"+date.getDate()+"%26f%3D"+date.getFullYear()+"%26g%3Dd%26a%3D0%26b%3D2%26c%3D1962%26ignore%3D.csv'&format=json&callback=?";
       
       $.getJSON(url, function (result) {
@@ -559,7 +565,7 @@ function newChart(symbol) {
         var result_data = result.query.results.row.slice(1);
         
         // Format result_data to change col1->open, col2->high, ...
-        data = new Array(result_data.length - 1)
+        data = new Array(result_data.length - 1);
         for (var i=0, j=data.length; i < j; i++) {
           data[i] = {open:   parseFloat(result_data[i].col1),
                      high:   parseFloat(result_data[i].col2),
@@ -602,8 +608,8 @@ function newChart(symbol) {
     
     // get lowest low and highest high
     for (var i = today; i < end; i++) {
-      if (data[i].low < low) { low = data[i].low }
-      if (data[i].high > high) { high = data[i].high }
+      if (data[i].low < low) { low = data[i].low; }
+      if (data[i].high > high) { high = data[i].high; }
     }
 
     // get multipliers
@@ -614,7 +620,7 @@ function newChart(symbol) {
             "low": low,
             "high": high,
             "height_mul": height_mul,
-            "width_mul": width_mul}
+            "width_mul": width_mul};
   }
   
   function drawHorizontalLines() {
@@ -647,17 +653,15 @@ function newChart(symbol) {
     var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
     
-    // draw wicks
     for (var i = end; i >= today; i--) {
+      // draw wicks
       c.fillStyle = "#000";
       c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
                  height - (height_mul * (data[i].low-low)),
                  2,
                  (height_mul * (data[i].low - data[i].high)));
-    }
 
-    // draw bodies
-    for (var i = end; i >= today; i--) {
+      // draw bodies
       if (data[i].open < data[i].close) { c.fillStyle = up_color; }
       else { c.fillStyle = down_color; }
       c.fillRect(width - ((i-today+1)*width_mul), 
@@ -745,7 +749,7 @@ function newChart(symbol) {
     c.beginPath();
     c.strokeStyle = "#000";
     c.moveTo(width - ((end-today+1)*width_mul) + (width_mul / 4) - 1, 
-             height - (height_mul * (data[end].close-low)))
+             height - (height_mul * (data[end].close-low)));
     for (var i = end; i >= today; i--) {
       c.lineTo(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
                height - (height_mul * (data[i].close-low)));
@@ -756,10 +760,11 @@ function newChart(symbol) {
 
 
 
-};
+}
 
 
 $(document).ready(function() {
+  "use strict";
   newChart("IBM");
 });
 
