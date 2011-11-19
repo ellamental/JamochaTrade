@@ -181,8 +181,8 @@ function newChart(symbol) {
   // Chart Settings widget
   
   $("#chart_settings").hover(
-    function () { $(this).addClass("ui-state-hover") },
-    function () { $(this).removeClass("ui-state-hover") }
+    function () { $(this).addClass("ui-state-hover"); },
+    function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#chart_settings_pane").toggle();
   });
@@ -196,39 +196,39 @@ function newChart(symbol) {
     else {
       $("#color_pickers").hide(500);
     }
-  }).click(function (e) { e.stopPropagation() });
+  }).click(function (e) { e.stopPropagation(); });
   
   $("#up_color").change(function () {
     up_color = $("#up_color").val();
     drawChart();
-  }).click(function (e) { e.stopPropagation() });
+  }).click(function (e) { e.stopPropagation(); });
   $("#down_color").change(function () {
     down_color = $("#down_color").val();
     drawChart();
-  }).click(function (e) { e.stopPropagation() });
+  }).click(function (e) { e.stopPropagation(); });
 
   $("#time_period").change(function () {
     chart_length = parseInt($("#time_period").val(), 10);
     drawChart();
-  }).click(function (e) { e.stopPropagation() });
+  }).click(function (e) { e.stopPropagation(); });
 
   
   // Markets widget
   
   $("#markets").hover(
-    function () { $(this).addClass("ui-state-hover") },
-    function () { $(this).removeClass("ui-state-hover") }
+    function () { $(this).addClass("ui-state-hover"); },
+    function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#market_lists").toggle();
   });
 
   $("#dow_30").change(function () {
     selectSymbol($("#dow_30"));
-  }).click(function (e) { e.stopPropagation() });
+  }).click(function (e) { e.stopPropagation(); });
   
   $("#nasdaq_100").change(function () {
     selectSymbol($("#nasdaq_100"));
-  }).click(function (e) { e.stopPropagation() });
+  }).click(function (e) { e.stopPropagation(); });
   
   
   // Recently Viewed Widget
@@ -247,8 +247,8 @@ function newChart(symbol) {
   }
   
   $("#recently_viewed").hover(
-    function () { $(this).addClass("ui-state-hover") },
-    function () { $(this).removeClass("ui-state-hover") }
+    function () { $(this).addClass("ui-state-hover"); },
+    function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#recently_viewed_list").toggle();
   });
@@ -256,14 +256,14 @@ function newChart(symbol) {
   $("#recently_viewed_list").change(function (e) {
     var s = $(this).val();
     changeSymbol(s);
-  }).click(function (e) { e.stopPropagation() });
+  }).click(function (e) { e.stopPropagation(); });
   
   
   // Favorites widget
   
   $("#favorites").hover(
-    function () { $(this).addClass("ui-state-hover") },
-    function () { $(this).removeClass("ui-state-hover") }
+    function () { $(this).addClass("ui-state-hover"); },
+    function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#favorites_pane").toggle();
   });
