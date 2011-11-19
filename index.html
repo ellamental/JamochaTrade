@@ -22,6 +22,7 @@
     $("#portfolio_view").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("#pending_orders_pane").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("button").button();
+    $("#recently_viewed_list").selectable();
   });
   </script>
 
@@ -233,6 +234,13 @@
             </select>
           </div> <!-- close market_lists -->
         </div> <!-- close markets -->
+
+        <div id="recently_viewed" class="ui-state-default">
+          <strong>Recently Viewed</strong><br />
+          <select id="recently_viewed_list" class="ui-state-default">
+            <option id="rv_IBM" value="IBM">IBM</li>
+          </select>
+        </div>
       </div> <!-- close Chart -->
     </div> <!-- close chart_controls -->
     

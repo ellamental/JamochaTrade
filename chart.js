@@ -35,7 +35,8 @@ function newChart(symbol) {
   $("#pending_orders_pane").hide();
   $("#chart_settings_pane").hide();
   $("#market_lists").hide();
-
+  $("#recently_viewed_list").hide();
+  
   var width = 620,
       height = 500,
       chart = document.getElementById("chart"),
@@ -146,6 +147,14 @@ function newChart(symbol) {
       $(this).data('timeoutId', timeoutId);
   });
   
+  function changeSymbol(sym) {
+    //sym = sym.toUpperCase();
+    symbol = sym;
+    $("#symbol_name").text(sym);
+    addRecentlyViewed(sym);
+    getData(sym);
+  }
+  
   function getChart() {
     var name = $("#symbol_entry").val().toUpperCase();
     symbol = name;
@@ -158,8 +167,9 @@ function newChart(symbol) {
   
   function selectSymbol(select_box) {
     var name = select_box.val();
-    $("#symbol_name").text(name);
-    getData(name);
+    //$("#symbol_name").text(name);
+    //getData(name);
+    changeSymbol(name);
     select_box.val('title');
   }
     
@@ -203,6 +213,33 @@ function newChart(symbol) {
     drawChart();
   });
 
+  var recently_viewed_cache = ["IBM"];
+  function addRecentlyViewed(sym) {
+    var recent = $("#recently_viewed_list");
+    if (recently_viewed_cache.indexOf(sym) < 0) {
+      recently_viewed_cache.push(sym);
+      recent.prepend('<option id="rv_'+sym+'" value="'+sym+'">'+sym+'</option>');
+    }
+    else {
+      $("#rv_"+sym).remove();
+      recent.prepend('<option id="rv_'+sym+'" value="'+sym+'">'+sym+'</option>');
+    }
+    recent.val(sym);
+  }
+  
+  $("#recently_viewed_list").change(function (e) {
+    var s = $(this).val();
+    changeSymbol(s);
+  }).click(function (e) { e.stopPropagation() });
+  
+  $("#recently_viewed").hover(
+    function () { $(this).addClass("ui-state-hover") },
+    function () { $(this).removeClass("ui-state-hover") }
+  ).click(function (e) {
+    $("#recently_viewed_list").toggle();
+  });
+  
+  
   //__________________________________________________________________________
   // Order Processing
   //__________________________________________________________________________
