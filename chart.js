@@ -63,10 +63,12 @@ function newChart(symbol) {
       portfolio = {},
   
       pending_orders = [],
-      pending_order_counter = 0;
+      pending_order_counter = 0,
+      
+      recently_viewed_cache = [];
 
   chart.width = width; chart.height = height;
-  getData(symbol);
+  changeSymbol(symbol);
 
   $("#comment_submit").click(function () {
     var datastring = "message="+$("#comment_box").val();
@@ -156,7 +158,7 @@ function newChart(symbol) {
   });
   
   function changeSymbol(sym) {
-    //sym = sym.toUpperCase();
+    sym = sym.toUpperCase();
     symbol = sym;
     $("#symbol_name").text(sym);
     addRecentlyViewed(sym);
@@ -164,20 +166,14 @@ function newChart(symbol) {
   }
   
   function getChart() {
-    var name = $("#symbol_entry").val().toUpperCase();
-    symbol = name;
-    getData(name);
-    $("#symbol_name").text(name);
+    changeSymbol($("#symbol_entry").val());
     $("#symbol_entry").val("");
   }
   $("#new_symbol").click(getChart);
   $("#symbol_entry").bind("keypress", function (e) {if (e.which === 13) {getChart();}});
   
   function selectSymbol(select_box) {
-    var name = select_box.val();
-    //$("#symbol_name").text(name);
-    //getData(name);
-    changeSymbol(name);
+    changeSymbol(select_box.val());
     select_box.val('title');
   }
     
@@ -220,7 +216,6 @@ function newChart(symbol) {
     drawChart();
   }).click(function (e) { e.stopPropagation() });
 
-  var recently_viewed_cache = ["IBM"];
   function addRecentlyViewed(sym) {
     var recent = $("#recently_viewed_list");
     if (recently_viewed_cache.indexOf(sym) < 0) {
@@ -386,9 +381,7 @@ function newChart(symbol) {
     
     // Bind events
     item.find("#pi_view").click(function () {
-      symbol = sym;
-      $("#symbol_name").text(sym.toUpperCase());
-      getData(sym);
+      changeSymbol(sym);
     });
     
     order_type_select.click(function () {
