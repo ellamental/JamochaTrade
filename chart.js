@@ -39,6 +39,7 @@ function newChart(symbol) {
   $("#recently_viewed_list").hide();
   $("#limit_price_div").hide();
   $("#indicator_settings").hide();
+  $("#favorites_pane").hide();
 
   
   var width = 620,
@@ -258,6 +259,27 @@ function newChart(symbol) {
   }).click(function (e) { e.stopPropagation() });
   
   
+  // Favorites widget
+  
+  $("#favorites").hover(
+    function () { $(this).addClass("ui-state-hover") },
+    function () { $(this).removeClass("ui-state-hover") }
+  ).click(function (e) {
+    $("#favorites_pane").toggle();
+  });
+  
+  $("#add_favorite").click(function (e) {
+    var fav_list = $("#favorites_list");
+    e.stopPropagation();
+    fav_list.append('<option value="'+symbol+'">'+symbol+'</option>');
+    if (fav_list.children().length < 5) {
+      fav_list.attr("size", fav_list.children().length);
+    }
+  });
+  
+  $("#favorites_list").change(function () {
+    changeSymbol($(this).val());
+  }).click(function (e) { e.stopPropagation(); });
   
   //__________________________________________________________________________
   // Order Processing

@@ -22,7 +22,6 @@
     $("#portfolio_view").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("#pending_orders_pane").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("button").button();
-    $("#recently_viewed_list").selectable();
   });
   </script>
 
@@ -240,7 +239,17 @@
             <strong>Recently Viewed</strong><br />
             <select id="recently_viewed_list" class="ui-state-default">
             </select>
-          </div>
+          </div> <!-- close recently_viewed -->
+
+          <div id="favorites" class="ui-state-default">
+            <strong>Favorites</strong>
+            <div id="favorites_pane">
+              <button id="add_favorite">Add Current Symbol</button><br />
+              <select id="favorites_list" class="ui-state-default">
+              </select>
+            </div> <!-- close favorites_pane -->
+          </div> <!-- close favorites -->
+
         </div> <!-- close chart_widgets -->
       </div> <!-- close Chart -->
     </div> <!-- close chart_controls -->
