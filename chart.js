@@ -31,6 +31,7 @@ function newChart(symbol) {
 
   // Hide things that should be hidden by default
   $("#pending_orders_pane").hide();
+  $("#chart_settings").hide();
 
   var width = 620,
       height = 500,
@@ -75,7 +76,7 @@ function newChart(symbol) {
   });
   
   //__________________________________________________________________________
-  // Event binding
+  // Time Controls
   //__________________________________________________________________________
   
   function nextDay(days, delay) {
@@ -102,6 +103,19 @@ function newChart(symbol) {
   $("#next_day").click(function () { nextDay(1, 0); });
   $("#next_week").click(function () { nextDay(5, 100); });
   $("#next_month").click(function () { nextDay(20, 25); });
+  
+  
+  //__________________________________________________________________________
+  // Chart Controls
+  //__________________________________________________________________________
+  
+  $("#chart_controls").mouseenter(function() {
+      clearTimeout($(this).data('timeoutId'));
+      $("#chart_settings").show('slow');
+  }).mouseleave(function(){
+      var timeoutId = setTimeout(function(){ $("#chart_settings").hide('slow') }, 2000);
+      $(this).data('timeoutId', timeoutId);
+  });
   
   function getChart() {
     var name = $("#symbol_entry").val().toUpperCase();

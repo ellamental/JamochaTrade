@@ -50,38 +50,40 @@
       <h3>Chart</h3>
       <div>
         <input id="symbol_entry" size="10"></input> <button id="new_symbol">Go</button><br/>
-        Length: <select id="time_period" class="ui-state-default">
-                  <option value="15">15 day</option>
-                  <option value="30">30 day</option>
-                  <option value="60">60 day</option>
-                  <option value="90">90 day</option>
-                </select><br />
-        Style: 
-        <select id="chart_style" class="ui-state-default">
-          <option value="candle">Candle</option>
-          <option value="bar">Bar</option>
-          <option value="ohlc">OHLC</option>
-          <option value="hlc">HLC</option>
-          <option value="line">Line</option>
-        </select><br />
-        <div id="color_pickers">
-        Colors:<br />
-        Up: <select id="up_color" class="ui-state-default">
-              <option value="#000000">Black</option>
-              <option value="#0000FF">Blue</option>
-              <option value="#FF0000">Red</option>
-              <option value="#00FF00">Green</option>
-              <option value="#FF9933">Orange</option>
-              <option value="#FFFF00">Yellow</option>
-            </select> 
-        Down: <select id="down_color" class="ui-state-default">
-              <option value="#000000">Black</option>
-              <option value="#0000FF">Blue</option>
-              <option value="#FF0000">Red</option>
-              <option value="#00FF00">Green</option>
-              <option value="#FF9933">Orange</option>
-              <option value="#FFFF00">Yellow</option>
-            </select>
+        <div id="chart_settings">
+          Length: <select id="time_period" class="ui-state-default">
+                    <option value="15">15 day</option>
+                    <option value="30">30 day</option>
+                    <option value="60">60 day</option>
+                    <option value="90">90 day</option>
+                  </select><br />
+          Style: 
+          <select id="chart_style" class="ui-state-default">
+            <option value="candle">Candle</option>
+            <option value="bar">Bar</option>
+            <option value="ohlc">OHLC</option>
+            <option value="hlc">HLC</option>
+            <option value="line">Line</option>
+          </select><br />
+          <div id="color_pickers">
+          Colors:<br />
+          Up: <select id="up_color" class="ui-state-default">
+                <option value="#000000">Black</option>
+                <option value="#0000FF">Blue</option>
+                <option value="#FF0000">Red</option>
+                <option value="#00FF00">Green</option>
+                <option value="#FF9933">Orange</option>
+                <option value="#FFFF00">Yellow</option>
+              </select> 
+          Down: <select id="down_color" class="ui-state-default">
+                <option value="#000000">Black</option>
+                <option value="#0000FF">Blue</option>
+                <option value="#FF0000">Red</option>
+                <option value="#00FF00">Green</option>
+                <option value="#FF9933">Orange</option>
+                <option value="#FFFF00">Yellow</option>
+              </select>
+        </div> <!-- close chart_settings -->
       </div> <!-- close color_changers -->
 
 
