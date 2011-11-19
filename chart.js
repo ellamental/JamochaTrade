@@ -28,10 +28,13 @@ function newChart(symbol) {
   $("#up_color").val("#00FF00");
   $("#down_color").val("#FF0000");
   $("#buy_order_type").val("market");
+  $("#dow_30").val("title");
+  $("#nasdaq_100").val("title");
 
   // Hide things that should be hidden by default
   $("#pending_orders_pane").hide();
-  $("#chart_settings").hide();
+  $("#chart_settings_pane").hide();
+  $("#market_lists").hide();
 
   var width = 620,
       height = 500,
@@ -135,11 +138,11 @@ function newChart(symbol) {
   // Chart Controls
   //__________________________________________________________________________
   
-  $("#chart_controls").mouseenter(function() {
+  $("#chart_settings").mouseenter(function() {
       clearTimeout($(this).data('timeoutId'));
-      $("#chart_settings").show('slow');
+      $("#chart_settings_pane").show('slow');
   }).mouseleave(function(){
-      var timeoutId = setTimeout(function(){ $("#chart_settings").hide('slow'); }, 2000);
+      var timeoutId = setTimeout(function(){ $("#chart_settings_pane").hide('slow'); }, 1000);
       $(this).data('timeoutId', timeoutId);
   });
   
@@ -152,6 +155,28 @@ function newChart(symbol) {
   }
   $("#new_symbol").click(getChart);
   $("#symbol_entry").bind("keypress", function (e) {if (e.which === 13) {getChart();}});
+  
+  function selectSymbol(select_box) {
+    var name = select_box.val();
+    $("#symbol_name").text(name);
+    getData(name);
+    select_box.val('title');
+  }
+    
+  $("#markets").mouseenter(function() {
+      clearTimeout($(this).data('timeoutId'));
+      $("#market_lists").show('slow');
+  }).mouseleave(function(){
+      var timeoutId = setTimeout(function(){ $("#market_lists").hide('slow'); }, 1000);
+      $(this).data('timeoutId', timeoutId);
+  });
+  $("#dow_30").change(function () {
+    selectSymbol($("#dow_30"));
+  });
+  $("#nasdaq_100").change(function () {
+    selectSymbol($("#nasdaq_100"));
+  });
+  
   
   $("#chart_style").change(function () {
     chart_style = $("#chart_style").val();

@@ -53,41 +53,186 @@
       <h3>Chart</h3>
       <div>
         <input id="symbol_entry" size="10"></input> <button id="new_symbol">Go</button><br/>
-        <div id="chart_settings">
-          Length: <select id="time_period" class="ui-state-default">
-                    <option value="15">15 day</option>
-                    <option value="30">30 day</option>
-                    <option value="60">60 day</option>
-                    <option value="90">90 day</option>
+        <div id="chart_settings" class="ui-state-default">
+          <strong>Chart Settings</strong><br />
+          <div id="chart_settings_pane">
+            Length: <select id="time_period" class="ui-state-default">
+                      <option value="15">15 day</option>
+                      <option value="30">30 day</option>
+                      <option value="60">60 day</option>
+                      <option value="90">90 day</option>
+                    </select><br />
+            Style: 
+            <select id="chart_style" class="ui-state-default">
+              <option value="candle">Candle</option>
+              <option value="bar">Bar</option>
+              <option value="ohlc">OHLC</option>
+              <option value="hlc">HLC</option>
+              <option value="line">Line</option>
+            </select><br />
+            <div id="color_pickers">
+              Colors:<br />
+              Up: <select id="up_color" class="ui-state-default">
+                    <option value="#000000">Black</option>
+                    <option value="#0000FF">Blue</option>
+                    <option value="#FF0000">Red</option>
+                    <option value="#00FF00">Green</option>
+                    <option value="#FF9933">Orange</option>
+                    <option value="#FFFF00">Yellow</option>
                   </select><br />
-          Style: 
-          <select id="chart_style" class="ui-state-default">
-            <option value="candle">Candle</option>
-            <option value="bar">Bar</option>
-            <option value="ohlc">OHLC</option>
-            <option value="hlc">HLC</option>
-            <option value="line">Line</option>
-          </select><br />
-          <div id="color_pickers">
-            Colors:<br />
-            Up: <select id="up_color" class="ui-state-default">
-                  <option value="#000000">Black</option>
-                  <option value="#0000FF">Blue</option>
-                  <option value="#FF0000">Red</option>
-                  <option value="#00FF00">Green</option>
-                  <option value="#FF9933">Orange</option>
-                  <option value="#FFFF00">Yellow</option>
-                </select> 
-            Down: <select id="down_color" class="ui-state-default">
-                  <option value="#000000">Black</option>
-                  <option value="#0000FF">Blue</option>
-                  <option value="#FF0000">Red</option>
-                  <option value="#00FF00">Green</option>
-                  <option value="#FF9933">Orange</option>
-                  <option value="#FFFF00">Yellow</option>
-                </select>
-          </div> <!-- close color_pickers -->
+              Down: <select id="down_color" class="ui-state-default">
+                    <option value="#000000">Black</option>
+                    <option value="#0000FF">Blue</option>
+                    <option value="#FF0000">Red</option>
+                    <option value="#00FF00">Green</option>
+                    <option value="#FF9933">Orange</option>
+                    <option value="#FFFF00">Yellow</option>
+                  </select>
+            </div> <!-- close color_pickers -->
+          </div> <!-- close chart_settings_pane -->
         </div> <!-- close chart_settings -->
+
+        <div id="markets" class="ui-state-default">
+          <strong>Markets</strong><br />
+          <div id="market_lists">
+            <select id="dow_30" class="ui-state-default">
+              <option value="title">Dow 30</option>
+              <option value="MMM">3M Co</option>
+              <option value="AA">Alcoa Inc</option>
+              <option value="AXP">American Express Co</option>
+              <option value="T">AT&amp;T Inc</option>
+              <option value="BAC">Bank of America Corp</option>
+              <option value="BA">Boeing Co</option>
+              <option value="CAT">Caterpillar Inc</option>
+              <option value="CVX">Chevron Corp</option>
+              <option value="CSCO">Cisco Systems Inc</option>
+              <option value="KO">Coca-Cola Co</option>
+              <option value="DD">E I Du Pont De Nemours And Co</option>
+              <option value="XOM">Exxon Mobil Corp</option>
+              <option value="GE">General Electric Company</option>
+              <option value="HPQ">Hewlett Packard Co</option>
+              <option value="HD">Home Depot Inc</option>
+              <option value="INTC">Intel Corp</option>
+              <option value="IBM">International Business Machines Co</option>
+              <option value="JNJ">Johnson &amp; Johnson</option>
+              <option value="JPM">JPMorgan Chase and Co</option>
+              <option value="KFT">Kraft Foods Inc</option>
+              <option value="MCD">McDonalds Corp</option>
+              <option value="MRK">Merck &amp; Co Inc</option>
+              <option value="MSFT">Microsoft Corp</option>
+              <option value="PFE">Pfizer Inc</option>
+              <option value="PG">Procter &amp; Gamble Co</option>
+              <option value="TRV">Travelers Companies Inc</option>
+              <option value="UTX">United Technologies Corp</option>
+              <option value="VZ">Verizon Communications Inc</option>
+              <option value="WMT">Wal-Mart Stores Inc</option>
+              <option value="DIS">Walt Disney Co</option>
+            </select>
+            <select id="nasdaq_100" class="ui-state-default">
+              <option value="title">NASDAQ 100</option>
+              <option value="ATVI">Activision Blizzard, Inc</option>
+              <option value="ADBE">Adobe Systems Incorporated</option>
+              <option value="AKAM">Akamai Technologies, Inc</option>
+              <option value="ALXN">Alexion Pharmaceuticals, Inc</option>
+              <option value="ALTR">Altera Corporation</option>
+              <option value="AMZN">Amazon.com, Inc</option>
+              <option value="AMGN">Amgen Inc</option>
+              <option value="APOL">Apollo Group, Inc</option>
+              <option value="AAPL">Apple Inc</option>
+              <option value="AMAT">Applied Materials, Inc</option>
+              <option value="ADSK">Autodesk, Inc</option>
+              <option value="ADP">Automatic Data Processing, Inc</option>
+              <option value="BIDU">Baidu, Inc</option>
+              <option value="BBBY">Bed Bath &amp; Beyond Inc</option>
+              <option value="BIIB">Biogen Idec Inc</option>
+              <option value="BMC">BMC Software, Inc</option>
+              <option value="BRCM">Broadcom Corporation</option>
+              <option value="CHRW">C.H. Robinson Worldwide, Inc</option>
+              <option value="CA">CA Inc</option>
+              <option value="CELG">Celgene Corporation</option>
+              <option value="CERN">Cerner Corporation</option>
+              <option value="CHKP">Check Point Software Technologies Ltd</option>
+              <option value="CSCO">Cisco Systems, Inc</option>
+              <option value="CTXS">Citrix Systems, Inc</option>
+              <option value="CTSH">Cognizant Technology Solutions Corporation</option>
+              <option value="CMCSA">Comcast Corporation</option>
+              <option value="COST">Costco Wholesale Corporation</option>
+              <option value="CTRP">Ctrip.com International, Ltd</option>
+              <option value="DELL">Dell Inc</option>
+              <option value="XRAY">DENTSPLY International Inc</option>
+              <option value="DTV">DIRECTV</option>
+              <option value="DLTR">Dollar Tree, Inc</option>
+              <option value="EBAY">eBay Inc</option>
+              <option value="ERTS">Electronic Arts Inc</option>
+              <option value="EXPE">Expedia, Inc</option>
+              <option value="EXPD">Expeditors International of Washington, Inc</option>
+              <option value="ESRX">Express Scripts, Inc</option>
+              <option value="FFIV">F5 Networks, Inc</option>
+              <option value="FAST">Fastenal Company</option>
+              <option value="FSLR">First Solar, Inc</option>
+              <option value="FISV">Fiserv, Inc</option>
+              <option value="FLEX">Flextronics International Ltd</option>
+              <option value="FLIR">FLIR Systems, Inc</option>
+              <option value="GRMN">Garmin Ltd</option>
+              <option value="GILD">Gilead Sciences, Inc</option>
+              <option value="GOOG">Google Inc</option>
+              <option value="GMCR">Green Mountain Coffee Roasters, Inc</option>
+              <option value="HSIC">Henry Schein, Inc</option>
+              <option value="ILMN">Illumina, Inc</option>
+              <option value="INFY">Infosys Limited</option>
+              <option value="INTC">Intel Corporation</option>
+              <option value="INTU">Intuit Inc</option>
+              <option value="ISRG">Intuitive Surgical, Inc</option>
+              <option value="JOYG">Joy Global Inc</option>
+              <option value="KLAC">KLA-Tencor Corporation</option>
+              <option value="LRCX">Lam Research Corporation</option>
+              <option value="LINTA">Liberty Media Corporation</option>
+              <option value="LIFE">Life Technologies Corporation</option>
+              <option value="LLTC">Linear Technology Corporation</option>
+              <option value="MRVL">Marvell Technology Group Ltd</option>
+              <option value="MAT">Mattel, Inc</option>
+              <option value="MXIM">Maxim Integrated Products, Inc</option>
+              <option value="MCHP">Microchip Technology Incorporated</option>
+              <option value="MU">Micron Technology, Inc</option>
+              <option value="MSFT">Microsoft Corporation</option>
+              <option value="MYL">Mylan Inc</option>
+              <option value="NTAP">NetApp, Inc</option>
+              <option value="NFLX">Netflix, Inc</option>
+              <option value="NWSA">News Corporation</option>
+              <option value="NIHD">NII Holdings, Inc</option>
+              <option value="NVDA">NVIDIA Corporation</option>
+              <option value="ORLY">O'Reilly Automotive, Inc</option>
+              <option value="ORCL">Oracle Corporation</option>
+              <option value="PCAR">PACCAR Inc</option>
+              <option value="PAYX">Paychex, Inc</option>
+              <option value="PCLN">priceline.com Incorporated</option>
+              <option value="QGEN">Qiagen N.V.</option>
+              <option value="QCOM">QUALCOMM Incorporated</option>
+              <option value="RIMM">Research in Motion Limited</option>
+              <option value="ROST">Ross Stores, Inc</option>
+              <option value="SNDK">SanDisk Corporation</option>
+              <option value="STX">Seagate Technology</option>
+              <option value="SHLD">Sears Holdings Corporation</option>
+              <option value="SIAL">Sigma-Aldrich Corporation</option>
+              <option value="SIRI">Sirius XM Radio Inc</option>
+              <option value="SPLS">Staples, Inc</option>
+              <option value="SBUX">Starbucks Corporation</option>
+              <option value="SRCL">Stericycle, Inc</option>
+              <option value="SYMC">Symantec Corporation</option>
+              <option value="TEVA">Teva Pharmaceutical Industries Limited</option>
+              <option value="URBN">Urban Outfitters, Inc</option>
+              <option value="VRSN">VeriSign, Inc</option>
+              <option value="VRTX">Vertex Pharmaceuticals Incorporated</option>
+              <option value="VMED">Virgin Media Inc</option>
+              <option value="VOD">Vodafone Group Plc</option>
+              <option value="WCRX">Warner Chilcott plc</option>
+              <option value="WFM">Whole Foods Market, Inc</option>
+              <option value="WYNN">Wynn Resorts, Limited</option>
+              <option value="XLNX">Xilinx, Inc</option>
+              <option value="YHOO">Yahoo! Inc</option>
+            </select>
+          </div> <!-- close market_lists -->
+        </div> <!-- close markets -->
       </div> <!-- close Chart -->
     </div> <!-- close chart_controls -->
     
