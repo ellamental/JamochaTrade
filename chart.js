@@ -33,6 +33,7 @@ function newChart(symbol) {
 
   // Hide things that should be hidden by default
   $("#pending_orders_pane").hide();
+  $("#chart_widgets").hide();
   $("#chart_settings_pane").hide();
   $("#market_lists").hide();
   $("#recently_viewed_list").hide();
@@ -139,19 +140,20 @@ function newChart(symbol) {
   // Chart Controls
   //__________________________________________________________________________
   
+  $("#chart_controls").mouseenter(function() {
+      clearTimeout($(this).data('timeoutId'));
+      $("#chart_widgets").show('slow');
+  }).mouseleave(function(){
+      var timeoutId = setTimeout(function(){ $("#chart_widgets").hide('slow'); }, 1000);
+      $(this).data('timeoutId', timeoutId);
+  });
+  
   $("#chart_settings").hover(
     function () { $(this).addClass("ui-state-hover") },
     function () { $(this).removeClass("ui-state-hover") }
   ).click(function (e) {
     $("#chart_settings_pane").toggle();
   });
-//   $("#chart_settings").mouseenter(function() {
-//       clearTimeout($(this).data('timeoutId'));
-//       $("#chart_settings_pane").show('slow');
-//   }).mouseleave(function(){
-//       var timeoutId = setTimeout(function(){ $("#chart_settings_pane").hide('slow'); }, 1000);
-//       $(this).data('timeoutId', timeoutId);
-//   });
   
   function changeSymbol(sym) {
     //sym = sym.toUpperCase();
