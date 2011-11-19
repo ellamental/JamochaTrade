@@ -191,6 +191,7 @@ function newChart(symbol) {
     po.find("#po_symbol").text(o.symbol);
     po.find("#po_shares").text(o.shares);
     po.find("#po_price").text(o.price);
+    po.find("#po_cancel").button();
     po.find("#po_cancel").click(function () {
       removePendingOrder(o.id);
     });
