@@ -37,6 +37,9 @@ function newChart(symbol) {
   $("#chart_settings_pane").hide();
   $("#market_lists").hide();
   $("#recently_viewed_list").hide();
+  $("#limit_price_div").hide();
+  $("#indicator_settings").hide();
+
   
   var width = 620,
       height = 500,
@@ -142,13 +145,10 @@ function newChart(symbol) {
   // Chart Controls
   //__________________________________________________________________________
   
-  $("#chart_controls").mouseenter(function() {
-      clearTimeout($(this).data('timeoutId'));
-      $("#chart_widgets").show('slow');
-  }).mouseleave(function(){
-      var timeoutId = setTimeout(function(){ $("#chart_widgets").hide('slow'); }, 1000);
-      $(this).data('timeoutId', timeoutId);
-  });
+  $("#chart_controls").hover(
+    function () { $("#chart_widgets").show('fast'); },
+    function () { $("#chart_widgets").hide('fast'); }
+  );
   
   $("#chart_settings").hover(
     function () { $(this).addClass("ui-state-hover") },
@@ -246,14 +246,13 @@ function newChart(symbol) {
   // Order Processing
   //__________________________________________________________________________
 
-  $("#limit_price_div").hide();
   $("#buy_order_type").change(function () {
     var val = $("#buy_order_type").val();
     if (val === "market") {
-      $("#limit_price_div").hide();
+      $("#limit_price_div").hide('fast');
     }
     else if (val === "limit" || val === "stop") {
-      $("#limit_price_div").show();
+      $("#limit_price_div").show('fast');
     }
   });
   
@@ -280,7 +279,7 @@ function newChart(symbol) {
     pending_order_counter++;
     displayPendingOrder(o);
     if (pending_orders.length === 1) {
-      $("#pending_orders_pane").show();
+      $("#pending_orders_pane").show('fast');
     }
   }
   
@@ -308,7 +307,7 @@ function newChart(symbol) {
         pending_orders.splice(i, 1);
         $("#po_"+order_id).remove();
         if (pending_orders.length < 1) {
-          $("#pending_orders_pane").hide();
+          $("#pending_orders_pane").hide('fast');
         }
       }
     }
@@ -338,7 +337,7 @@ function newChart(symbol) {
       
       // if no current position, create a new position and add to beginning of portfolio[symbol]
       if (portfolio[symbol][0].shares === 0) {
-        pitem.show();
+        pitem.show('fast');
         portfolio[symbol].unshift({ "shares": shares, 
                                     "price": price,
                                     "trades": [ ["buy", shares, price] ] });
@@ -373,7 +372,7 @@ function newChart(symbol) {
     // Set default values, hide elements and make buttons
     var order_type_select = item.find("#pi_order_type");
     order_type_select.val("market");
-    item.find("#pi_limit_div").hide();
+    item.find("#pi_limit_div").hide('fast');
     
     // Set initial values
     item.find("#pi_symbol").text(sym);
@@ -387,10 +386,10 @@ function newChart(symbol) {
     order_type_select.click(function () {
       var o = order_type_select.val();
       if (o === "market") {
-        item.find("#pi_limit_div").hide();
+        item.find("#pi_limit_div").hide('fast');
       }
       else if (o === "limit" || o === "stop") {
-        item.find("#pi_limit_div").show();
+        item.find("#pi_limit_div").show('fast');
       }
     });
     
@@ -433,7 +432,7 @@ function newChart(symbol) {
       
       // Update portfolio item
       var pitem = $("#pi_"+sym);
-      if (portfolio[sym][0].shares === 0) { pitem.hide(); }
+      if (portfolio[sym][0].shares === 0) { pitem.hide('fast'); }
       pitem.find("#pi_shares").text(portfolio[sym][0].shares);
       $("#account").text(formatCurrency(account));
     }
@@ -489,7 +488,7 @@ function newChart(symbol) {
     
     // If all orders have been filled: hide pending orders pane
     if (pending_orders.length < 1) {
-      $("#pending_orders_pane").hide();
+      $("#pending_orders_pane").hide('fast');
     }
   }
   
@@ -498,7 +497,6 @@ function newChart(symbol) {
   // Indicators
   //__________________________________________________________________________
   
-  $("#indicator_settings").hide();
   
   var active_indicators = [],
       indicator_counter = 0;
@@ -525,7 +523,7 @@ function newChart(symbol) {
       removeIndicator(id);
     });
     if (active_indicators.length < 2) {
-      $("#active_indicators").show();
+      $("#active_indicators").show('fast');
     }
   }
   
@@ -562,15 +560,15 @@ function newChart(symbol) {
       is_elem.append('<button id="is_cancel">Cancel</button><button id="is_apply">Apply</button>');
       $("#is_apply").button();
       $("#is_cancel").button();
-      $("#indicator_settings").show();
+      $("#indicator_settings").show('fast');
       $("#is_apply").click(function () {
         indicator_settings[indicator].click_func();
         is_elem.empty();
-        is_elem.hide();
+        is_elem.hide('fast');
       });
       $("#is_cancel").click(function () {
         is_elem.empty();
-        is_elem.hide();
+        is_elem.hide('fast');
       });
     }
   });
