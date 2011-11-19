@@ -644,7 +644,11 @@ function newChart(symbol) {
     c.stroke();
   }
 
-
+  $("#clear_trendlines").click(function () {
+    drawChart();
+  });
+  
+  
   
   //__________________________________________________________________________
   // Trendline Drawing
