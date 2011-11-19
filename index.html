@@ -14,6 +14,7 @@
 
   <script>
   $(function() {
+    $("#no_javascript_warning").remove();
     $("#switcher").themeswitcher();
     $("#chart_controls").accordion({autoHeight: false, navigation: true, collapsible: true});
     $("#indicators").accordion({autoHeight: false, navigation: true, collapsible: true});
@@ -42,6 +43,8 @@
 <body>
 <div id="wrapper">
 <div id="switcher"></div>
+
+  <h2 id="no_javascript_warning">This application requires Javascript</h2>
 
   <h3 id="symbol_name" class="ui-widget-header ui-corner-all">IBM</h3>
 
