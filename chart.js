@@ -389,7 +389,7 @@ function newChart(symbol) {
     // Set default values, hide elements and make buttons
     var order_type_select = item.find("#pi_order_type");
     order_type_select.val("market");
-    item.find("#pi_limit_div").hide('fast');
+    item.find("#pi_limit_div").hide();
     
     // Set initial values
     item.find("#pi_symbol").text(sym);
