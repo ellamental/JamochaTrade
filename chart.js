@@ -75,6 +75,32 @@ function newChart(symbol) {
     });
   });
   
+  
+  //__________________________________________________________________________
+  // Miscellaneous Functions
+  //__________________________________________________________________________
+  
+  function formatCurrency(num) {
+    var cents = ((num % 1).toFixed(2)).split('.')[1],
+        s = [],
+        n = Math.floor(num),
+        t;
+    while (n > 0) {
+      t = (n % 1000)
+      n = Math.floor(n / 1000);
+      // display $3,000.00 instead of $003,000.00
+      if (n > 0) {
+        // display $1,001.00 instead of $1,1.00
+        if (t === 0) { t = '000' }
+        else if (t < 10) { t = '00' + t }
+        else if (t < 100) { t = '0' + t }
+      }
+      s.unshift(t);
+    }
+    return '$'+s.join(',')+'.'+cents;
+  }
+  
+  
   //__________________________________________________________________________
   // Time Controls
   //__________________________________________________________________________
@@ -94,7 +120,7 @@ function newChart(symbol) {
               port_value += stock_data[sym][today].close * portfolio[sym][0].shares;
             }
           }
-          $("#portfolio_value").text("$"+port_value.toFixed(2));
+          $("#portfolio_value").text(formatCurrency(port_value));
         }
       }
     }
@@ -241,7 +267,7 @@ function newChart(symbol) {
     // update account
     var cost = shares * price;
     account = account - cost;
-    $("#account").text("$" + account.toFixed(2));
+    $("#account").text(formatCurrency(account));
     
     if (symbol in portfolio) {
       var pitem = $("#pi_"+symbol);
@@ -347,7 +373,7 @@ function newChart(symbol) {
       var pitem = $("#pi_"+sym);
       if (portfolio[sym][0].shares === 0) { pitem.hide(); }
       var div_id = pitem.find("#pi_shares").text(portfolio[sym][0].shares);
-      $("#account").text("$" + account.toFixed(2));
+      $("#account").text(formatCurrency(account));
     }
   }
 
