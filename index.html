@@ -66,30 +66,29 @@
             <option value="line">Line</option>
           </select><br />
           <div id="color_pickers">
-          Colors:<br />
-          Up: <select id="up_color" class="ui-state-default">
-                <option value="#000000">Black</option>
-                <option value="#0000FF">Blue</option>
-                <option value="#FF0000">Red</option>
-                <option value="#00FF00">Green</option>
-                <option value="#FF9933">Orange</option>
-                <option value="#FFFF00">Yellow</option>
-              </select> 
-          Down: <select id="down_color" class="ui-state-default">
-                <option value="#000000">Black</option>
-                <option value="#0000FF">Blue</option>
-                <option value="#FF0000">Red</option>
-                <option value="#00FF00">Green</option>
-                <option value="#FF9933">Orange</option>
-                <option value="#FFFF00">Yellow</option>
-              </select>
+            Colors:<br />
+            Up: <select id="up_color" class="ui-state-default">
+                  <option value="#000000">Black</option>
+                  <option value="#0000FF">Blue</option>
+                  <option value="#FF0000">Red</option>
+                  <option value="#00FF00">Green</option>
+                  <option value="#FF9933">Orange</option>
+                  <option value="#FFFF00">Yellow</option>
+                </select> 
+            Down: <select id="down_color" class="ui-state-default">
+                  <option value="#000000">Black</option>
+                  <option value="#0000FF">Blue</option>
+                  <option value="#FF0000">Red</option>
+                  <option value="#00FF00">Green</option>
+                  <option value="#FF9933">Orange</option>
+                  <option value="#FFFF00">Yellow</option>
+                </select>
+          </div> <!-- close color_pickers -->
         </div> <!-- close chart_settings -->
-      </div> <!-- close color_changers -->
-
-
       </div> <!-- close Chart -->
     </div> <!-- close chart_controls -->
     
+
     <div id="indicators">
       <h3>Indicators</h3>
       <div>
@@ -97,14 +96,11 @@
           <option value="sma">SMA</option>
         </select>
         <button id="add_indicator">Add Indicator</button>
-        <div id="indicator_settings" class="ui-state-default ui-corner-all">
-        </div>
-        <div id="active_indicators">
-        </div>
-
-        <!-- SMA <input id="sma_days" size="4"></input> days <button id="draw_sma">Draw</button> -->
+        <div id="indicator_settings" class="ui-state-default ui-corner-all"></div>
+        <div id="active_indicators"></div>
       </div>
     </div> <!-- close indicators -->
+
 
     <div id="order_entry">
       <h3>Order Entry</h3>
@@ -121,6 +117,7 @@
       </div> <!-- close Order Entry -->
     </div> <!-- close order_entry -->
     
+
     <div id="portfolio_view">
       <h3>Portfolio</h3>
       <div id="portfolio_list">
@@ -131,6 +128,7 @@
       </div> <!-- close Portfolio -->
     </div> <!-- close portfolio_view -->
 
+
     <div id="pending_orders_pane">
       <h3>Pending Orders</h3>
       <div id="pending_orders">
@@ -138,6 +136,7 @@
     </div> <!-- close pending_orders -->
 
   </div> <!-- close toolbar -->
+
 
   <div id="main">
     <div id="container">
@@ -164,8 +163,10 @@
   </div> <!-- close main -->
 
 
-
 </div> <!-- close wrapper -->
+
+
+<!-- Templates -->
 
 <div id="pi_template" class="ui-corner-all ui-widget-content">
   Symbol: <span id="pi_symbol"></span><br />
@@ -178,7 +179,7 @@
   Shares: <input id="pi_sell_shares" size="6"></input><br />
   <div id="pi_limit_div">Limit Price: <input id="pi_limit_price" size="6"></div>
   <button id="pi_sell">Sell</button><button id="pi_view">View</button>
-</div>
+</div> <!-- close pi_template -->
 
 <div id="po_template" class="ui-corner-all ui-widget-content">
   <span id="po_type"></span><br />
@@ -186,7 +187,7 @@
   Shares: <span id="po_shares"></span><br />
   Price: <span id="po_price"></span><br />
   <button id="po_cancel">Cancel</button>
-</div>
+</div> <!-- close po_template -->
 
 
 </body>

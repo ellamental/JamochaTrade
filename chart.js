@@ -86,14 +86,14 @@ function newChart(symbol) {
         n = Math.floor(num),
         t;
     while (n > 0) {
-      t = (n % 1000)
+      t = (n % 1000);
       n = Math.floor(n / 1000);
       // display $3,000.00 instead of $003,000.00
       if (n > 0) {
         // display $1,001.00 instead of $1,1.00
-        if (t === 0) { t = '000' }
-        else if (t < 10) { t = '00' + t }
-        else if (t < 100) { t = '0' + t }
+        if (t === 0) { t = '000'; }
+        else if (t < 10) { t = '00' + t; }
+        else if (t < 100) { t = '0' + t; }
       }
       s.unshift(t);
     }
@@ -139,7 +139,7 @@ function newChart(symbol) {
       clearTimeout($(this).data('timeoutId'));
       $("#chart_settings").show('slow');
   }).mouseleave(function(){
-      var timeoutId = setTimeout(function(){ $("#chart_settings").hide('slow') }, 2000);
+      var timeoutId = setTimeout(function(){ $("#chart_settings").hide('slow'); }, 2000);
       $(this).data('timeoutId', timeoutId);
   });
   
@@ -372,7 +372,7 @@ function newChart(symbol) {
       // Update portfolio item
       var pitem = $("#pi_"+sym);
       if (portfolio[sym][0].shares === 0) { pitem.hide(); }
-      var div_id = pitem.find("#pi_shares").text(portfolio[sym][0].shares);
+      pitem.find("#pi_shares").text(portfolio[sym][0].shares);
       $("#account").text(formatCurrency(account));
     }
   }
@@ -438,8 +438,8 @@ function newChart(symbol) {
   
   $("#indicator_settings").hide();
   
-  var active_indicators = [];
-  var indicator_counter = 0;
+  var active_indicators = [],
+      indicator_counter = 0;
   
   function drawActiveIndicators() {
     for (var i=0, j=active_indicators.length; i < j; i++) {
@@ -485,9 +485,9 @@ function newChart(symbol) {
     "sma": {"html": '<div>Days: <input id="sma_days" size="4"></input><br />Color: '+makeColorSelect('sma_color')+'</div>',
             "click_func": function () {
                             var days = parseInt($("#sma_days").val(), 10),
-                                color = $("#sma_color").val();
-                                name = "SMA ("+days+")";
-                            addActiveIndicator(name, drawSMA, [days, color]);
+                                color = $("#sma_color").val(),
+                                ind_name = "SMA ("+days+")";
+                            addActiveIndicator(ind_name, drawSMA, [days, color]);
                           }
            }
   };
@@ -514,9 +514,9 @@ function newChart(symbol) {
   });
   
   function drawSMA(days, color) {
-    var o = getAdjustments();
-    var sma_data = [];
-    var end = chart_length + today;
+    var o = getAdjustments(),
+        sma_data = [],
+        end = chart_length + today;
     for (var i=today; i < end; i++) {
       var slice = data.slice(i, i+days), 
           sum = 0;
@@ -597,8 +597,8 @@ function newChart(symbol) {
     }
     else {
       console.log("Downloading...");
-      var date = new Date();
-      var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D"+(date.getMonth()+1)+"%26e%3D"+date.getDate()+"%26f%3D"+date.getFullYear()+"%26g%3Dd%26a%3D0%26b%3D2%26c%3D1962%26ignore%3D.csv'&format=json&callback=?";
+      var date = new Date(),
+          url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D"+(date.getMonth()+1)+"%26e%3D"+date.getDate()+"%26f%3D"+date.getFullYear()+"%26g%3Dd%26a%3D0%26b%3D2%26c%3D1962%26ignore%3D.csv'&format=json&callback=?";
       
       $.getJSON(url, function (result) {
         //col0=Date, col1=Open, col2=High, col3=Low, col4=Close, col5=Volume, col6=Adj Close
@@ -643,9 +643,9 @@ function newChart(symbol) {
   }
 
   function getAdjustments() {
-    var end = today + chart_length;
-    var low = data[today].low;
-    var high = data[today].high;
+    var end = today + chart_length,
+        low = data[today].low,
+        high = data[today].high;
     
     // get lowest low and highest high
     for (var i = today; i < end; i++) {
@@ -654,8 +654,8 @@ function newChart(symbol) {
     }
 
     // get multipliers
-    var height_mul = (height) / (high - low);
-    var width_mul = (width-20) / chart_length;
+    var height_mul = (height) / (high - low),
+        width_mul = (width-20) / chart_length;
 
     return {"end": end,
             "low": low,
@@ -676,8 +676,8 @@ function newChart(symbol) {
   }
 
   function drawPriceLabels(a) {
-    var mul = height / 6;
-    var diff = (a.high-a.low) / 6;
+    var mul = height / 6,
+        diff = (a.high-a.low) / 6;
     c.fillStyle = "#000";
     c.font = 'italic 15px sans-serif';
     c.textAlign = "right";
@@ -688,10 +688,14 @@ function newChart(symbol) {
   }
 
   function drawCandle() {
+    var a = getAdjustments(),
+        end = a.end,
+        low = a.low,
+        high = a.high,
+        height_mul = a.height_mul, 
+        width_mul = a.width_mul;
+
     clear_canvas();
-    var a = getAdjustments();
-    var end = a.end, low = a.low, high = a.high;// = data[today].high;
-    var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
     
     for (var i = end; i >= today; i--) {
@@ -714,10 +718,14 @@ function newChart(symbol) {
   }
 
   function drawBar() {
+    var a = getAdjustments(),
+        end = a.end,
+        low = a.low,
+        high = a.high,
+        height_mul = a.height_mul, 
+        width_mul = a.width_mul;
+
     clear_canvas();
-    var a = getAdjustments();
-    var end = a.end, low = a.low, high = data[today].high;
-    var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
 
     for (var i = end; i >= today; i--) {
@@ -732,10 +740,14 @@ function newChart(symbol) {
   }
   
   function drawOHLC() {
+    var a = getAdjustments(),
+        end = a.end,
+        low = a.low,
+        high = a.high,
+        height_mul = a.height_mul, 
+        width_mul = a.width_mul;
+
     clear_canvas();
-    var a = getAdjustments();
-    var end = a.end, low = a.low, high = data[today].high;
-    var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
 
     // draw wicks
@@ -758,10 +770,14 @@ function newChart(symbol) {
   }
 
   function drawHLC() {
+    var a = getAdjustments(),
+        end = a.end,
+        low = a.low,
+        high = a.high,
+        height_mul = a.height_mul, 
+        width_mul = a.width_mul;
+
     clear_canvas();
-    var a = getAdjustments();
-    var end = a.end, low = a.low, high = data[today].high;
-    var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
 
     // draw wicks
@@ -780,10 +796,14 @@ function newChart(symbol) {
   }
 
   function drawLine() {
+    var a = getAdjustments(),
+        end = a.end,
+        low = a.low,
+        high = a.high,
+        height_mul = a.height_mul, 
+        width_mul = a.width_mul;
+
     clear_canvas();
-    var a = getAdjustments();
-    var end = a.end, low = a.low, high = data[today].high;
-    var height_mul = a.height_mul, width_mul = a.width_mul;
     drawHorizontalLines();
 
     // draw line
