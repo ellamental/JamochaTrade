@@ -136,7 +136,7 @@ function newChart(symbol) {
             if (portfolio[sym][0].shares !== 0) {
               var close = stock_data[sym][today].close,
                   position = portfolio[sym][0],
-                  pgl = $("#pi_"+sym).find("#percent_gain_loss");
+                  pgl = $("#pi_"+sym).find("#pi_percent_gain_loss");
               port_value += close * position.shares;
               pgl.text(percentGain(position.price, close));
               if (position.price < close) {
@@ -395,6 +395,7 @@ function newChart(symbol) {
                                     "price": price,
                                     "trades": [ ["buy", shares, price] ] });
         pitem.find("#pi_shares").text(shares);
+        pitem.find("#pi_purchase_price").text(formatCurrency(price));
       }
       
       // if there is a current position: average and update the purchase price, shares and trades
@@ -405,6 +406,7 @@ function newChart(symbol) {
         portfolio[symbol][0].price = avg_price;
         portfolio[symbol][0].trades.push(["buy", shares, price]);
         pitem.find("#pi_shares").text(portfolio[symbol][0].shares);
+        pitem.find("#pi_purchase_price").text(formatCurrency(avg_price));
       }
       console.log(portfolio[symbol]);
     }
@@ -414,11 +416,11 @@ function newChart(symbol) {
       portfolio[symbol] = [{ "shares": shares, 
                              "price": price, 
                              "trades": [ ["buy", shares, price] ] }];
-      addPortfolioItem(symbol, shares);
+      addPortfolioItem(symbol, shares, price);
     }
   }
   
-  function addPortfolioItem(sym, shares) {
+  function addPortfolioItem(sym, shares, price) {
     var item = $("#pi_template").clone(true);
     item.attr("id", "pi_"+sym);
 
@@ -427,7 +429,8 @@ function newChart(symbol) {
     var order_type_select = item.find("#pi_order_type");
     order_type_select.val("market");
     item.find("#pi_limit_div").hide();
-    item.find("#percent_gain_loss").text("0.00%");
+    item.find("#pi_percent_gain_loss").text("0.00%");
+    item.find("#pi_purchase_price").text(formatCurrency(price));
     
     // Set initial values
     item.find("#pi_symbol").text(sym);
