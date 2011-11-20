@@ -682,6 +682,7 @@ function newChart(symbol) {
     $("#sketch").mouseup(function (e) {
       var x = e.pageX - offset.left,
           y = e.pageY - offset.top;
+      c.strokeStyle = "#000";
       c.beginPath();
       c.moveTo(begin_x, begin_y);
       c.lineTo(x, y);
