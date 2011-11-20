@@ -112,6 +112,10 @@ function newChart(symbol) {
     return '$'+s.join(',')+'.'+cents;
   }
   
+  function percentGain(purchase_price, current_price) {
+    return (((current_price / purchase_price) - 1) * 100).toFixed(2) + "%";
+  }
+  
   
   
   //__________________________________________________________________________
@@ -130,7 +134,17 @@ function newChart(symbol) {
           var port_value = account;
           for (var sym in portfolio) {
             if (portfolio[sym][0].shares !== 0) {
-              port_value += stock_data[sym][today].close * portfolio[sym][0].shares;
+              var close = stock_data[sym][today].close,
+                  position = portfolio[sym][0],
+                  pgl = $("#pi_"+sym).find("#percent_gain_loss");
+              port_value += close * position.shares;
+              pgl.text(percentGain(position.price, close));
+              if (position.price < close) {
+                pgl.css("color", "green");
+              }
+              else {
+                pgl.css("color", "red");
+              }
             }
           }
           $("#portfolio_value").text(formatCurrency(port_value));
@@ -413,6 +427,7 @@ function newChart(symbol) {
     var order_type_select = item.find("#pi_order_type");
     order_type_select.val("market");
     item.find("#pi_limit_div").hide();
+    item.find("#percent_gain_loss").text("0.00%");
     
     // Set initial values
     item.find("#pi_symbol").text(sym);
