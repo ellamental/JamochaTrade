@@ -409,6 +409,7 @@ function newChart(symbol) {
     item.attr("id", "pi_"+sym);
 
     // Set default values, hide elements and make buttons
+    item.find("#pi_info").hide();
     var order_type_select = item.find("#pi_order_type");
     order_type_select.val("market");
     item.find("#pi_limit_div").hide();
@@ -418,11 +419,17 @@ function newChart(symbol) {
     item.find("#pi_shares").text(shares);
     
     // Bind events
-    item.find("#pi_view").click(function () {
+    item.click(function () {
+      item.find("#pi_info").toggle();
+    });
+    
+    item.find("#pi_view").click(function (e) {
+      e.stopPropagation();
       changeSymbol(sym);
     });
     
-    order_type_select.click(function () {
+    order_type_select.click(function (e) {
+      e.stopPropagation();
       var o = order_type_select.val();
       if (o === "market") {
         item.find("#pi_limit_div").hide('fast');
@@ -432,7 +439,8 @@ function newChart(symbol) {
       }
     });
     
-    item.find("#pi_sell").click(function () {
+    item.find("#pi_sell").click(function (e) {
+      e.stopPropagation();
       var order_type = order_type_select.val();
       if (order_type === "market") {
         sell(sym, item.find("#pi_sell_shares").val(), stock_data[sym][today].close);
@@ -443,6 +451,14 @@ function newChart(symbol) {
       else if (order_type === "stop") {
         addPendingOrder("sell_stop", sym, item.find("#pi_limit_price").val(), item.find("#pi_sell_shares").val());
       }
+    });
+    
+    item.find("#pi_sell_shares").click(function (e) {
+      e.stopPropagation();
+    });
+    
+    item.find("#pi_limit_price").click(function (e) {
+      e.stopPropagation();
     });
     
     $("#security_list").prepend(item);

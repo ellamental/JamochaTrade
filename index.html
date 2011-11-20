@@ -339,16 +339,17 @@
 <!-- Templates -->
 
 <div id="pi_template" class="ui-corner-all ui-widget-content">
-  Symbol: <span id="pi_symbol"></span><br />
-  Shares: <span id="pi_shares"></span><br />
-  Order Type: <select id="pi_order_type" class="ui-state-default">
-                <option value="market">Market</option>
-                <option value="limit">Limit</option>
-                <option value="stop">Stop</option>
-              </select><br />
-  Shares: <input id="pi_sell_shares" size="6"></input><br />
-  <div id="pi_limit_div">Limit Price: <input id="pi_limit_price" size="6"></div>
-  <button id="pi_sell">Sell</button><button id="pi_view">View</button>
+  <span id="pi_symbol"></span> - <span id="pi_shares"></span> shares
+  <div id="pi_info">
+    Order Type: <select id="pi_order_type" class="ui-state-default">
+                  <option value="market">Market</option>
+                  <option value="limit">Limit</option>
+                  <option value="stop">Stop</option>
+                </select><br />
+    Shares: <input id="pi_sell_shares" size="6"></input><br />
+    <div id="pi_limit_div">Limit Price: <input id="pi_limit_price" size="6"></div>
+    <button id="pi_sell">Sell</button><button id="pi_view">View</button>
+  </div> <!-- close pi_info -->
 </div> <!-- close pi_template -->
 
 <div id="po_template" class="ui-corner-all ui-widget-content">
