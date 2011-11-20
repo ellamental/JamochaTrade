@@ -136,15 +136,19 @@ function newChart(symbol) {
             if (portfolio[sym][0].shares !== 0) {
               var close = stock_data[sym][today].close,
                   position = portfolio[sym][0],
-                  pgl = $("#pi_"+sym).find("#pi_percent_gain_loss");
-              port_value += close * position.shares;
-              pgl.text(percentGain(position.price, close));
+                  pitem = $("#pi_"+sym),
+                  pitem_pgl = pitem.find("#pi_percent_gain_loss"),
+                  pitem_value = pitem.find("#pi_value"),
+                  current_value = close * position.shares;
+              port_value += current_value;
+              pitem_pgl.text(percentGain(position.price, close));
               if (position.price < close) {
-                pgl.css("color", "green");
+                pitem_pgl.css("color", "green");
               }
               else {
-                pgl.css("color", "red");
+                pitem_pgl.css("color", "red");
               }
+              pitem_value.text(formatCurrency(current_value));
             }
           }
           $("#portfolio_value").text(formatCurrency(port_value));
@@ -396,6 +400,7 @@ function newChart(symbol) {
                                     "trades": [ ["buy", shares, price] ] });
         pitem.find("#pi_shares").text(shares);
         pitem.find("#pi_purchase_price").text(formatCurrency(price));
+        pitem.find("#pi_value").text(formatCurrency(cost));
       }
       
       // if there is a current position: average and update the purchase price, shares and trades
@@ -407,6 +412,7 @@ function newChart(symbol) {
         portfolio[symbol][0].trades.push(["buy", shares, price]);
         pitem.find("#pi_shares").text(portfolio[symbol][0].shares);
         pitem.find("#pi_purchase_price").text(formatCurrency(avg_price));
+        pitem.find("#pi_value").text(formatCurrency(price*portfolio[symbol][0].shares));
       }
       console.log(portfolio[symbol]);
     }
@@ -431,6 +437,7 @@ function newChart(symbol) {
     item.find("#pi_limit_div").hide();
     item.find("#pi_percent_gain_loss").text("0.00%");
     item.find("#pi_purchase_price").text(formatCurrency(price));
+    item.find("#pi_value").text(formatCurrency(price*shares));
     
     // Set initial values
     item.find("#pi_symbol").text(sym);
@@ -512,6 +519,7 @@ function newChart(symbol) {
       var pitem = $("#pi_"+sym);
       if (portfolio[sym][0].shares === 0) { pitem.hide('fast'); }
       pitem.find("#pi_shares").text(portfolio[sym][0].shares);
+      pitem.find("#pi_value").text(formatCurrency(portfolio[sym][0].shares * price));
       $("#account").text(formatCurrency(account));
     }
   }
