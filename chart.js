@@ -460,7 +460,12 @@ function newChart(symbol) {
     item.find("#pi_limit_price").click(function (e) {
       e.stopPropagation();
     });
-    
+
+    item.hover(
+      function () { item.addClass("ui-state-hover"); },
+      function () { item.removeClass("ui-state-hover"); }
+    );
+
     $("#security_list").prepend(item);
   }
   
