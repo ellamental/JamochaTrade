@@ -69,8 +69,11 @@ function newChart(symbol) {
       pending_orders = [],
       pending_order_counter = 0,
       
-      recently_viewed_cache = [];
-
+      recently_viewed_cache = [],
+      
+      active_indicators = [],
+      indicator_counter = 0;
+  
   chart.width = width; chart.height = height;
   changeSymbol(symbol);
 
@@ -190,11 +193,6 @@ function newChart(symbol) {
   $("#new_symbol").click(getChart);
   $("#symbol_entry").bind("keypress", function (e) {if (e.which === 13) {getChart();}});
   
-  function selectSymbol(select_box) {
-    changeSymbol(select_box.val());
-    select_box.val('title');
-  }
-  
   
   // Chart Settings widget
   
@@ -239,6 +237,11 @@ function newChart(symbol) {
   ).click(function (e) {
     $("#market_lists").toggle();
   });
+
+  function selectSymbol(select_box) {
+    changeSymbol(select_box.val());
+    select_box.val('title');
+  }
 
   $("#dow_30").change(function () {
     selectSymbol($("#dow_30"));
@@ -298,6 +301,8 @@ function newChart(symbol) {
   $("#favorites_list").change(function () {
     changeSymbol($(this).val());
   }).click(function (e) { e.stopPropagation(); });
+  
+  
   
   //__________________________________________________________________________
   // Order Processing
@@ -584,10 +589,6 @@ function newChart(symbol) {
   // Indicators
   //__________________________________________________________________________
   
-  
-  var active_indicators = [],
-      indicator_counter = 0;
-  
   function drawActiveIndicators() {
     for (var i=0, j=active_indicators.length; i < j; i++) {
       var ind = active_indicators[i];
@@ -701,20 +702,17 @@ function newChart(symbol) {
   // Trendline Drawing
   //__________________________________________________________________________
   
-  var offset = $("#chart").offset();
-  var canvas, sketch_context,
-      begin_x, begin_y;
-  
   $("#chart").mousedown(function (e) {
-    var container = chart.parentNode;
-    canvas = document.createElement('canvas');
+  var offset = $("#chart").offset(),
+      container = chart.parentNode,
+      canvas = document.createElement('canvas'),
+      begin_x = e.pageX - offset.left,
+      begin_y = e.pageY - offset.top,
+      sketch_context = canvas.getContext("2d");
     canvas.id = 'sketch';
     canvas.width = chart.width;
     canvas.height = chart.height;
     container.appendChild(canvas);
-    begin_x = e.pageX - offset.left;
-    begin_y = e.pageY - offset.top;
-    sketch_context = canvas.getContext("2d");
   
     $("#sketch").mousemove(function (e) {
       var x = e.pageX - offset.left,
