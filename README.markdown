@@ -1,5 +1,7 @@
 A stock charting and paper trading application written in pure Javascript. JamochaTrade allows the user to fictionally buy and sell stock using real historical data in order to test new strategies, familiarize themselves with a new security or teach/learn about trading stocks.
 
+### [Try a demo here](http://nickzarr.com/demos/jamochatrade/)
+
 Features:
 
 - 5 chart types (candlestick, bar, ohlc, hlc, line)
