@@ -171,6 +171,7 @@ function newChart(symbol) {
   //__________________________________________________________________________
   
   $("#chart_controls").hover(
+    //function () { $("#chart_widgets").toggle('fast'); }
     function () { $("#chart_widgets").show('fast'); },
     function () { $("#chart_widgets").hide('fast'); }
   );
@@ -419,7 +420,7 @@ function newChart(symbol) {
         pitem.find("#pi_purchase_price").text(formatCurrency(avg_price));
         pitem.find("#pi_value").text(formatCurrency(price*portfolio[symbol][0].shares));
       }
-      console.log(portfolio[symbol]);
+      //console.log(portfolio[symbol]);
     }
     
     // if no position in this security has ever existed: create a new position
@@ -517,7 +518,7 @@ function newChart(symbol) {
       var profit = price * shares;
       portfolio[sym][0].shares = portfolio[sym][0].shares - shares;
       portfolio[sym][0].trades.push(["sell", shares, price]);
-      console.log(portfolio[sym][0]);
+      //console.log(portfolio[sym][0]);
       account += profit;
       
       // Update portfolio item
@@ -748,7 +749,7 @@ function newChart(symbol) {
       drawChart();
     }
     else {
-      console.log("Downloading...");
+      //console.log("Downloading...");
       var date = new Date(),
           url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D'http%3A%2F%2Fichart.finance.yahoo.com%2Ftable.csv%3Fs%3D" + symbol + "%26d%3D"+(date.getMonth()+1)+"%26e%3D"+date.getDate()+"%26f%3D"+date.getFullYear()+"%26g%3Dd%26a%3D0%26b%3D2%26c%3D1962%26ignore%3D.csv'&format=json&callback=?";
       
