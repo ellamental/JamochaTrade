@@ -297,6 +297,11 @@ function newChart(symbol) {
     changeSymbol($(this).val());
   }).click(function (e) { e.stopPropagation(); });
   
+  $("#remove_favorite").click(function (e) {
+    e.stopPropagation();
+    $("#favorites_list option:selected").remove();
+  });
+  
   
   
   //__________________________________________________________________________
