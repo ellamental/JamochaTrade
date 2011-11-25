@@ -188,8 +188,11 @@ function newChart(symbol) {
   // Symbol Entry widget
   
   function getChart() {
-    changeSymbol($("#symbol_entry").val());
-    $("#symbol_entry").val("");
+    var sym = $("#symbol_entry").val();
+    if (sym) {
+      changeSymbol(sym);
+      $("#symbol_entry").val("");
+    }
   }
   $("#new_symbol").click(getChart);
   $("#symbol_entry").bind("keypress", function (e) {if (e.which === 13) {getChart();}});
@@ -758,18 +761,24 @@ function newChart(symbol) {
         // result_data[0] = headers, result_data[1:] = data, most recent first
         var result_data = result.query.results.row.slice(1);
         
-        // Format result_data to change col1->open, col2->high, ...
-        data = new Array(result_data.length - 1);
-        for (var i=0, j=data.length; i < j; i++) {
-          data[i] = {open:   parseFloat(result_data[i].col1),
-                     high:   parseFloat(result_data[i].col2),
-                     low:    parseFloat(result_data[i].col3),
-                     close:  parseFloat(result_data[i].col4),
-                     date:   result_data[i].col0,
-                     volume: result_data[i].col5};
+        // Handle invalid symbol
+        if (result_data[0].col0.indexOf('404 Not Found') >= 0) {
+          alert("Symbol not found");
         }
-        stock_data[symbol] = data;
-        drawChart();
+        else {
+          // Format result_data to change col1->open, col2->high, ...
+          data = new Array(result_data.length - 1);
+          for (var i=0, j=data.length; i < j; i++) {
+            data[i] = {open:   parseFloat(result_data[i].col1),
+                      high:   parseFloat(result_data[i].col2),
+                      low:    parseFloat(result_data[i].col3),
+                      close:  parseFloat(result_data[i].col4),
+                      date:   result_data[i].col0,
+                      volume: result_data[i].col5};
+          }
+          stock_data[symbol] = data;
+          drawChart();
+        }
         //console.log(data.slice(today,today+10));
       });
     }
