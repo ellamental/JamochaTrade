@@ -55,7 +55,9 @@
     <div id="chart_controls">
       <h3>Chart</h3>
       <div>
-        <input id="symbol_entry" size="10"></input> <button id="new_symbol">Go</button><br/>
+        <input id="symbol_entry" size="10"></input>
+        <button id="new_symbol">Go</button><br/>
+
         <div id="chart_widgets">
           <div id="chart_settings" class="ui-state-default">
             <strong>Chart Settings</strong><br />
@@ -247,8 +249,8 @@
           <div id="favorites" class="ui-state-default">
             <strong>Favorites</strong>
             <div id="favorites_pane">
-              <button id="add_favorite">Add</button>
-              <button id="remove_favorite">Remove</button><br />
+              <button id="add_favorite" title="Add current symbol to favorites list.">Add</button>
+              <button id="remove_favorite" title="Remove selected symbol from favorites list.">Remove</button><br />
               <select id="favorites_list" class="ui-state-default"></select>
             </div> <!-- close favorites_pane -->
           </div> <!-- close favorites -->
@@ -262,7 +264,7 @@
       <h3>Indicators</h3>
       <div>
         <select id="indicator_select" class="ui-state-default">
-          <option value="sma">SMA</option>
+          <option value="sma" title="Simple Moving Average">SMA</option>
         </select>
         <button id="add_indicator">Add Indicator</button>
         <div id="indicator_settings" class="ui-state-default ui-corner-all"></div>
@@ -276,13 +278,13 @@
       <h3>Order Entry</h3>
       <div>
         Order Type: <select id="buy_order_type" class="ui-state-default">
-                      <option value="market">Market</option>
-                      <option value="limit">Limit</option>
-                      <option value="stop">Stop</option>
+                      <option value="market" title="A market order will be executed immediately">Market</option>
+                      <option value="limit" title="A limit order is an order to buy or sell a stock at a specific price or better.  A buy limit order can only be executed at the limit price or lower.">Limit</option>
+                      <option value="stop" title="A stop order, also referred to as a stop-loss order, is an order to buy or sell a stock once the price of the stock reaches a specified price, known as the stop price.  When the stop price is reached, a stop order becomes a market order.  A buy stop order is entered at a stop price above the current market price.">Stop</option>
                     </select><br />
-        Shares: <input id="shares_to_buy" size="6"></input> <button id="buy">Buy</button>
+        Shares: <input id="shares_to_buy" size="6" title="Enter number of shares or leave blank to purchase as many shares as possible."></input> <button id="buy">Buy</button>
         <div id="limit_price_div">
-          Limit Price: <input id="limit_price" size="6"></input>
+          Limit Price: <input id="limit_price" size="6" title="Enter limit or stop price."></input>
         </div> <!-- close limit_price_div -->
       </div> <!-- close Order Entry -->
     </div> <!-- close order_entry -->
@@ -344,11 +346,11 @@
     Value: <span id="pi_value"></span><br />
     Purchase Price: <span id="pi_purchase_price"></span><br />
     Order Type: <select id="pi_order_type" class="ui-state-default">
-                  <option value="market">Market</option>
-                  <option value="limit">Limit</option>
-                  <option value="stop">Stop</option>
+                  <option value="market" title="A market order will be executed immediately">Market</option>
+                  <option value="limit" title="A limit order is an order to buy or sell a stock at a specific price or better.  A sell limit order can only be executed at the limit price or higher.">Limit</option>
+                  <option value="stop" title="A stop order, also referred to as a stop-loss order, is an order to buy or sell a stock once the price of the stock reaches a specified price, known as the stop price.  When the stop price is reached, a stop order becomes a market order.  A sell stop order is entered at a stop price below the current market price.">Stop</option>
                 </select><br />
-    Shares: <input id="pi_sell_shares" size="6"></input><br />
+    Shares: <input id="pi_sell_shares" size="6" title="Enter number of shares or leave blank to sell all owned shares."></input><br />
     <div id="pi_limit_div">Limit Price: <input id="pi_limit_price" size="6"></div>
     <button id="pi_sell">Sell</button><button id="pi_view">View</button>
   </div> <!-- close pi_info -->
