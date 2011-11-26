@@ -963,7 +963,6 @@ function newChart(symbol) {
                  height - (height_mul * (d.open-low)),
                  body_width,
                  (height_mul * (d.open - d.close)));
-      
     }
     drawPriceLabels(a);
   }
@@ -973,19 +972,22 @@ function newChart(symbol) {
         end = a.end,
         low = a.low,
         high = a.high,
-        height_mul = a.height_mul, 
-        width_mul = a.width_mul;
-
+        height_mul = a.height_mul,
+        width_mul = a.width_mul,
+        body_width = width / (chart_length * 2),
+        d;
+    
     clear_canvas();
     drawHorizontalLines();
-
-    for (var i = end; i >= today; i--) {
-      if (data[i].open < data[i].close) { c.fillStyle = up_color; }
+    
+    for (var i=today; i < end; i++) {
+      d = data[i];
+      if (d.open < d.close) { c.fillStyle = up_color; }
       else { c.fillStyle = down_color; }
-      c.fillRect(width - ((i-today+1)*width_mul), 
-                 height - (height_mul * (data[i].close-low)),
-                 width / (chart_length*2), //20,
-                 height);//(height_mul * (data[i].open - data[i].close)));
+      c.fillRect(width + ((today-i-1)*width_mul),
+                 height - (height_mul * (d.open-low)),
+                 body_width,
+                 height);
     }
     drawPriceLabels(a);
   }
