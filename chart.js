@@ -31,6 +31,7 @@ function newChart(symbol) {
   $("#dow_30").val("title");
   $("#nasdaq_100").val("title");
   $("#commission_type").val("none");
+  $("#indicator_select").val("sma");
 
   // Hide things that should be hidden by default
   $("#pending_orders_pane").hide();
@@ -705,7 +706,7 @@ function newChart(symbol) {
   }
 
   var indicator_settings = {
-    "sma": {"html": '<div>Days: <input id="sma_days" size="4"></input><br />Color: '+makeColorSelect('sma_color')+'</div>',
+    "sma": {"html": '<div>Simple Moving Average<br />Days: <input id="sma_days" size="4"></input><br />Color: '+makeColorSelect('sma_color')+'</div>',
             "click_func": function () {
                             var days = parseInt($("#sma_days").val(), 10),
                                 color = $("#sma_color").val(),
@@ -713,12 +714,21 @@ function newChart(symbol) {
                             addActiveIndicator(ind_name, drawSMA, [days, color]);
                           }
            },
-    "ema": {"html": '<div>Days: <input id="ema_days" size="4"></input><br />Color: '+makeColorSelect('ema_color')+'</div>',
+    "ema": {"html": '<div>Exponential Moving Average<br />Days: <input id="ema_days" size="4"></input><br />Color: '+makeColorSelect('ema_color')+'</div>',
             "click_func": function () {
                             var days = parseInt($("#ema_days").val(), 10),
                                 color = $("#ema_color").val(),
                                 ind_name = "EMA ("+days+")";
                             addActiveIndicator(ind_name, drawEMA, [days, color]);
+                          }
+           },
+    "donchian": {"html": '<div>Donchian Channel<br />Days: <input id="d_days" size="4"></input><br />High Color: '+makeColorSelect('hi_color')+'<br />Low Color: '+makeColorSelect('lo_color')+'</div>',
+            "click_func": function () {
+                            var days = parseInt($("#d_days").val(), 10),
+                                hi_color = $("#hi_color").val(),
+                                lo_color = $("#lo_color").val(),
+                                ind_name = "Donchian Channel ("+days+")";
+                            addActiveIndicator(ind_name, drawDChannel, [days, hi_color, lo_color]);
                           }
            }
   };
@@ -773,6 +783,33 @@ function newChart(symbol) {
       ema_data.push(ema);
     }
     drawaLine(ema_data, o, color);
+  }
+  
+  function drawDChannel(days, high_color, low_color) {
+    var o = getAdjustments(),
+        end = chart_length + today,
+        hi_data = [],
+        lo_data = [],
+        hi = 0,
+        lo = 1000000,
+        slice;
+    for (var i=end; i >= today; i--) {
+      slice = data.slice(i, i+days);
+      for (var j=0; j < days; j++) {
+        if (slice[j].high > hi) {
+          hi = slice[j].high;
+        }
+        if (slice[j].low < lo) {
+          lo = slice[j].low;
+        }
+      }
+      hi_data.push(hi);
+      lo_data.push(lo);
+      hi = 0;
+      lo = 1000000;
+    }
+    drawaLine(hi_data, o, high_color);
+    drawaLine(lo_data, o, low_color);
   }
   
   function drawaLine(data_list, o, color) {
