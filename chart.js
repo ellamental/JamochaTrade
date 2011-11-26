@@ -40,6 +40,7 @@ function newChart(symbol) {
   $("#limit_price_div").hide();
   $("#indicator_settings").hide();
   $("#favorites_pane").hide();
+  $("#settings_pane").hide();
 
   
   var width = 620,
@@ -87,6 +88,24 @@ function newChart(symbol) {
         $("#comment_box").val("");
       }
     });
+  });
+  
+  
+  
+  //__________________________________________________________________________
+  // Settings
+  //__________________________________________________________________________
+  
+  $("#settings_link").click(function () {
+    $("#settings_pane").toggle();
+    return false;
+  });
+  
+  $("#set_current_day").click(function () {
+    var remain = $("#set_current_day_input")
+    today = parseInt(remain.val(), 10);
+    remain.val("");
+    changeSymbol(symbol);
   });
   
   
