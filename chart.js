@@ -733,24 +733,38 @@ function newChart(symbol) {
            }
   };
   
+  function show_indicator_settings() {
+    var is_elem = $("#indicator_settings"),
+        indicator = $("#indicator_select").val();
+    is_elem.append(indicator_settings[indicator].html);
+    is_elem.append('<button id="is_cancel">Cancel</button><button id="is_apply">Apply</button>');
+    $("#is_apply").button();
+    $("#is_cancel").button();
+    $("#indicator_settings").show('fast');
+    $("#is_apply").click(function () {
+      indicator_settings[indicator].click_func();
+      is_elem.empty();
+      is_elem.hide('fast');
+    });
+    $("#is_cancel").click(function () {
+      is_elem.empty();
+      is_elem.hide('fast');
+    });
+  }
+
   $("#add_indicator").click(function () {
     var is_elem = $("#indicator_settings");
     if (is_elem.children().size() === 0 ) {
-      var indicator = $("#indicator_select").val();
-      is_elem.append(indicator_settings[indicator].html);
-      is_elem.append('<button id="is_cancel">Cancel</button><button id="is_apply">Apply</button>');
-      $("#is_apply").button();
-      $("#is_cancel").button();
-      $("#indicator_settings").show('fast');
-      $("#is_apply").click(function () {
-        indicator_settings[indicator].click_func();
-        is_elem.empty();
-        is_elem.hide('fast');
-      });
-      $("#is_cancel").click(function () {
-        is_elem.empty();
-        is_elem.hide('fast');
-      });
+      show_indicator_settings();
+    }
+  });
+  
+  $("#indicator_select").change(function () {
+    var is_elem = $("#indicator_settings");
+    if (is_elem.children().size() > 0) {
+      is_elem.empty();
+      is_elem.hide('fast');
+      show_indicator_settings();
     }
   });
   
