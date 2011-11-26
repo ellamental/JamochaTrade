@@ -82,6 +82,7 @@ function newChart(symbol) {
   
   chart.width = width; chart.height = height;
   changeSymbol(symbol);
+  $("#days_left").text(today);
 
   $("#comment_submit").click(function () {
     var datastring = "message="+$("#comment_box").val();
@@ -194,12 +195,14 @@ function newChart(symbol) {
   //__________________________________________________________________________
   
   function nextDay(days, delay) {
+    var days_left = $("#days_left");
     function nextD() {
       if (days > 0) {
         var t = setTimeout(nextD, delay); 
         days--;
         if (today > 0) {
-          today--; 
+          today--;
+          days_left.text(today);
           drawChart();
           processOrders();
           var port_value = account;
