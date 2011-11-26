@@ -712,6 +712,14 @@ function newChart(symbol) {
                                 ind_name = "SMA ("+days+")";
                             addActiveIndicator(ind_name, drawSMA, [days, color]);
                           }
+           },
+    "ema": {"html": '<div>Days: <input id="ema_days" size="4"></input><br />Color: '+makeColorSelect('ema_color')+'</div>',
+            "click_func": function () {
+                            var days = parseInt($("#ema_days").val(), 10),
+                                color = $("#ema_color").val(),
+                                ind_name = "EMA ("+days+")";
+                            addActiveIndicator(ind_name, drawEMA, [days, color]);
+                          }
            }
   };
   
@@ -753,7 +761,20 @@ function newChart(symbol) {
     }
     drawaLine(sma_data, o, color);
   }  
- 
+  
+  function drawEMA(days, color) {
+    var o = getAdjustments(),
+        ema_data = [],
+        end = chart_length + today,
+        multiple = 2 / (days + 1),
+        ema = average(data.slice(end, end+days), 'close');
+    for (var i=end; i >= today; i--) {
+      ema = ((data[i].close - ema)*multiple) + ema;
+      ema_data.push(ema);
+    }
+    drawaLine(ema_data, o, color);
+  }
+  
   function drawaLine(data_list, o, color) {
     c.beginPath();
     c.strokeStyle = color;
