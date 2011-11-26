@@ -991,32 +991,35 @@ function newChart(symbol) {
     }
     drawPriceLabels(a);
   }
-  
+
   function drawOHLC() {
     var a = getAdjustments(),
         end = a.end,
         low = a.low,
         high = a.high,
-        height_mul = a.height_mul, 
-        width_mul = a.width_mul;
-
+        height_mul = a.height_mul,
+        width_mul = a.width_mul,
+        body_width = width / (chart_length * 2),
+        wick_center = (body_width / 2) - 1,
+        d;
+    
     clear_canvas();
     drawHorizontalLines();
-
-    // draw wicks
-    for (var i = end; i >= today; i--) {
-      c.fillStyle = "#000";
-      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                 height - (height_mul * (data[i].low-low)),
+    
+    c.fillStyle = "#000";
+    for (var i=today; i < end; i++) {
+      d = data[i];
+      c.fillRect(width + ((today-i-1)*width_mul) + wick_center,
+                 height - (height_mul * (d.low-low)),
                  2,
-                 (height_mul * (data[i].low - data[i].high)));
-      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4),
-                 height - (height_mul * (data[i].close-low)),
-                 width_mul / 4,
+                 (height_mul * (d.low - d.high)));
+      c.fillRect(width + ((today-i-1)*width_mul),
+                 height - (height_mul * (d.open-low)),
+                 wick_center,
                  2);
-      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1,
-                 height - (height_mul * (data[i].open-low)),
-                 -(width_mul / 4),
+      c.fillRect(width + ((today-i-1)*width_mul) + wick_center + 2,
+                 height - (height_mul * (d.close-low)),
+                 wick_center,
                  2);
     }
     drawPriceLabels(a);
@@ -1027,22 +1030,25 @@ function newChart(symbol) {
         end = a.end,
         low = a.low,
         high = a.high,
-        height_mul = a.height_mul, 
-        width_mul = a.width_mul;
-
+        height_mul = a.height_mul,
+        width_mul = a.width_mul,
+        body_width = width / (chart_length * 2),
+        wick_center = (body_width / 2) - 1,
+        d;
+    
     clear_canvas();
     drawHorizontalLines();
-
-    // draw wicks
-    for (var i = end; i >= today; i--) {
-      c.fillStyle = "#000";
-      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4) - 1, 
-                 height - (height_mul * (data[i].low-low)),
+    
+    c.fillStyle = "#000";
+    for (var i=today; i < end; i++) {
+      d = data[i];
+      c.fillRect(width + ((today-i-1)*width_mul) + wick_center,
+                 height - (height_mul * (d.low-low)),
                  2,
-                 (height_mul * (data[i].low - data[i].high)));
-      c.fillRect(width - ((i-today+1)*width_mul) + (width_mul / 4),
-                 height - (height_mul * (data[i].close-low)),
-                 width_mul / 4,
+                 (height_mul * (d.low - d.high)));
+      c.fillRect(width + ((today-i-1)*width_mul) + wick_center + 2,
+                 height - (height_mul * (d.close-low)),
+                 wick_center,
                  2);
     }
     drawPriceLabels(a);
