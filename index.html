@@ -333,6 +333,13 @@
       <a href="#" id="settings_link">Settings</a>
       <div id="settings_pane">
         Set Days Remaining: <input id="set_current_day_input"></input> <button id="set_current_day">Set</button><br />
+        Commission: <select id="commission_type" class="ui-state-default ui-corner-all">
+                      <option value="none">None</option>
+                      <option value="per_share">Per Share</option>
+                      <option value="percentage">Percentage</option>
+                    </select>
+        <span id="commission_amount_text"></span> <input id="commission_amount" size="4"></input>
+        <button id="set_commission">Set</button>
       </div> <!-- close settings_pane -->
     </div> <!-- close settings -->
 

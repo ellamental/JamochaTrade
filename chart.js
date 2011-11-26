@@ -30,6 +30,7 @@ function newChart(symbol) {
   $("#buy_order_type").val("market");
   $("#dow_30").val("title");
   $("#nasdaq_100").val("title");
+  $("#commission_type").val("none");
 
   // Hide things that should be hidden by default
   $("#pending_orders_pane").hide();
@@ -41,7 +42,8 @@ function newChart(symbol) {
   $("#indicator_settings").hide();
   $("#favorites_pane").hide();
   $("#settings_pane").hide();
-
+  $("#commission_amount").hide();
+  $("#commission_amount_text").hide();
   
   var width = 620,
       height = 500,
@@ -73,7 +75,10 @@ function newChart(symbol) {
       recently_viewed_cache = [],
       
       active_indicators = [],
-      indicator_counter = 0;
+      indicator_counter = 0,
+      
+      commission_type = "none",
+      commission_amount = 0;
   
   chart.width = width; chart.height = height;
   changeSymbol(symbol);
@@ -101,12 +106,56 @@ function newChart(symbol) {
     return false;
   });
   
+  // Change current day
+  
   $("#set_current_day").click(function () {
     var remain = $("#set_current_day_input")
     today = parseInt(remain.val(), 10);
     remain.val("");
     changeSymbol(symbol);
   });
+  
+  // Commissions
+  
+  $("#commission_type").change(function () {
+    var cur_val = $(this).val(),
+        comm_amount = $("#commission_amount"),
+        comm_amount_text = $("#commission_amount_text");
+    if (cur_val === "none") {
+      comm_amount.hide();
+      comm_amount_text.hide();
+    }
+    else if (cur_val === "per_share") {
+      comm_amount.show();
+      comm_amount_text.text("$");
+      comm_amount_text.show();
+    }
+    else if (cur_val === "percentage") {
+      comm_amount.show();
+      comm_amount_text.text("%");
+      comm_amount_text.show();
+    }
+  });
+  
+  $("#set_commission").click(function () {
+    commission_type = $("#commission_type").val();
+    commission_amount = parseFloat($("#commission_amount").val());
+    if (commission_type === "percentage") {
+      commission_amount = commission_amount / 100;
+    }
+  });
+  
+  function calculate_commission(price) {
+    if (commission_type === "none") {
+      return 0;
+    }
+    else if (commission_type === "per_share") {
+      return commission_amount;
+    }
+    else if (commission_type === "percentage") {
+      return price * commission_amount;
+    }
+  }
   
   
   
@@ -397,6 +446,7 @@ function newChart(symbol) {
   function buy(num_shares, price) {
     // Parse input
     price = parseFloat(price);
+    price = price + calculate_commission(price);
     var shares;
     if (num_shares === "") {
       shares = Math.floor(account / price);
@@ -519,6 +569,7 @@ function newChart(symbol) {
   }
   
   function sell(sym, num_shares, price) {
+    price = price - calculate_commission(price);
     if (sym in portfolio) {
       // Parse input
       var shares;
