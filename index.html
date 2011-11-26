@@ -59,17 +59,17 @@
         <button id="new_symbol">Go</button><br/>
 
         <div id="chart_widgets">
-          <div id="chart_settings" class="ui-state-default">
+          <div id="chart_settings" class="ui-state-default ui-corner-all">
             <strong>Chart Settings</strong><br />
             <div id="chart_settings_pane">
-              Length: <select id="time_period" class="ui-state-default">
+              Length: <select id="time_period" class="ui-state-default ui-corner-all">
                         <option value="15">15 day</option>
                         <option value="30">30 day</option>
                         <option value="60">60 day</option>
                         <option value="90">90 day</option>
                       </select><br />
               Style: 
-              <select id="chart_style" class="ui-state-default">
+              <select id="chart_style" class="ui-state-default ui-corner-all">
                 <option value="candle">Candle</option>
                 <option value="bar">Bar</option>
                 <option value="ohlc">OHLC</option>
@@ -78,7 +78,7 @@
               </select><br />
               <div id="color_pickers">
                 Colors:<br />
-                Up: <select id="up_color" class="ui-state-default">
+                Up: <select id="up_color" class="ui-state-default ui-corner-all">
                       <option value="#000000">Black</option>
                       <option value="#0000FF">Blue</option>
                       <option value="#FF0000">Red</option>
@@ -86,7 +86,7 @@
                       <option value="#FF9933">Orange</option>
                       <option value="#FFFF00">Yellow</option>
                     </select><br />
-                Down: <select id="down_color" class="ui-state-default">
+                Down: <select id="down_color" class="ui-state-default ui-corner-all">
                       <option value="#000000">Black</option>
                       <option value="#0000FF">Blue</option>
                       <option value="#FF0000">Red</option>
@@ -98,10 +98,10 @@
             </div> <!-- close chart_settings_pane -->
           </div> <!-- close chart_settings -->
 
-          <div id="markets" class="ui-state-default">
+          <div id="markets" class="ui-state-default ui-corner-all">
             <strong>Markets</strong><br />
             <div id="market_lists">
-              <select id="dow_30" class="ui-state-default">
+              <select id="dow_30" class="ui-state-default ui-corner-all">
                 <option value="title">Dow 30</option>
                 <option value="MMM">3M Co</option>
                 <option value="AA">Alcoa Inc</option>
@@ -134,7 +134,7 @@
                 <option value="WMT">Wal-Mart Stores Inc</option>
                 <option value="DIS">Walt Disney Co</option>
               </select>
-              <select id="nasdaq_100" class="ui-state-default">
+              <select id="nasdaq_100" class="ui-state-default ui-corner-all">
                 <option value="title">NASDAQ 100</option>
                 <option value="ATVI">Activision Blizzard, Inc</option>
                 <option value="ADBE">Adobe Systems Incorporated</option>
@@ -240,18 +240,18 @@
             </div> <!-- close market_lists -->
           </div> <!-- close markets -->
 
-          <div id="recently_viewed" class="ui-state-default">
+          <div id="recently_viewed" class="ui-state-default ui-corner-all">
             <strong>Recently Viewed</strong><br />
-            <select id="recently_viewed_list" class="ui-state-default">
+            <select id="recently_viewed_list" class="ui-state-default ui-corner-all">
             </select>
           </div> <!-- close recently_viewed -->
 
-          <div id="favorites" class="ui-state-default">
+          <div id="favorites" class="ui-state-default ui-corner-all">
             <strong>Favorites</strong>
             <div id="favorites_pane">
               <button id="add_favorite" title="Add current symbol to favorites list.">Add</button>
               <button id="remove_favorite" title="Remove selected symbol from favorites list.">Remove</button><br />
-              <select id="favorites_list" class="ui-state-default"></select>
+              <select id="favorites_list" class="ui-state-default ui-corner-all"></select>
             </div> <!-- close favorites_pane -->
           </div> <!-- close favorites -->
 
@@ -263,7 +263,7 @@
     <div id="indicators">
       <h3>Indicators</h3>
       <div>
-        <select id="indicator_select" class="ui-state-default">
+        <select id="indicator_select" class="ui-state-default ui-corner-all">
           <option value="sma" title="Simple Moving Average">SMA</option>
         </select>
         <button id="add_indicator">Add Indicator</button>
@@ -277,7 +277,7 @@
     <div id="order_entry">
       <h3>Order Entry</h3>
       <div>
-        Order Type: <select id="buy_order_type" class="ui-state-default">
+        Order Type: <select id="buy_order_type" class="ui-state-default ui-corner-all">
                       <option value="market" title="A market order will be executed immediately">Market</option>
                       <option value="limit" title="A limit order is an order to buy or sell a stock at a specific price or better.  A buy limit order can only be executed at the limit price or lower.">Limit</option>
                       <option value="stop" title="A stop order, also referred to as a stop-loss order, is an order to buy or sell a stock once the price of the stock reaches a specified price, known as the stop price.  When the stop price is reached, a stop order becomes a market order.  A buy stop order is entered at a stop price above the current market price.">Stop</option>
@@ -353,7 +353,7 @@
   <div id="pi_info">
     Value: <span id="pi_value"></span><br />
     Purchase Price: <span id="pi_purchase_price"></span><br />
-    Order Type: <select id="pi_order_type" class="ui-state-default">
+    Order Type: <select id="pi_order_type" class="ui-state-default ui-corner-all">
                   <option value="market" title="A market order will be executed immediately">Market</option>
                   <option value="limit" title="A limit order is an order to buy or sell a stock at a specific price or better.  A sell limit order can only be executed at the limit price or higher.">Limit</option>
                   <option value="stop" title="A stop order, also referred to as a stop-loss order, is an order to buy or sell a stock once the price of the stock reaches a specified price, known as the stop price.  When the stop price is reached, a stop order becomes a market order.  A sell stop order is entered at a stop price below the current market price.">Stop</option>
