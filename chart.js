@@ -241,11 +241,9 @@ function newChart(symbol) {
   // Chart Controls
   //__________________________________________________________________________
   
-  $("#chart_controls").hover(
-    //function () { $("#chart_widgets").toggle('fast'); }
-    function () { $("#chart_widgets").show('fast'); },
-    function () { $("#chart_widgets").hide('fast'); }
-  );  
+  $("#chart_controls").click(
+    function () { $("#chart_widgets").toggle('fast'); }
+  );
   
   // Symbol Entry widget
   
@@ -267,6 +265,7 @@ function newChart(symbol) {
     function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#chart_settings_pane").toggle();
+    e.stopPropagation();
   });
   
   $("#chart_style").change(function () {
@@ -302,6 +301,7 @@ function newChart(symbol) {
     function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#market_lists").toggle();
+    e.stopPropagation();
   });
 
   function selectSymbol(select_box) {
@@ -338,6 +338,7 @@ function newChart(symbol) {
     function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#recently_viewed_list").toggle();
+    e.stopPropagation();
   });
   
   $("#recently_viewed_list").change(function (e) {
@@ -353,6 +354,7 @@ function newChart(symbol) {
     function () { $(this).removeClass("ui-state-hover"); }
   ).click(function (e) {
     $("#favorites_pane").toggle();
+    e.stopPropagation();
   });
   
   $("#add_favorite").click(function (e) {
