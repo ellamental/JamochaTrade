@@ -110,9 +110,9 @@ function newChart(symbol) {
   // Change current day
   
   $("#set_current_day").click(function () {
-    var remain = $("#set_current_day_input")
-    today = parseInt(remain.val(), 10);
-    remain.val("");
+    var days_remaining = $("#set_current_day_input");
+    today = parseInt(days_remaining.val(), 10);
+    days_remaining.val("");
     changeSymbol(symbol);
   });
   
