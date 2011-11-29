@@ -22,6 +22,10 @@ body {text-align: center;}
   margin-left: 20px;
 }
 
+#rentageek {
+  margin-right: 160px;
+}
+
 #toolbar {
   float: left;
   width: 350px;
