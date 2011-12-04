@@ -1016,6 +1016,29 @@ function newChart(symbol) {
     }
   }
 
+  function drawVolume(a) {
+    var end = a.end,
+        vol_high = a.vol_high,
+        width_mul = a.width_mul,
+        body_width = width / (chart_length * 2),
+        v_height = volume_height,
+        d, v;
+    vol_c.fillStyle = "#000";
+    vol_c.font = 'italic 15px sans-serif';
+    vol_c.textAlign = "right";
+    vol_c.fillText(vol_high, width-10, 15);
+    for (var i=today; i < end; i++) {
+      d = data[i];
+      v = (d.volume/vol_high)*v_height;
+      if (d.open < d.close) { vol_c.fillStyle = "#555"; }
+      else { vol_c.fillStyle = "#888"; }
+      vol_c.fillRect( width + ((today-i-1)*width_mul),
+                      volume_height - v,
+                      body_width,
+                      v_height );
+    }
+  }
+
   function drawCandle() {
     var a = getAdjustments(),
         end = a.end,
@@ -1074,27 +1097,6 @@ function newChart(symbol) {
     drawVolume(a);
   }
 
-  function drawVolume(a) {
-    var end = a.end,
-        vol_high = a.vol_high,
-        width_mul = a.width_mul,
-        body_width = width / (chart_length * 2),
-        v_height = volume_height,
-        v;
-    vol_c.fillStyle = "#000";
-    vol_c.font = 'italic 15px sans-serif';
-    vol_c.textAlign = "right";
-    vol_c.fillText(vol_high, width-10, 15);
-    vol_c.fillStyle = "#777";
-    for (var i=today; i < end; i++) {
-      v = (data[i].volume/vol_high)*v_height;
-      vol_c.fillRect(width + ((today-i-1)*width_mul),
-                 volume_height - v,
-                 body_width,
-                 v_height);
-    }
-  }
-
   function drawOHLC() {
     var a = getAdjustments(),
         end = a.end,
@@ -1126,6 +1128,7 @@ function newChart(symbol) {
                  2);
     }
     drawPriceLabels(a);
+    drawVolume(a);
   }
 
   function drawHLC() {
@@ -1155,6 +1158,7 @@ function newChart(symbol) {
                  2);
     }
     drawPriceLabels(a);
+    drawVolume(a);
   }
 
   function drawLine() {
@@ -1179,6 +1183,7 @@ function newChart(symbol) {
     }
     c.stroke();
     drawPriceLabels(a);
+    drawVolume(a);
   }
 
 }
