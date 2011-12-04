@@ -4,6 +4,10 @@ body {text-align: center;}
   border: 1px solid #000;
 }
 
+#volume_chart {
+  border: 1px solid #000;
+}
+
 #container {
   position: relative;
 }

@@ -48,8 +48,11 @@ function newChart(symbol) {
   
   var width = 620,
       height = 500,
+      volume_height = 50,
       chart = document.getElementById("chart"),
       c = chart.getContext("2d"),
+      volume_chart = document.getElementById("volume_chart"),
+      vol_c = volume_chart.getContext("2d"),
       
       today = 300,
       chart_length = parseInt($("#time_period").val(), 10),
@@ -82,6 +85,7 @@ function newChart(symbol) {
       commission_amount = 0;
   
   chart.width = width; chart.height = height;
+  volume_chart.width = width; volume_chart.height = volume_height;
   changeSymbol(symbol);
   $("#days_left").text(today);
 
@@ -929,7 +933,7 @@ function newChart(symbol) {
                       low:    parseFloat(result_data[i].col3),
                       close:  parseFloat(result_data[i].col4),
                       date:   result_data[i].col0,
-                      volume: result_data[i].col5};
+                      volume: parseFloat(result_data[i].col5) };
           }
           $("#symbol_name").text(sym);
           symbol = sym;
@@ -950,6 +954,7 @@ function newChart(symbol) {
 
   function clear_canvas() {
     c.clearRect(0, 0, width, height);
+    vol_c.clearRect(0, 0, width, volume_height);
   }
 
   function drawChart() {
@@ -966,12 +971,14 @@ function newChart(symbol) {
   function getAdjustments() {
     var end = today + chart_length,
         low = data[today].low,
-        high = data[today].high;
+        high = data[today].high,
+        vol_high = data[today].volume;
     
     // get lowest low and highest high
     for (var i = today; i < end; i++) {
       if (data[i].low < low) { low = data[i].low; }
       if (data[i].high > high) { high = data[i].high; }
+      if (data[i].volume > vol_high) { vol_high = data[i].volume; }
     }
 
     // get multipliers
@@ -982,7 +989,8 @@ function newChart(symbol) {
             "low": low,
             "high": high,
             "height_mul": height_mul,
-            "width_mul": width_mul};
+            "width_mul": width_mul,
+            "vol_high": vol_high };
   }
   
   function drawHorizontalLines() {
@@ -1037,6 +1045,7 @@ function newChart(symbol) {
                  (height_mul * (d.open - d.close)));
     }
     drawPriceLabels(a);
+    drawVolume(a);
   }
 
   function drawBar() {
@@ -1062,6 +1071,28 @@ function newChart(symbol) {
                  height);
     }
     drawPriceLabels(a);
+    drawVolume(a);
+  }
+
+  function drawVolume(a) {
+    var end = a.end,
+        vol_high = a.vol_high,
+        width_mul = a.width_mul,
+        body_width = width / (chart_length * 2),
+        v_height = volume_height,
+        v;
+    vol_c.fillStyle = "#000";
+    vol_c.font = 'italic 15px sans-serif';
+    vol_c.textAlign = "right";
+    vol_c.fillText(vol_high, width-10, 15);
+    vol_c.fillStyle = "#777";
+    for (var i=today; i < end; i++) {
+      v = (data[i].volume/vol_high)*v_height;
+      vol_c.fillRect(width + ((today-i-1)*width_mul),
+                 volume_height - v,
+                 body_width,
+                 v_height);
+    }
   }
 
   function drawOHLC() {
