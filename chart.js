@@ -97,6 +97,7 @@ function newChart(symbol) {
       data: datastring,
       success: function() {
         $("#comment_box").val("");
+        alert("Comment sent successfully");
       }
     });
   });
